@@ -25,13 +25,17 @@
     "url": "git+https://github.com/flancer32/teq-web.git"
   },
   "scripts": {
-    "test:accept": "./node_modules/mocha/bin/_mocha './test/accept/**/*.test.mjs' --recursive",
-    "test:unit": "./node_modules/mocha/bin/_mocha './test/unit/**/*.test.mjs' --recursive"
+    "eslint": "./node_modules/.bin/eslint ./src/",
+    "test:accept": "./node_modules/.bin/_mocha './test/accept/**/*.test.mjs' --recursive",
+    "test:unit": "./node_modules/.bin/_mocha './test/unit/**/*.test.mjs' --recursive"
   },
   "dependencies": {
     "@teqfw/di": ">=0.34.0"
   },
   "devDependencies": {
+    "@eslint/js": "^9.25.0",
+    "eslint": "^9.25.0",
+    "eslint-plugin-jsdoc": "^50.6.8",
     "mocha": "^11.3.0"
   },
   "engines": {

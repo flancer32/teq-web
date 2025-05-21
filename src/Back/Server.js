@@ -1,23 +1,56 @@
+/* eslint-disable jsdoc/require-param-description,jsdoc/check-param-names */
 /**
- * Display the messages about the processing of an API request.
- * @implements {TeqFw_Web_Api_Front_Api_Request_Alert}
+ * TODO: add JSDoc annotations
  */
 export default class Fl32_Web_Back_Server {
     /**
-     * @param {Lp_Base_Front_Defaults} DEF
-     * @param {TeqFw_Core_Shared_Api_Logger} logger -  instance
-     * @param {Lp_Base_Front_Mod_Notify} modNotify
+     * @param {typeof import('node:http')} http
+     * @param {typeof import('node:http2')} http2
+     * @param {typeof import('node:https')} https
+     * @param {Fl32_Web_Back_Defaults} DEF
+     * @param {Fl32_Web_Back_Logger} logger
+     * @param {Fl32_Web_Back_Dispatcher} dispatcher
+     * @param {typeof Fl32_Web_Back_Enum_Server_Type} SERVER_TYPE
      */
     constructor(
         {
-            Lp_Base_Front_Defaults$: DEF,
-            TeqFw_Core_Shared_Api_Logger$: logger,
-            Lp_Base_Front_Mod_Notify$: modNotify,
+            'node:http': http,
+            'node:http2': http2,
+            'node:https': https,
+            Fl32_Web_Back_Defaults$: DEF,
+            Fl32_Web_Back_Logger$: logger,
+            Fl32_Web_Back_Dispatcher$: dispatcher,
+            Fl32_Web_Back_Enum_Server_Type$: SERVER_TYPE,
         }
     ) {
-        // INSTANCE METHODS
-        this.error = function (msg, req, res) {
-            modNotify.negative(msg);
+        // VARS
+        const {createServer} = http;
+        const {createServer: createServerH2} = http2;
+        /** @type {module:http.Server} */
+        let _instance;
+
+        // MAIN
+        /**
+         * @returns {module:http.Server}
+         */
+        this.getInstance = () => _instance;
+
+        /**
+         * @param {Fl32_Web_Back_Server_Config.Dto} [cfg]
+         * @returns {Promise<void>}
+         */
+        this.start = async function (cfg) {
+            const port = cfg?.port ?? DEF.PORT;
+            const type = cfg?.type ?? SERVER_TYPE.HTTP;
+
+            _instance = createServer({});
+            _instance.on('request', dispatcher.onEventRequest);
+            _instance.listen(port);
+            logger.info(`The server is listening on port ${port}...`);
+        };
+
+        this.stop = async function () {
+            console.log(`The server is stopping...`);
         };
     }
 }

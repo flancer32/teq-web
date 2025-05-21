@@ -14,9 +14,9 @@ register their handlers efficiently.
 - Modular architecture that enables seamless integration of new handlers from external plugins.
 - Flexible middleware registration with a configurable execution order.
 - Structured request processing in three distinct stages:
-    - **Pre-processing (`PRE`)**: Initial request handling (e.g., logging, authentication).
-    - **Main processing (`PROCESS`)**: Core logic execution and routing.
-    - **Post-processing (`POST`)**: Final actions, such as logging the response or cleanup.
+    - **Pre-processing (`pre`)**: Initial request handling (e.g., logging, authentication).
+    - **Main processing (`process`)**: Core logic execution and routing.
+    - **Post-processing (`post`)**: Final actions, such as logging the response or cleanup.
 - The dispatcher sequentially executes all pre-processing handlers, exactly one main handler (if found), and all
   post-processing handlers.
 - Supports integration with alternative web servers via custom adapters.
