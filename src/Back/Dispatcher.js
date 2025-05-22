@@ -75,7 +75,7 @@ export default class Fl32_Web_Back_Dispatcher {
 
                 // If not handled at all and no error occurred
                 if (respond.isWritable(res)) {
-                    logger.trace(`404 Not Found: ${req.url}`);
+                    logger.error(`404 Not Found: ${req.url}`);
                     respond.code404_NotFound({res});
                 }
             } finally {
