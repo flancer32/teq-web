@@ -40,9 +40,11 @@ export default class Fl32_Web_Back_Server {
          * @returns {Promise<void>}
          */
         this.start = async function (cfg) {
+            // order handlers in the dispatcher
+            dispatcher.orderHandlers();
+            // create server
             const port = cfg?.port ?? DEF.PORT;
             const type = cfg?.type ?? SERVER_TYPE.HTTP;
-
             _instance = createServer({});
             _instance.on('request', dispatcher.onEventRequest);
             _instance.listen(port);
