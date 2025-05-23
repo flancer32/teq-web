@@ -1,8 +1,8 @@
-/* eslint-disable jsdoc/require-param-description,jsdoc/check-param-names */
 /**
  * TODO: add JSDoc annotations
  */
 export default class Fl32_Web_Back_Server {
+    /* eslint-disable jsdoc/require-param-description,jsdoc/check-param-names */
     /**
      * @param {typeof import('node:http')} http
      * @param {typeof import('node:http2')} http2
@@ -23,6 +23,7 @@ export default class Fl32_Web_Back_Server {
             Fl32_Web_Back_Enum_Server_Type$: SERVER_TYPE,
         }
     ) {
+        /* eslint-enable jsdoc/require-param-description,jsdoc/check-param-names */
         // VARS
         const {createServer} = http;
         const {createServer: createServerH2} = http2;

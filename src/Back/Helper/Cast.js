@@ -39,10 +39,10 @@ export default class Fl32_Web_Back_Helper_Cast {
      * If both `upper` and `lower` are true, `upper` takes precedence.
      *
      * @param {*} data - The input to cast.
-     * @param {Object} enu - Object whose values represent valid enum values.
-     * @param {Object} [opts]
-     * @param {boolean} [opts.lower] - Normalize input to lower case before comparison.
-     * @param {boolean} [opts.upper] - Normalize input to upper case before comparison.
+     * @param {object} enu - Object whose values represent valid enum values.
+     * @param {object} [params] - Parameters object.
+     * @param {boolean} [params.lower] - Normalize input to lower case before comparison.
+     * @param {boolean} [params.upper] - Normalize input to upper case before comparison.
      * @returns {string|undefined}
      */
     enum(data, enu, {lower, upper} = {}) {
@@ -59,7 +59,7 @@ export default class Fl32_Web_Back_Helper_Cast {
 
     /**
      * Cast input data into integer 'number' data type.
-     * @param {*} data
+     * @param {*} data - Input data to be cast to integer.
      * @returns {number|undefined}
      */
     int(data) {
@@ -70,7 +70,7 @@ export default class Fl32_Web_Back_Helper_Cast {
 
     /**
      * Cast input data into 'string' data type.
-     * @param {*} data
+     * @param {*} data - Input data to be cast to string.
      * @returns {string|undefined}
      */
     string(data) {
