@@ -13,7 +13,7 @@ export default class Fl32_Web_Back_Helper_Cast {
 
         if (Array.isArray(data)) {
             arr = data;
-        } else if (data != null) {
+        } else if (data !== null) {
             arr = [data];
         }
 

@@ -12,13 +12,14 @@ export default class Fl32_Web_Back_Dispatcher {
     /**
      * @param {Fl32_Web_Back_Logger} logger
      * @param {Fl32_Web_Back_Helper_Respond} respond
-     * @param {Fl32_Web_Back_Dto_Handler_Info} dtoInfo
+     * @param {Fl32_Web_Back_Helper_Order_Kahn} helpOrder
      * @param {typeof Fl32_Web_Back_Enum_Stage} STAGE
      */
     constructor(
         {
             Fl32_Web_Back_Logger$: logger,
             Fl32_Web_Back_Helper_Respond$: respond,
+            Fl32_Web_Back_Helper_Order_Kahn$: helpOrder,
             Fl32_Web_Back_Enum_Stage$: STAGE,
         }
     ) {
@@ -94,25 +95,20 @@ export default class Fl32_Web_Back_Dispatcher {
          * Sorts registered handlers by stage.
          */
         this.orderHandlers = function () {
-            // FUNCS
-            const _sortHandlers = (list) => {
-                // TODO: Implement before/after sorting logic if needed.
-                return list;
-            };
-
-            // MAIN
             const pre = [], process = [], post = [];
 
             for (const handler of _handlers.values()) {
                 const dto = handler.getRegistrationInfo();
-                if (dto.stage === STAGE.PRE) pre.push(handler);
-                else if (dto.stage === STAGE.PROCESS) process.push(handler);
-                else if (dto.stage === STAGE.POST) post.push(handler);
+                if (dto.stage === STAGE.PRE) {
+                    pre.push(handler);
+                } else if (dto.stage === STAGE.PROCESS) {
+                    process.push(handler);
+                } else if (dto.stage === STAGE.POST) post.push(handler);
             }
 
-            _pre = _sortHandlers(pre);
-            _process = _sortHandlers(process);
-            _post = _sortHandlers(post);
+            _pre = helpOrder.sort(pre);
+            _process = helpOrder.sort(process);
+            _post = helpOrder.sort(post);
         };
     }
 
