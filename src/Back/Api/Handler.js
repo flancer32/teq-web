@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-vars */
 /**
  * Interface for web request handlers used by the dispatcher in this plugin.
  * Defines the structure and behavior of a handler.
@@ -6,6 +5,7 @@
  * @interface
  */
 export default class Fl32_Web_Back_Api_Handler {
+    /* eslint-disable no-unused-vars */
     /**
      * Handles the incoming web request.
      * @param {module:http.IncomingMessage|module:http2.Http2ServerRequest} req - The incoming HTTP request object.
