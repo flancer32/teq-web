@@ -39,7 +39,7 @@
     "mocha": "^11.3.0"
   },
   "engines": {
-    "node": ">=22"
+    "node": ">=20"
   },
   "funding": {
     "type": "individual",
