@@ -1,12 +1,16 @@
 /**
- * TODO: add JSDoc annotations
+ * Web server implementation supporting HTTP/1 and HTTP/2 protocols.
+ * Handles incoming requests and delegates them to the dispatcher.
+ *
+ * @property {function(): module:http.Server} getInstance - Returns the server instance.
+ * @property {function(Fl32_Web_Back_Server_Config.Dto): Promise<void>} start - Starts the server with given configuration.
+ * @property {function(): Promise<void>} stop - Stops the server.
  */
 export default class Fl32_Web_Back_Server {
     /* eslint-disable jsdoc/require-param-description,jsdoc/check-param-names */
     /**
      * @param {typeof import('node:http')} http
      * @param {typeof import('node:http2')} http2
-     * @param {typeof import('node:https')} https
      * @param {Fl32_Web_Back_Defaults} DEF
      * @param {Fl32_Web_Back_Logger} logger
      * @param {Fl32_Web_Back_Dispatcher} dispatcher
@@ -16,7 +20,6 @@ export default class Fl32_Web_Back_Server {
         {
             'node:http': http,
             'node:http2': http2,
-            'node:https': https,
             Fl32_Web_Back_Defaults$: DEF,
             Fl32_Web_Back_Logger$: logger,
             Fl32_Web_Back_Dispatcher$: dispatcher,
@@ -26,7 +29,7 @@ export default class Fl32_Web_Back_Server {
         /* eslint-enable jsdoc/require-param-description,jsdoc/check-param-names */
         // VARS
         const {createServer} = http;
-        const {createServer: createServerH2} = http2;
+        const {createServer: createServerH2, createSecureServer} = http2;
         /** @type {module:http.Server} */
         let _instance;
 
@@ -37,7 +40,8 @@ export default class Fl32_Web_Back_Server {
         this.getInstance = () => _instance;
 
         /**
-         * @param {Fl32_Web_Back_Server_Config.Dto} [cfg]
+         * Starts the server with optional configuration.
+         * @param {Fl32_Web_Back_Server_Config.Dto} [cfg] - Server configuration
          * @returns {Promise<void>}
          */
         this.start = async function (cfg) {
@@ -46,12 +50,33 @@ export default class Fl32_Web_Back_Server {
             // create server
             const port = cfg?.port ?? DEF.PORT;
             const type = cfg?.type ?? SERVER_TYPE.HTTP;
-            _instance = createServer({});
+
+            if (type === SERVER_TYPE.HTTP2) {
+                _instance = createServerH2();
+                logger.info(`Starting server in HTTP/2 mode on port ${port}...`);
+            } else if (type === SERVER_TYPE.HTTP) {
+                _instance = createServer({});
+                logger.info(`Starting server in HTTP/1 mode on port ${port}...`);
+            } else if (type === SERVER_TYPE.HTTPS) {
+                if (!cfg.tls?.key || !cfg.tls?.cert) {
+                    logger.error('HTTPS server requires TLS key and certificate');
+                    throw new Error('TLS key and certificate are required for HTTPS server');
+                }
+                _instance = createSecureServer(cfg.tls);
+                logger.info(`Starting server in HTTPS (HTTP/2 + TLS) mode on port ${port}...`);
+            } else {
+                logger.error(`Unsupported server type: ${type}`);
+                throw new Error(`Server type '${type}' is not supported`);
+            }
+
             _instance.on('request', dispatcher.onEventRequest);
             _instance.listen(port);
-            logger.info(`The server is listening on port ${port}...`);
         };
 
+        /**
+         * Stops the server.
+         * @returns {Promise<void>}
+         */
         this.stop = async function () {
             console.log(`The server is stopping...`);
         };

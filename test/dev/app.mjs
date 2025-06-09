@@ -5,6 +5,7 @@
  */
 import {dirname, join} from 'node:path';
 import {fileURLToPath} from 'node:url';
+import {readFileSync} from 'node:fs';
 import Container from '@teqfw/di';
 
 // VARS
@@ -39,7 +40,26 @@ const server = await container.get('Fl32_Web_Back_Server$');
 const SERVER_TYPE = await container.get('Fl32_Web_Back_Enum_Server_Type$');
 /** @type {Fl32_Web_Back_Server_Config} */
 const factConfig = await container.get('Fl32_Web_Back_Server_Config$');
+
+// Read TLS certificates
+const certsDir = join(cur, '..', 'certs');
+const key = readFileSync(join(certsDir, 'key.pem'), 'utf8');
+const cert = readFileSync(join(certsDir, 'cert.pem'), 'utf8');
+let ca;
+try {
+    ca = readFileSync(join(certsDir, 'ca.pem'), 'utf8');
+} catch (e) {
+    // CA certificate is optional
+}
+
+console.log('Starting HTTPS server on port 3443...');
 const cfg = factConfig.create({
-    port: 3000, type: SERVER_TYPE.HTTP
+    port: 3443,
+    type: SERVER_TYPE.HTTPS,
+    tls: {
+        key,
+        cert,
+        ca
+    }
 });
 await server.start(cfg);
