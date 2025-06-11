@@ -78,7 +78,15 @@ export default class Fl32_Web_Back_Server {
          * @returns {Promise<void>}
          */
         this.stop = async function () {
-            console.log(`The server is stopping...`);
+            if (_instance) {
+                await new Promise((resolve, reject) => {
+                    _instance.close(err => err ? reject(err) : resolve());
+                });
+                logger.info('Server stopped');
+                _instance = undefined;
+            } else {
+                logger.warn('Server is not running');
+            }
         };
     }
 }
