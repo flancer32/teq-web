@@ -7,7 +7,7 @@ export default class Fl32_Web_Back_Helper_Mime {
         /**
          * Mapping from file extension to MIME type.
          * Keys must start with a dot, e.g. '.html'.
-         * @type {Object<string, string>}
+         * @type {{[key: string]: string}}
          */
         const _types = Object.freeze({
             '.aac': 'audio/aac',

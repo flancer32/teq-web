@@ -35,10 +35,10 @@ export default class Fl32_Web_Back_Helper_Respond {
         /**
          * Sends an HTTP response with a given status code.
          *
-         * @param {Object} params
+         * @param {object} params
          * @param {module:http.ServerResponse|module:http2.Http2ServerResponse} params.res - HTTP response object.
-         * @param {Object<string, string>} [params.headers={}] - Custom headers.
-         * @param {string|Object} [params.body=''] - Response body.
+         * @param {{[key: string]: string}} [params.headers={}] - Custom headers.
+         * @param {string|object} [params.body=''] - Response body.
          * @param {number} status - HTTP status code.
          * @returns {boolean} - `true` if response was sent, `false` if headers were already sent.
          */
