@@ -14,6 +14,7 @@ describe('Fl32_Web_Back_Server (mocked)', () => {
         createServer: () => ({
             listen: () => { log.push('http.listen'); },
             on: () => { log.push('http.on'); },
+            close: (cb) => { log.push('http.close'); cb && cb(); },
         }),
     };
 
@@ -21,10 +22,12 @@ describe('Fl32_Web_Back_Server (mocked)', () => {
         createServer: () => ({
             listen: () => { log.push('http2.listen'); },
             on: () => { log.push('http2.on'); },
+            close: (cb) => { log.push('http2.close'); cb && cb(); },
         }),
         createSecureServer: (tlsOpts) => ({
             listen: () => { log.push('http2s.listen'); },
             on: () => { log.push('http2s.on'); },
+            close: (cb) => { log.push('http2s.close'); cb && cb(); },
         })
     };
 
@@ -95,5 +98,15 @@ describe('Fl32_Web_Back_Server (mocked)', () => {
             /not supported/
         );
         assert.deepStrictEqual(log.at(-1), ['error', 'Unsupported server type: ftp']);
+    });
+
+    it('should stop the server', async () => {
+        const server = await container.get('Fl32_Web_Back_Server$');
+        await server.start();
+        await server.stop();
+        assert.deepStrictEqual(log.slice(-2), [
+            'http.close',
+            ['info', 'Server stopped'],
+        ]);
     });
 });
