@@ -1,5 +1,5 @@
-import {describe, it} from 'mocha';
-import assert from 'assert';
+import {describe, it, beforeEach} from 'node:test';
+import assert from 'node:assert/strict';
 import {buildTestContainer} from '../common.js';
 
 describe('Fl32_Web_Back_Server (mocked)', () => {
