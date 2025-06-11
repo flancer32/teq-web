@@ -1,7 +1,7 @@
 {
   "name": "@flancer32/teq-web",
   "version": "0.1.0",
-  "description": "Web plugin for TeqFW platform: interfaces, simple server, handler dispatcher.",
+  "description": "Node.js web plugin supporting Express and Fastify integration, with built-in server for standalone operation",
   "type": "module",
   "keywords": [
     "es6+",
