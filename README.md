@@ -109,6 +109,30 @@ This will start an HTTPS server on port `3443` with:
 
 ---
 
+### Using with Express or Fastify
+
+The dispatcher can be connected to external web frameworks instead of the built-in server.
+
+```js
+// Express
+const app = Express();
+app.use(async (req, res) => {
+    await dispatcher.onEventRequest(req, res);
+});
+app.listen(3000);
+
+// Fastify
+const fastify = Fastify();
+fastify.all('*', async (request, reply) => {
+    const req = request.raw;
+    const res = reply.raw;
+    await dispatcher.onEventRequest(req, res);
+});
+await fastify.listen({port: 3000});
+```
+
+---
+
 ## Installation
 
 ```bash
