@@ -3,7 +3,6 @@
   "version": "0.1.0",
   "description": "Web plugin for TeqFW platform: interfaces, simple server, handler dispatcher.",
   "type": "module",
-  "main": "index.js",
   "keywords": [
     "es6+",
     "teqfw",
