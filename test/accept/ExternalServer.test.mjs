@@ -10,10 +10,10 @@ async function startExpress(port, dispatcher) {
   app.use(async (req, res) => {
     await dispatcher.onEventRequest(req, res);
   });
-  await new Promise((resolve, reject) => {
+  const server = await new Promise((resolve, reject) => {
     const srv = app.listen(port, err => err ? reject(err) : resolve(srv));
   });
-  return app;
+  return server;
 }
 
 async function startFastify(port, dispatcher) {
@@ -32,7 +32,7 @@ describe('Dispatcher integration with external servers', () => {
     const container = buildTestContainer();
     const dispatcher = await container.get('Fl32_Web_Back_Dispatcher$');
     const port = 3054;
-    const app = await startExpress(port, dispatcher);
+    const server = await startExpress(port, dispatcher);
 
     const status = await new Promise((resolve, reject) => {
       http.get(`http://localhost:${port}`, res => {
@@ -43,8 +43,7 @@ describe('Dispatcher integration with external servers', () => {
     });
 
     assert.strictEqual(status, 404);
-    // TODO: for codex - there is no `close` method in Express web server
-    await new Promise(resolve => app.close(resolve));
+    await new Promise(resolve => server.close(resolve));
   });
 
   it('should respond via fastify', async () => {
