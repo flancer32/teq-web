@@ -25,8 +25,8 @@
   },
   "scripts": {
     "eslint": "./node_modules/.bin/eslint ./src/",
-    "test:accept": "node --test test/accept",
-    "test:unit": "node --test ./test/unit"
+    "test:accept": "node --test $(find ./test/accept -name '*.test.mjs')",
+    "test:unit": "node --test $(find ./test/unit -name '*.test.mjs')"
   },
   "dependencies": {
     "@teqfw/di": ">=0.34.0"
