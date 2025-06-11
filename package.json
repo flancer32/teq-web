@@ -26,7 +26,7 @@
   "scripts": {
     "eslint": "./node_modules/.bin/eslint ./src/",
     "test:accept": "node --test test/accept",
-    "test:unit": "node --test test/unit"
+    "test:unit": "node --test ./test/unit"
   },
   "dependencies": {
     "@teqfw/di": ">=0.34.0"
