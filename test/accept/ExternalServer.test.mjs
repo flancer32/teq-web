@@ -43,6 +43,7 @@ describe('Dispatcher integration with external servers', () => {
     });
 
     assert.strictEqual(status, 404);
+    // TODO: for codex - there is no `close` method in Express web server
     await new Promise(resolve => app.close(resolve));
   });
 
