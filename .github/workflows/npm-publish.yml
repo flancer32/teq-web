@@ -30,7 +30,7 @@ jobs:
     needs: build
     runs-on: ubuntu-latest
     steps:
-      # Checkout repository code again for separate job
+      # Checkout repository code again for a separate job
       - uses: actions/checkout@v4
 
       # Setup Node.js and configure npm registry
