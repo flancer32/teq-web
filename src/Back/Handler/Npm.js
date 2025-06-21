@@ -129,8 +129,27 @@ export default class Fl32_Web_Back_Handler_Npm {
 
         /**
          * Initialize handler with allow list.
+         *
          * @param {object} params
-         * @param {{[key: string]: string[]}} params.allow
+         * @param {{[key: string]: string[]}} params.allow - Map of packages to paths
+         *   that can be served from `node_modules`.
+         * @returns {Promise<void>}
+         *
+         * @example
+         * // Allow a single file from a package
+         * await npmHandler.init({
+         *   allow: {
+         *     vue: ['dist/vue.global.prod.js'],
+         *   },
+         * });
+         *
+         * @example
+         * // Allow all files from a subfolder
+         * await npmHandler.init({
+         *   allow: {
+         *     '@teqfw/di/src': ['.'],
+         *   },
+         * });
          */
         this.init = async function ({allow}) {
             _allow = allow || {};
