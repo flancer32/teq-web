@@ -4,6 +4,7 @@ export default class App_Plugin_Start {
      * @param {typeof import('node:url')} url
      * @param {Fl32_Web_Back_Dispatcher} dispatcher
      * @param {Fl32_Web_Back_Handler_Pre_Log} hndlRequestLog
+     * @param {Fl32_Web_Back_Handler_Npm} hndlNpm
      * @param {Fl32_Web_Back_Handler_Static} hndlStatic
      */
     constructor(
@@ -12,6 +13,7 @@ export default class App_Plugin_Start {
             'node:url': url,
             Fl32_Web_Back_Dispatcher$: dispatcher,
             Fl32_Web_Back_Handler_Pre_Log$: hndlRequestLog,
+            Fl32_Web_Back_Handler_Npm$: hndlNpm,
             Fl32_Web_Back_Handler_Static$: hndlStatic,
         }
     ) {
@@ -29,9 +31,11 @@ export default class App_Plugin_Start {
 
         return async function () {
             // Set up handlers
+            await hndlNpm.init({allow: {'@teqfw/di': ['src/Container.js']}});
             await hndlStatic.init({rootPath: webRoot});
             // Register handlers
             dispatcher.addHandler(hndlRequestLog);
+            dispatcher.addHandler(hndlNpm);
             dispatcher.addHandler(hndlStatic);
         };
     }
