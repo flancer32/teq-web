@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.2.0] - 2025-06-21
+
+### Added
+- Integration test covering NPM handler with the built-in server.
+- Built-in NPM handler for serving files from `node_modules`.
+- JSDoc examples for NPM handler initialization.
+
 ## [0.1.0] - 2025-06-11
 
 ### Added
