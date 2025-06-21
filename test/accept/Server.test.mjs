@@ -11,7 +11,7 @@ async function waitListening(server) {
   }
 }
 
-describe('Fl32_Web_Back_Server (real)', () => {
+describe('Fl32_Web_Back_Server', () => {
   it('should start and respond in HTTP/1 mode', async () => {
     const container = buildTestContainer();
     const server = await container.get('Fl32_Web_Back_Server$');
@@ -99,6 +99,51 @@ describe('Fl32_Web_Back_Server (real)', () => {
     });
 
     assert.strictEqual(status, 404);
+    await server.stop();
+    assert.strictEqual(server.getInstance(), undefined);
+  });
+});
+
+describe('Fl32_Web_Back_Api_Handler', () => {
+  it('should serve allowed NPM file', async () => {
+    const container = buildTestContainer();
+    const dispatcher = await container.get('Fl32_Web_Back_Dispatcher$');
+    const handler = await container.get('Fl32_Web_Back_Handler_Npm$');
+    await handler.init({
+      allow: {
+        '@teqfw/di/src': ['.'],
+      },
+    });
+    dispatcher.addHandler(handler);
+    dispatcher.orderHandlers();
+
+    const server = await container.get('Fl32_Web_Back_Server$');
+    const SERVER_TYPE = await container.get('Fl32_Web_Back_Enum_Server_Type$');
+    const Config = await container.get('Fl32_Web_Back_Server_Config$');
+    const http = await container.get('node:http');
+
+    const cfg = Config.create({ port: 3056, type: SERVER_TYPE.HTTP });
+    await server.start(cfg);
+    await waitListening(server);
+
+    const result = await new Promise((resolve, reject) => {
+      const req = http.get({
+        hostname: 'localhost',
+        port: cfg.port,
+        path: '/node_modules/@teqfw/di/src/Api/Container/Parser/Chunk.js',
+      }, res => {
+        const chunks = [];
+        res.on('data', ch => chunks.push(ch));
+        res.on('end', () => {
+          resolve({ status: res.statusCode, body: Buffer.concat(chunks).toString() });
+        });
+      });
+      req.on('error', reject);
+    });
+
+    assert.strictEqual(result.status, 200);
+    assert.match(result.body, /class TeqFw_Di_Api_Container_Parser_Chunk/);
+
     await server.stop();
     assert.strictEqual(server.getInstance(), undefined);
   });
