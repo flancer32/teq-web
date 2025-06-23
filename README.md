@@ -83,7 +83,8 @@ resolver.addNamespaceRoot('Fl32_Web_', './node_modules/@flancer32/teq-web/src');
 const logHandler = await container.get('Fl32_Web_Back_Handler_Pre_Log$');
 const sourceHandler = await container.get('Fl32_Web_Back_Handler_Source$');
 const staticHandler = await container.get('Fl32_Web_Back_Handler_Static$');
-await sourceHandler.init({
+const SourceCfg = await container.get('Fl32_Web_Back_Dto_Handler_Source$');
+const sourceCfg = SourceCfg.create({
     root: 'node_modules',
     prefix: '/node_modules/',
     allow: {
@@ -91,6 +92,7 @@ await sourceHandler.init({
         '@teqfw/di': ['src/Container.js'],
     }
 });
+await sourceHandler.init(sourceCfg);
 await staticHandler.init({rootPath: webRoot});
 
 // Register handlers

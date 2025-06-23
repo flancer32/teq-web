@@ -12,6 +12,7 @@ export default class Fl32_Web_Back_Handler_Source {
      * @param {Fl32_Web_Back_Helper_Mime} helpMime
      * @param {Fl32_Web_Back_Helper_Respond} respond
      * @param {Fl32_Web_Back_Dto_Handler_Info} dtoInfo
+     * @param {Fl32_Web_Back_Dto_Handler_Source} dtoCfg
      * @param {typeof Fl32_Web_Back_Enum_Stage} STAGE
      */
     constructor(
@@ -23,6 +24,7 @@ export default class Fl32_Web_Back_Handler_Source {
             Fl32_Web_Back_Helper_Mime$: helpMime,
             Fl32_Web_Back_Helper_Respond$: respond,
             Fl32_Web_Back_Dto_Handler_Info$: dtoInfo,
+            Fl32_Web_Back_Dto_Handler_Source$: dtoCfg,
             Fl32_Web_Back_Enum_Stage$: STAGE,
         }
     ) {
@@ -160,11 +162,16 @@ export default class Fl32_Web_Back_Handler_Source {
          *   },
          * });
          */
-        this.init = async function ({root = 'node_modules', prefix = '/node_modules/', allow = {}} = {}) {
-            _root = path.resolve(root);
-            _prefix = prefix;
+        /**
+         * @param {Fl32_Web_Back_Dto_Handler_Source.Dto|object} cfg
+         * @returns {Promise<void>}
+         */
+        this.init = async function (cfg = {}) {
+            const dto = dtoCfg.create(cfg);
+            _root = path.resolve(dto.root);
+            _prefix = dto.prefix;
             if (!_prefix.endsWith('/')) _prefix += '/';
-            _allow = allow;
+            _allow = dto.allow;
         };
 
         /** @returns {Fl32_Web_Back_Dto_Handler_Info.Dto} */
