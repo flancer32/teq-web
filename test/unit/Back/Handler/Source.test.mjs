@@ -30,7 +30,7 @@ class MockRes extends Writable {
     }
 }
 
-describe('Fl32_Web_Back_Handler_Npm', () => {
+describe('Fl32_Web_Back_Handler_Source', () => {
     let container;
     const log = [];
 
@@ -44,8 +44,8 @@ describe('Fl32_Web_Back_Handler_Npm', () => {
     });
 
     it('should serve allowed file', async () => {
-        const handler = await container.get('Fl32_Web_Back_Handler_Npm$');
-        await handler.init({allow: {'@teqfw/di': ['package.json']}});
+        const handler = await container.get('Fl32_Web_Back_Handler_Source$');
+        await handler.init({root: 'node_modules', prefix: '/node_modules/', allow: {'@teqfw/di': ['package.json']}});
         const req = {url: '/node_modules/@teqfw/di/package.json'};
         const res = new MockRes();
         const ok = await handler.handle(req, res);
@@ -57,8 +57,8 @@ describe('Fl32_Web_Back_Handler_Npm', () => {
     });
 
     it('should deny disallowed path', async () => {
-        const handler = await container.get('Fl32_Web_Back_Handler_Npm$');
-        await handler.init({allow: {'@teqfw/di': ['package.json']}});
+        const handler = await container.get('Fl32_Web_Back_Handler_Source$');
+        await handler.init({root: 'node_modules', prefix: '/node_modules/', allow: {'@teqfw/di': ['package.json']}});
         const req = {url: '/node_modules/@teqfw/di/secret.js'};
         const res = new MockRes();
         const ok = await handler.handle(req, res);

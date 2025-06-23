@@ -81,9 +81,11 @@ resolver.addNamespaceRoot('Fl32_Web_', './node_modules/@flancer32/teq-web/src');
 
 // Get and configure built-in handlers
 const logHandler = await container.get('Fl32_Web_Back_Handler_Pre_Log$');
-const npmHandler = await container.get('Fl32_Web_Back_Handler_Npm$');
+const sourceHandler = await container.get('Fl32_Web_Back_Handler_Source$');
 const staticHandler = await container.get('Fl32_Web_Back_Handler_Static$');
-await npmHandler.init({
+await sourceHandler.init({
+    root: 'node_modules',
+    prefix: '/node_modules/',
     allow: {
         vue: ['dist/vue.global.prod.js'],
         '@teqfw/di': ['src/Container.js'],
@@ -94,7 +96,7 @@ await staticHandler.init({rootPath: webRoot});
 // Register handlers
 const dispatcher = await container.get('Fl32_Web_Back_Dispatcher$');
 dispatcher.addHandler(logHandler);
-dispatcher.addHandler(npmHandler);
+dispatcher.addHandler(sourceHandler);
 dispatcher.addHandler(staticHandler);
 
 // Create and start the server
@@ -113,7 +115,7 @@ await server.start({
 This will start an HTTPS server on port `3443` with:
 
 * `Fl32_Web_Back_Handler_Pre_Log` logging each request method and URL;
-* `Fl32_Web_Back_Handler_Npm` serving allowed files from `node_modules`;
+* `Fl32_Web_Back_Handler_Source` serving allowed files from `node_modules`;
 * `Fl32_Web_Back_Handler_Static` serving files from the `/web` folder.
 
 ---
