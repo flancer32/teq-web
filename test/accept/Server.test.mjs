@@ -108,8 +108,10 @@ describe('Fl32_Web_Back_Api_Handler', () => {
   it('should serve allowed NPM file', async () => {
     const container = buildTestContainer();
     const dispatcher = await container.get('Fl32_Web_Back_Dispatcher$');
-    const handler = await container.get('Fl32_Web_Back_Handler_Npm$');
+    const handler = await container.get('Fl32_Web_Back_Handler_Source$');
     await handler.init({
+      root: 'node_modules',
+      prefix: '/node_modules/',
       allow: {
         '@teqfw/di/src': ['.'],
       },
