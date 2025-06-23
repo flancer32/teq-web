@@ -111,7 +111,7 @@ describe('Fl32_Web_Back_Api_Handler', () => {
     const handler = await container.get('Fl32_Web_Back_Handler_Source$');
     await handler.init({
       root: 'node_modules',
-      prefix: '/node_modules/',
+      prefix: '/npm/',
       allow: {
         '@teqfw/di/src': ['.'],
       },
@@ -132,7 +132,7 @@ describe('Fl32_Web_Back_Api_Handler', () => {
       const req = http.get({
         hostname: 'localhost',
         port: cfg.port,
-        path: '/node_modules/@teqfw/di/src/Api/Container/Parser/Chunk.js',
+        path: '/npm/@teqfw/di/src/Api/Container/Parser/Chunk.js',
       }, res => {
         const chunks = [];
         res.on('data', ch => chunks.push(ch));
@@ -145,6 +145,51 @@ describe('Fl32_Web_Back_Api_Handler', () => {
 
     assert.strictEqual(result.status, 200);
     assert.match(result.body, /class TeqFw_Di_Api_Container_Parser_Chunk/);
+
+    await server.stop();
+    assert.strictEqual(server.getInstance(), undefined);
+  });
+
+  it('should serve allowed source file', async () => {
+    const container = buildTestContainer();
+    const dispatcher = await container.get('Fl32_Web_Back_Dispatcher$');
+    const handler = await container.get('Fl32_Web_Back_Handler_Source$');
+    await handler.init({
+      root: 'src',
+      prefix: '/sources/',
+      allow: {
+        Back: ['Server.js'],
+      },
+    });
+    dispatcher.addHandler(handler);
+    dispatcher.orderHandlers();
+
+    const server = await container.get('Fl32_Web_Back_Server$');
+    const SERVER_TYPE = await container.get('Fl32_Web_Back_Enum_Server_Type$');
+    const Config = await container.get('Fl32_Web_Back_Server_Config$');
+    const http = await container.get('node:http');
+
+    const cfg = Config.create({ port: 3057, type: SERVER_TYPE.HTTP });
+    await server.start(cfg);
+    await waitListening(server);
+
+    const result = await new Promise((resolve, reject) => {
+      const req = http.get({
+        hostname: 'localhost',
+        port: cfg.port,
+        path: '/sources/Back/Server.js',
+      }, res => {
+        const chunks = [];
+        res.on('data', ch => chunks.push(ch));
+        res.on('end', () => {
+          resolve({ status: res.statusCode, body: Buffer.concat(chunks).toString() });
+        });
+      });
+      req.on('error', reject);
+    });
+
+    assert.strictEqual(result.status, 200);
+    assert.match(result.body, /class Fl32_Web_Back_Server/);
 
     await server.stop();
     assert.strictEqual(server.getInstance(), undefined);

@@ -31,7 +31,7 @@ export default class App_Plugin_Start {
 
         return async function () {
             // Set up handlers
-            await hndlSource.init({root: 'node_modules', prefix: '/node_modules/', allow: {'@teqfw/di': ['src/Container.js']}});
+            await hndlSource.init({root: 'node_modules', prefix: '/npm/', allow: {'@teqfw/di': ['src/Container.js']}});
             await hndlStatic.init({rootPath: webRoot});
             // Register handlers
             dispatcher.addHandler(hndlRequestLog);
