@@ -30,7 +30,7 @@ class MockRes extends Writable {
     }
 }
 
-describe('Fl32_Web_Back_Handler_Npm', () => {
+describe('Fl32_Web_Back_Handler_Source', () => {
     let container;
     const log = [];
 
@@ -44,9 +44,9 @@ describe('Fl32_Web_Back_Handler_Npm', () => {
     });
 
     it('should serve allowed file', async () => {
-        const handler = await container.get('Fl32_Web_Back_Handler_Npm$');
-        await handler.init({allow: {'@teqfw/di': ['package.json']}});
-        const req = {url: '/node_modules/@teqfw/di/package.json'};
+        const handler = await container.get('Fl32_Web_Back_Handler_Source$');
+        await handler.init({root: 'node_modules', prefix: '/npm/', allow: {'@teqfw/di': ['package.json']}});
+        const req = {url: '/npm/@teqfw/di/package.json'};
         const res = new MockRes();
         const ok = await handler.handle(req, res);
         await new Promise(resolve => res.on('finish', resolve));
@@ -57,13 +57,26 @@ describe('Fl32_Web_Back_Handler_Npm', () => {
     });
 
     it('should deny disallowed path', async () => {
-        const handler = await container.get('Fl32_Web_Back_Handler_Npm$');
-        await handler.init({allow: {'@teqfw/di': ['package.json']}});
-        const req = {url: '/node_modules/@teqfw/di/secret.js'};
+        const handler = await container.get('Fl32_Web_Back_Handler_Source$');
+        await handler.init({root: 'node_modules', prefix: '/npm/', allow: {'@teqfw/di': ['package.json']}});
+        const req = {url: '/npm/@teqfw/di/secret.js'};
         const res = new MockRes();
         const ok = await handler.handle(req, res);
         assert.strictEqual(ok, false);
         assert.strictEqual(res.headersSent, false);
         assert.ok(log[0][0] === 'warn');
+    });
+
+    it('should serve allowed src file', async () => {
+        const handler = await container.get('Fl32_Web_Back_Handler_Source$');
+        await handler.init({root: 'src', prefix: '/sources/', allow: {Back: ['Server.js']}});
+        const req = {url: '/sources/Back/Server.js'};
+        const res = new MockRes();
+        const ok = await handler.handle(req, res);
+        await new Promise(resolve => res.on('finish', resolve));
+        assert.strictEqual(ok, true);
+        assert.strictEqual(res.statusCode, 200);
+        assert.match(res.data.toString(), /class Fl32_Web_Back_Server/);
+        assert.strictEqual(log.length, 0);
     });
 });

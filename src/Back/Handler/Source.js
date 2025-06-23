@@ -1,8 +1,8 @@
 /**
- * Serves whitelisted files from ./node_modules directory.
+ * Serves whitelisted source files from the configured root directory.
  * @implements Fl32_Web_Back_Api_Handler
  */
-export default class Fl32_Web_Back_Handler_Npm {
+export default class Fl32_Web_Back_Handler_Source {
     /* eslint-disable jsdoc/require-param-description,jsdoc/check-param-names */
     /**
      * @param {typeof import('node:fs')} fs
@@ -36,7 +36,11 @@ export default class Fl32_Web_Back_Handler_Npm {
             HTTP2_HEADER_LAST_MODIFIED,
             HTTP_STATUS_OK,
         } = H2;
-        const _root = path.resolve('node_modules');
+        /** @type {string} */
+        let _root;
+
+        /** @type {string} */
+        let _prefix = '/';
 
         /** @type {Fl32_Web_Back_Dto_Handler_Info.Dto} */
         const _info = dtoInfo.create();
@@ -49,7 +53,7 @@ export default class Fl32_Web_Back_Handler_Npm {
 
         // MAIN
         /**
-         * Handles request to serve allowed files from node_modules.
+         * Handles request to serve allowed files from the source directory.
          *
          * @param {module:http.IncomingMessage|module:http2.Http2ServerRequest} req
          * @param {module:http.ServerResponse|module:http2.Http2ServerResponse} res
@@ -59,12 +63,11 @@ export default class Fl32_Web_Back_Handler_Npm {
             if (!respond.isWritable(res)) return false;
 
             const urlPath = decodeURIComponent(req.url.split('?')[0]);
-            const prefix = '/node_modules/';
-            if (!urlPath.startsWith(prefix)) return false;
+            if (!urlPath.startsWith(_prefix)) return false;
 
-            const rel = urlPath.slice(prefix.length);
+            const rel = urlPath.slice(_prefix.length);
             if (rel.includes('..') || path.isAbsolute(rel)) {
-                logger.warn(`NPM static access denied: ${rel}`);
+                logger.warn(`Source static access denied: ${rel}`);
                 return false;
             }
 
@@ -93,13 +96,13 @@ export default class Fl32_Web_Back_Handler_Npm {
             }
 
             if (!allowed) {
-                logger.warn(`NPM static access denied: ${rel}`);
+                logger.warn(`Source static access denied: ${rel}`);
                 return false;
             }
 
             const fsPath = path.resolve(_root, rel);
             if (!fsPath.startsWith(_root)) {
-                logger.warn(`NPM static access denied: ${rel}`);
+                logger.warn(`Source static access denied: ${rel}`);
                 return false;
             }
 
@@ -107,11 +110,11 @@ export default class Fl32_Web_Back_Handler_Npm {
             try {
                 stat = await fsp.stat(fsPath);
             } catch {
-                logger.warn(`NPM static file not found: ${rel}`);
+                logger.warn(`Source static file not found: ${rel}`);
                 return false;
             }
             if (!stat.isFile()) {
-                logger.warn(`NPM static file not found: ${rel}`);
+                logger.warn(`Source static file not found: ${rel}`);
                 return false;
             }
 
@@ -128,16 +131,20 @@ export default class Fl32_Web_Back_Handler_Npm {
         };
 
         /**
-         * Initialize handler with allow list.
+         * Initialize handler.
          *
          * @param {object} params
-         * @param {{[key: string]: string[]}} params.allow - Map of packages to paths
-         *   that can be served from `node_modules`.
+         * @param {string} params.root - Root directory for files.
+         * @param {string} params.prefix - URL prefix to match.
+         * @param {{[key: string]: string[]}} params.allow - Map of directories to paths
+         *   that can be served.
          * @returns {Promise<void>}
          *
          * @example
          * // Allow a single file from a package
-         * await npmHandler.init({
+         * await sourceHandler.init({
+         *   root: 'node_modules',
+         *   prefix: '/node_modules/',
          *   allow: {
          *     vue: ['dist/vue.global.prod.js'],
          *   },
@@ -145,14 +152,19 @@ export default class Fl32_Web_Back_Handler_Npm {
          *
          * @example
          * // Allow all files from a subfolder
-         * await npmHandler.init({
+         * await sourceHandler.init({
+         *   root: 'node_modules',
+         *   prefix: '/node_modules/',
          *   allow: {
          *     '@teqfw/di/src': ['.'],
          *   },
          * });
          */
-        this.init = async function ({allow}) {
-            _allow = allow || {};
+        this.init = async function ({root = 'node_modules', prefix = '/node_modules/', allow = {}} = {}) {
+            _root = path.resolve(root);
+            _prefix = prefix;
+            if (!_prefix.endsWith('/')) _prefix += '/';
+            _allow = allow;
         };
 
         /** @returns {Fl32_Web_Back_Dto_Handler_Info.Dto} */
