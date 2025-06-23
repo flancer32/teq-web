@@ -45,7 +45,9 @@ describe('Fl32_Web_Back_Handler_Source', () => {
 
     it('should serve allowed file', async () => {
         const handler = await container.get('Fl32_Web_Back_Handler_Source$');
-        await handler.init({root: 'node_modules', prefix: '/npm/', allow: {'@teqfw/di': ['package.json']}});
+        const cfgFactory = await container.get('Fl32_Web_Back_Dto_Handler_Source$');
+        const cfg = cfgFactory.create({root: 'node_modules', prefix: '/npm/', allow: {'@teqfw/di': ['package.json']}});
+        await handler.init(cfg);
         const req = {url: '/npm/@teqfw/di/package.json'};
         const res = new MockRes();
         const ok = await handler.handle(req, res);
@@ -58,7 +60,9 @@ describe('Fl32_Web_Back_Handler_Source', () => {
 
     it('should deny disallowed path', async () => {
         const handler = await container.get('Fl32_Web_Back_Handler_Source$');
-        await handler.init({root: 'node_modules', prefix: '/npm/', allow: {'@teqfw/di': ['package.json']}});
+        const cfgFactory = await container.get('Fl32_Web_Back_Dto_Handler_Source$');
+        const cfg = cfgFactory.create({root: 'node_modules', prefix: '/npm/', allow: {'@teqfw/di': ['package.json']}});
+        await handler.init(cfg);
         const req = {url: '/npm/@teqfw/di/secret.js'};
         const res = new MockRes();
         const ok = await handler.handle(req, res);
@@ -69,7 +73,9 @@ describe('Fl32_Web_Back_Handler_Source', () => {
 
     it('should serve allowed src file', async () => {
         const handler = await container.get('Fl32_Web_Back_Handler_Source$');
-        await handler.init({root: 'src', prefix: '/sources/', allow: {Back: ['Server.js']}});
+        const cfgFactory = await container.get('Fl32_Web_Back_Dto_Handler_Source$');
+        const cfg = cfgFactory.create({root: 'src', prefix: '/sources/', allow: {Back: ['Server.js']}});
+        await handler.init(cfg);
         const req = {url: '/sources/Back/Server.js'};
         const res = new MockRes();
         const ok = await handler.handle(req, res);

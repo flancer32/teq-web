@@ -83,4 +83,32 @@ export default class Fl32_Web_Back_Helper_Cast {
         }
         return undefined;
     }
+
+    /**
+     * Cast an object to a map with string keys and array-of-string values.
+     * Throws error on invalid structure or values.
+     *
+     * @param {*} data - Raw input to cast.
+     * @returns {Record<string, string[]>}
+     */
+    stringArrayMap(data) {
+        if (data === undefined) return {};
+        if (typeof data !== 'object' || data === null || Array.isArray(data)) {
+            throw new Error('Invalid value for allow');
+        }
+        const res = {};
+        for (const [key, arr] of Object.entries(data)) {
+            if (!Array.isArray(arr)) throw new Error(`Invalid allow list for ${key}`);
+            const k = this.string(key);
+            if (!k) throw new Error('Invalid allow key');
+            const items = [];
+            for (const item of arr) {
+                const val = this.string(item);
+                if (!val) throw new Error(`Invalid allow list for ${k}`);
+                items.push(val);
+            }
+            res[k] = items;
+        }
+        return res;
+    }
 }
