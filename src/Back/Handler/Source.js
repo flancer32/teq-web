@@ -73,7 +73,8 @@ export default class Fl32_Web_Back_Handler_Source {
                 return false;
             }
 
-            let pkg; let subPath;
+            let pkg;
+            let subPath;
             for (const key of Object.keys(_allow)) {
                 if (rel === key || rel.startsWith(`${key}/`)) {
                     pkg = key;
