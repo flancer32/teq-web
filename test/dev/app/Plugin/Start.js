@@ -4,8 +4,8 @@ export default class App_Plugin_Start {
      * @param {typeof import('node:url')} url
      * @param {Fl32_Web_Back_Dispatcher} dispatcher
      * @param {Fl32_Web_Back_Handler_Pre_Log} hndlRequestLog
-     * @param {Fl32_Web_Back_Handler_Source} hndlSource
      * @param {Fl32_Web_Back_Handler_Static} hndlStatic
+     * @param {Fl32_Web_Back_Dto_Handler_Source} dtoCfg
      */
     constructor(
         {
@@ -13,8 +13,8 @@ export default class App_Plugin_Start {
             'node:url': url,
             Fl32_Web_Back_Dispatcher$: dispatcher,
             Fl32_Web_Back_Handler_Pre_Log$: hndlRequestLog,
-            Fl32_Web_Back_Handler_Source$: hndlSource,
             Fl32_Web_Back_Handler_Static$: hndlStatic,
+            Fl32_Web_Back_Dto_Handler_Source$: dtoCfg,
         }
     ) {
         // VARS
@@ -30,12 +30,10 @@ export default class App_Plugin_Start {
         const webRoot = join(root, 'web');
 
         return async function () {
-            // Set up handlers
-            await hndlSource.init({root: 'node_modules', prefix: '/npm/', allow: {'@teqfw/di': ['src/Container.js']}});
-            await hndlStatic.init({rootPath: webRoot});
-            // Register handlers
+            const srcNpm = dtoCfg.create({root: 'node_modules', prefix: '/npm/', allow: {'@teqfw/di': ['src/Container.js']}});
+            const srcWeb = dtoCfg.create({root: webRoot, prefix: '/'});
+            await hndlStatic.init({sources: [srcNpm, srcWeb]});
             dispatcher.addHandler(hndlRequestLog);
-            dispatcher.addHandler(hndlSource);
             dispatcher.addHandler(hndlStatic);
         };
     }

@@ -81,10 +81,9 @@ resolver.addNamespaceRoot('Fl32_Web_', './node_modules/@flancer32/teq-web/src');
 
 // Get and configure built-in handlers
 const logHandler = await container.get('Fl32_Web_Back_Handler_Pre_Log$');
-const sourceHandler = await container.get('Fl32_Web_Back_Handler_Source$');
 const staticHandler = await container.get('Fl32_Web_Back_Handler_Static$');
 const SourceCfg = await container.get('Fl32_Web_Back_Dto_Handler_Source$');
-const sourceCfg = SourceCfg.create({
+const srcNpm = SourceCfg.create({
     root: 'node_modules',
     prefix: '/node_modules/',
     allow: {
@@ -92,13 +91,12 @@ const sourceCfg = SourceCfg.create({
         '@teqfw/di': ['src/Container.js'],
     }
 });
-await sourceHandler.init(sourceCfg);
-await staticHandler.init({rootPath: webRoot});
+const srcWeb = SourceCfg.create({ root: webRoot, prefix: '/' });
+await staticHandler.init({sources: [srcNpm, srcWeb]});
 
 // Register handlers
 const dispatcher = await container.get('Fl32_Web_Back_Dispatcher$');
 dispatcher.addHandler(logHandler);
-dispatcher.addHandler(sourceHandler);
 dispatcher.addHandler(staticHandler);
 
 // Create and start the server
@@ -117,8 +115,7 @@ await server.start({
 This will start an HTTPS server on port `3443` with:
 
 * `Fl32_Web_Back_Handler_Pre_Log` logging each request method and URL;
-* `Fl32_Web_Back_Handler_Source` serving allowed files from `node_modules`;
-* `Fl32_Web_Back_Handler_Static` serving files from the `/web` folder.
+* `Fl32_Web_Back_Handler_Static` serving files from `node_modules` and the `/web` folder.
 
 ---
 
