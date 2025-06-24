@@ -1,12 +1,64 @@
 import {describe, it, beforeEach} from 'node:test';
 import assert from 'node:assert/strict';
-import {Writable} from 'node:stream';
-import {mkdtemp, writeFile, mkdir, rm} from 'node:fs/promises';
-import os from 'node:os';
-import {join} from 'node:path';
 import {buildTestContainer} from '../../common.js';
 
-class MockRes extends Writable {
+class EventEmitter {
+    constructor() { this._e = {}; }
+    on(ev, fn) { (this._e[ev] ||= []).push(fn); }
+    emit(ev, ...args) { (this._e[ev] || []).forEach(fn => fn(...args)); }
+}
+
+const mockHttp2 = {
+    constants: {
+        HTTP2_HEADER_CONTENT_LENGTH: 'content-length',
+        HTTP2_HEADER_CONTENT_TYPE: 'content-type',
+        HTTP2_HEADER_LAST_MODIFIED: 'last-modified',
+        HTTP_STATUS_OK: 200,
+    },
+};
+
+const normalize = (p) => {
+    p = p.replace(/\\/g, '/');
+    p = p.replace(/\/+/g, '/');
+    if (p.length > 1 && p.endsWith('/')) p = p.slice(0, -1);
+    return p;
+};
+const mockPath = {
+    resolve: (...parts) => normalize(parts.filter(Boolean).join('/')),
+    join: (...parts) => normalize(parts.filter(Boolean).join('/')),
+    isAbsolute: (p) => p.startsWith('/'),
+    extname: (p) => {
+        const base = p.split('/').pop();
+        const i = base.lastIndexOf('.');
+        return i > -1 ? base.slice(i) : '';
+    },
+};
+
+let files;
+let statMap;
+function resetFS() { files = {}; statMap = {}; }
+function addDir(p) { p = mockPath.resolve(p); statMap[p] = {isFile:()=>false,isDirectory:()=>true,size:0,mtime:new Date()}; }
+function addFile(p,c) { p = mockPath.resolve(p); files[p]=c; statMap[p] = {isFile:()=>true,isDirectory:()=>false,size:Buffer.byteLength(c),mtime:new Date()}; }
+
+const mockFs = {
+    promises: {
+        stat: async (p) => {
+            p = mockPath.resolve(p);
+            if (!statMap[p]) throw new Error('ENOENT');
+            return statMap[p];
+        },
+    },
+    createReadStream: (p) => ({
+        pipe(res) {
+            setImmediate(() => {
+                if (files[p]) res.write(files[p]);
+                res.end();
+            });
+        },
+    }),
+};
+
+class MockRes extends EventEmitter {
     constructor() {
         super();
         this.data = Buffer.alloc(0);
@@ -17,117 +69,102 @@ class MockRes extends Writable {
     }
     get headersSent() { return this._headersSent; }
     get writableEnded() { return this._ended; }
-    writeHead(status, headers) {
-        this.statusCode = status;
-        this.headers = headers;
-        this._headersSent = true;
-    }
-    _write(chunk, enc, cb) {
-        this.data = Buffer.concat([this.data, chunk]);
-        cb();
-    }
-    end(chunk) {
-        if (chunk) this.data = Buffer.concat([this.data, Buffer.from(chunk)]);
-        this._ended = true;
-        super.end();
-    }
+    writeHead(status, headers) { this.statusCode = status; this.headers = headers; this._headersSent = true; }
+    write(chunk) { this.data = Buffer.concat([this.data, Buffer.from(chunk)]); }
+    end(chunk) { if (chunk) this.write(chunk); this._ended = true; this.emit('finish'); }
 }
 
-describe('Fl32_Web_Back_Handler_Static (extended)', () => {
-    let container;
-    const log = [];
+describe('Fl32_Web_Back_Handler_Static (mocked)', () => {
+    let container; const log = [];
 
     beforeEach(() => {
         container = buildTestContainer();
+        container.register('node:fs', mockFs);
+        container.register('node:http2', mockHttp2);
+        container.register('node:path', mockPath);
         container.register('Fl32_Web_Back_Logger$', {
-            warn: (...args) => log.push(['warn', ...args]),
-            exception: (...args) => log.push(['exception', ...args]),
+            warn: (...a) => log.push(['warn', ...a]),
+            exception: (...a) => log.push(['exception', ...a]),
         });
         log.length = 0;
+        resetFS();
     });
 
     it('should match sources by prefix length', async () => {
-        const dirA = await mkdtemp(join(os.tmpdir(), 'a-'));
-        const dirB = await mkdtemp(join(os.tmpdir(), 'b-'));
-        await writeFile(join(dirA, 'test.txt'), 'A');
-        await writeFile(join(dirB, 'test.txt'), 'B');
+        addDir('/a');
+        addFile('/a/test.txt','A');
+        addDir('/b');
+        addFile('/b/test.txt','B');
         const handler = await container.get('Fl32_Web_Back_Handler_Static$');
         const Cfg = await container.get('Fl32_Web_Back_Dto_Handler_Source$');
-        await handler.init({sources: [
-            Cfg.create({prefix: '/files/', root: dirA}),
-            Cfg.create({prefix: '/files/special/', root: dirB}),
+        await handler.init({sources:[
+            Cfg.create({prefix:'/files/',root:'/a',allow:{'.':['.']}}),
+            Cfg.create({prefix:'/files/special/',root:'/b',allow:{'.':['.']}}),
         ]});
-        const req = {url: '/files/special/test.txt'};
         const res = new MockRes();
-        const ok = await handler.handle(req, res);
-        await new Promise(r => res.on('finish', r));
-        assert.strictEqual(ok, true);
-        assert.strictEqual(res.data.toString(), 'B');
-        await rm(dirA, {recursive: true, force: true});
-        await rm(dirB, {recursive: true, force: true});
+        const ok = await handler.handle({url:'/files/special/test.txt'}, res);
+        await new Promise(r=>res.on('finish',r));
+        assert.strictEqual(ok,true);
+        assert.strictEqual(res.data.toString(),'B');
     });
 
     it('should enforce allow list rules', async () => {
+        addFile('src/Back/Server.js','class Fl32_Web_Back_Server {}');
+        addFile('src/Back/Handler/Static.js','static');
         const handler = await container.get('Fl32_Web_Back_Handler_Static$');
         const Cfg = await container.get('Fl32_Web_Back_Dto_Handler_Source$');
-        await handler.init({sources: [
-            Cfg.create({root: 'src', prefix: '/s/', allow: {Back: ['Server.js']}})
+        await handler.init({sources:[
+            Cfg.create({root:'src',prefix:'/s/',allow:{Back:['Server.js']}})
         ]});
-        const reqOk = {url: '/s/Back/Server.js'};
         const resOk = new MockRes();
-        const ok = await handler.handle(reqOk, resOk);
-        await new Promise(r => resOk.on('finish', r));
-        assert.strictEqual(ok, true);
-        const reqBad = {url: '/s/Back/Handler/Static.js'};
+        const ok = await handler.handle({url:'/s/Back/Server.js'}, resOk);
+        await new Promise(r=>resOk.on('finish',r));
+        assert.strictEqual(ok,true);
         const resBad = new MockRes();
-        const bad = await handler.handle(reqBad, resBad);
-        assert.strictEqual(bad, false);
-        assert.strictEqual(resBad.headersSent, false);
+        const bad = await handler.handle({url:'/s/Back/Handler/Static.js'}, resBad);
+        assert.strictEqual(bad,false);
+        assert.strictEqual(resBad.headersSent,false);
     });
 
     it('should allow full access with dot rule', async () => {
+        addFile('src/Back/Server.js','class Fl32_Web_Back_Server {}');
         const handler = await container.get('Fl32_Web_Back_Handler_Static$');
         const Cfg = await container.get('Fl32_Web_Back_Dto_Handler_Source$');
-        await handler.init({sources: [
-            Cfg.create({root: 'src', prefix: '/full/', allow: {Back: ['.']}})
+        await handler.init({sources:[
+            Cfg.create({root:'src',prefix:'/full/',allow:{Back:['.']}})
         ]});
-        const req = {url: '/full/Back/Server.js'};
         const res = new MockRes();
-        const ok = await handler.handle(req, res);
-        await new Promise(r => res.on('finish', r));
-        assert.strictEqual(ok, true);
-        assert.match(res.data.toString(), /class Fl32_Web_Back_Server/);
+        const ok = await handler.handle({url:'/full/Back/Server.js'}, res);
+        await new Promise(r=>res.on('finish',r));
+        assert.strictEqual(ok,true);
+        assert.match(res.data.toString(),/class Fl32_Web_Back_Server/);
     });
 
     it('should serve index files in directories', async () => {
-        const dir = await mkdtemp(join(os.tmpdir(), 'web-'));
-        await mkdir(join(dir, 'd'));
-        await writeFile(join(dir, 'd', 'index.txt'), 'INDEX');
+        addDir('/dir');
+        addDir('/dir/d');
+        addFile('/dir/d/index.txt','INDEX');
         const handler = await container.get('Fl32_Web_Back_Handler_Static$');
         const Cfg = await container.get('Fl32_Web_Back_Dto_Handler_Source$');
-        await handler.init({sources: [Cfg.create({root: dir, prefix: '/w/', defaults: ['index.txt']}) ]});
-        const req = {url: '/w/d/'};
+        await handler.init({sources:[Cfg.create({root:'/dir',prefix:'/w/',defaults:['index.txt'],allow:{'.':['.']}})]});
         const res = new MockRes();
-        const ok = await handler.handle(req, res);
-        await new Promise(r => res.on('finish', r));
-        assert.strictEqual(ok, true);
-        assert.strictEqual(res.data.toString(), 'INDEX');
-        await rm(dir, {recursive: true, force: true});
+        const ok = await handler.handle({url:'/w/d/'}, res);
+        await new Promise(r=>res.on('finish',r));
+        assert.strictEqual(ok,true);
+        assert.strictEqual(res.data.toString(),'INDEX');
     });
 
     it('should reject path traversal and unmatched prefixes', async () => {
-        const dir = await mkdtemp(join(os.tmpdir(), 'safe-'));
-        await writeFile(join(dir, 'file.txt'), 'ok');
+        addFile('/safe/file.txt','ok');
         const handler = await container.get('Fl32_Web_Back_Handler_Static$');
         const Cfg = await container.get('Fl32_Web_Back_Dto_Handler_Source$');
-        await handler.init({sources: [Cfg.create({root: dir, prefix: '/p/'})]});
+        await handler.init({sources:[Cfg.create({root:'/safe',prefix:'/p/',allow:{'.':['.']}})]});
         const res1 = new MockRes();
-        const bad1 = await handler.handle({url: '/p/../file.txt'}, res1);
-        assert.strictEqual(bad1, false);
+        const bad1 = await handler.handle({url:'/p/../file.txt'}, res1);
+        assert.strictEqual(bad1,false);
         const res2 = new MockRes();
-        const bad2 = await handler.handle({url: '/x/file.txt'}, res2);
-        assert.strictEqual(bad2, false);
-        assert.strictEqual(res2.headersSent, false);
-        await rm(dir, {recursive: true, force: true});
+        const bad2 = await handler.handle({url:'/x/file.txt'}, res2);
+        assert.strictEqual(bad2,false);
+        assert.strictEqual(res2.headersSent,false);
     });
 });
