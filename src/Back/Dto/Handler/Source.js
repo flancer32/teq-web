@@ -1,5 +1,5 @@
 /**
- * Factory for Source handler configuration DTO.
+ * Factory for file source configuration DTO used by Static handler.
  */
 export default class Fl32_Web_Back_Dto_Handler_Source {
     /* eslint-disable jsdoc/require-param-description */
@@ -13,7 +13,7 @@ export default class Fl32_Web_Back_Dto_Handler_Source {
     ) {
         /* eslint-enable jsdoc/require-param-description */
         /**
-         * Create validated DTO for Source handler configuration.
+         * Create validated DTO for source configuration.
          *
          * @param {*} [data]
          * @returns {Dto}
@@ -24,6 +24,7 @@ export default class Fl32_Web_Back_Dto_Handler_Source {
                 res.root = cast.string(data.root);
                 res.prefix = cast.string(data.prefix);
                 res.allow = cast.stringArrayMap(data.allow);
+                res.defaults = cast.array(data.defaults, cast.string);
             }
             return res;
         };
@@ -40,4 +41,6 @@ class Dto {
     prefix;
     /** @type {{[key: string]: string[]}} */
     allow = {};
+    /** @type {string[]} */
+    defaults = [];
 }

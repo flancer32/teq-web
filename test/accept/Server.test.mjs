@@ -108,13 +108,16 @@ describe('Fl32_Web_Back_Api_Handler', () => {
   it('should serve allowed NPM file', async () => {
     const container = buildTestContainer();
     const dispatcher = await container.get('Fl32_Web_Back_Dispatcher$');
-    const handler = await container.get('Fl32_Web_Back_Handler_Source$');
+    const handler = await container.get('Fl32_Web_Back_Handler_Static$');
+    const Cfg = await container.get('Fl32_Web_Back_Dto_Handler_Source$');
     await handler.init({
-      root: 'node_modules',
-      prefix: '/npm/',
-      allow: {
-        '@teqfw/di/src': ['.'],
-      },
+      sources: [Cfg.create({
+        root: 'node_modules',
+        prefix: '/npm/',
+        allow: {
+          '@teqfw/di/src': ['.'],
+        },
+      })],
     });
     dispatcher.addHandler(handler);
     dispatcher.orderHandlers();
@@ -153,13 +156,16 @@ describe('Fl32_Web_Back_Api_Handler', () => {
   it('should serve allowed source file', async () => {
     const container = buildTestContainer();
     const dispatcher = await container.get('Fl32_Web_Back_Dispatcher$');
-    const handler = await container.get('Fl32_Web_Back_Handler_Source$');
+    const handler = await container.get('Fl32_Web_Back_Handler_Static$');
+    const Cfg = await container.get('Fl32_Web_Back_Dto_Handler_Source$');
     await handler.init({
-      root: 'src',
-      prefix: '/sources/',
-      allow: {
-        Back: ['Server.js'],
-      },
+      sources: [Cfg.create({
+        root: 'src',
+        prefix: '/sources/',
+        allow: {
+          Back: ['Server.js'],
+        },
+      })],
     });
     dispatcher.addHandler(handler);
     dispatcher.orderHandlers();
