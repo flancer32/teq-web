@@ -25,6 +25,17 @@ export default class Fl32_Web_Back_Handler_Static_A_Resolver {
             let pkgName;
             let subPath = '';
 
+            if (!config.allow) {
+                let fsPath = path.resolve(config.root, rel);
+                if (/[\\/]$/.test(fsPath) && fsPath.length > 1) {
+                    fsPath = fsPath.replace(/[\\/]+$/, '');
+                }
+                if (!fsPath.startsWith(config.root)) {
+                    throw new Error('Resolved path is outside the root');
+                }
+                return fsPath;
+            }
+
             // root‐level allow: '.' rules permit any rel under root
             if (config.allow?.['.'] != null) {
                 pkgName = '.';
@@ -58,7 +69,10 @@ export default class Fl32_Web_Back_Handler_Static_A_Resolver {
                 return null;
             }
 
-            const fsPath = path.resolve(config.root, rel);
+            let fsPath = path.resolve(config.root, rel);
+            if (/[\\/]$/.test(fsPath) && fsPath.length > 1) {
+                fsPath = fsPath.replace(/[\\/]+$/, '');
+            }
             if (!fsPath.startsWith(config.root)) {
                 throw new Error('Resolved path is outside the root');
             }
