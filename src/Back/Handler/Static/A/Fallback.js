@@ -11,31 +11,29 @@ export default class Fl32_Web_Back_Handler_Static_A_Fallback {
         }
     ) {
         /* eslint-enable jsdoc/check-param-names */
-        this._fsp = fs.promises;
-        this._path = path;
-    }
 
-    /**
-     * Apply default index fallback for directories.
-     *
-     * @param {string} fsPath
-     * @param {string[]} defaults
-     * @returns {Promise<string|null>} Path to existing file or null.
-     */
-    async apply(fsPath, defaults) {
-        let stat;
-        try { stat = await this._fsp.stat(fsPath); } catch { return null; }
+        /**
+         * Apply default index fallback for directories.
+         *
+         * @param {string} fsPath
+         * @param {string[]} defaults
+         * @returns {Promise<string|null>} Path to existing file or null.
+         */
+        this.apply = async (fsPath, defaults) => {
+            let stat;
+            try { stat = await fs.promises.stat(fsPath); } catch { return null; }
 
-        if (stat.isDirectory()) {
-            for (const file of defaults) {
-                const candidate = this._path.join(fsPath, file);
-                try {
-                    const s = await this._fsp.stat(candidate);
-                    if (s.isFile()) return candidate;
-                } catch { /* ignore */ }
+            if (stat.isDirectory()) {
+                for (const file of defaults) {
+                    const candidate = path.join(fsPath, file);
+                    try {
+                        const s = await fs.promises.stat(candidate);
+                        if (s.isFile()) return candidate;
+                    } catch { /* ignore */ }
+                }
+                return null;
             }
-            return null;
-        }
-        return stat.isFile() ? fsPath : null;
+            return stat.isFile() ? fsPath : null;
+        };
     }
 }

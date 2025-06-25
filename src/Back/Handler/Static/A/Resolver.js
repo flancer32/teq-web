@@ -9,22 +9,20 @@ export default class Fl32_Web_Back_Handler_Static_A_Resolver {
         }
     ) {
         /* eslint-enable jsdoc/check-param-names */
-        this._path = path;
-    }
 
-    /**
-     * Resolve filesystem path for given config and relative URL part.
-     * Applies allow rules and security checks.
-     *
-     * @param {{root:string,prefix:string,allow?:Record<string,string[]>}} config
-     * @param {string} rel
-     * @returns {string|null} Absolute path or null when not allowed.
-     * @throws {Error} On path traversal attempts.
-     */
-    resolve(config, rel) {
-        if (rel.includes('..') || this._path.isAbsolute(rel)) {
-            throw new Error('Static access denied');
-        }
+        /**
+         * Resolve filesystem path for given config and relative URL part.
+         * Applies allow rules and security checks.
+         *
+         * @param {{root:string,prefix:string,allow?:Record<string,string[]>}} config
+         * @param {string} rel
+         * @returns {string|null} Absolute path or null when not allowed.
+         * @throws {Error} On path traversal attempts.
+         */
+        this.resolve = (config, rel) => {
+            if (rel.includes('..') || path.isAbsolute(rel)) {
+                throw new Error('Static access denied');
+            }
 
         if (config.allow) {
             let pkg; let subPath = '';
@@ -53,10 +51,11 @@ export default class Fl32_Web_Back_Handler_Static_A_Resolver {
             if (!allowed) return null;
         }
 
-        const fsPath = this._path.resolve(config.root, rel);
+        const fsPath = path.resolve(config.root, rel);
         if (!fsPath.startsWith(config.root)) {
             throw new Error('Resolved path is outside the root');
         }
         return fsPath;
+        };
     }
 }

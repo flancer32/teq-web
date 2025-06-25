@@ -21,50 +21,42 @@ export default class Fl32_Web_Back_Handler_Static_A_FileService {
         }
     ) {
         /* eslint-enable jsdoc/check-param-names */
-        this._fs = fs;
-        this._fsp = fs.promises;
-        this._path = path;
-        this._logger = logger;
-        this._helpMime = helpMime;
-        this._resolver = resolver;
-        this._fallback = fallback;
         const {constants: H2} = http2;
-        this._H2 = H2;
-    }
 
-    /**
-     * Serve a file for given config and relative path.
-     *
-     * @param {*} config
-     * @param {string} rel
-     * @param {*} req
-     * @param {*} res
-     * @returns {Promise<boolean>} true if served
-     */
-    async serve(config, rel, req, res) {
-        try {
-            let fsPath = this._resolver.resolve(config, rel);
-            if (!fsPath) return false;
+        /**
+         * Serve a file for given config and relative path.
+         *
+         * @param {*} config
+         * @param {string} rel
+         * @param {*} req
+         * @param {*} res
+         * @returns {Promise<boolean>} true if served
+         */
+        this.serve = async (config, rel, req, res) => {
+            try {
+                let fsPath = resolver.resolve(config, rel);
+                if (!fsPath) return false;
 
-            fsPath = await this._fallback.apply(fsPath, config.defaults);
-            if (!fsPath) return false;
+                fsPath = await fallback.apply(fsPath, config.defaults);
+                if (!fsPath) return false;
 
-            const stat = await this._fsp.stat(fsPath);
-            if (!stat.isFile()) return false;
+                const stat = await fs.promises.stat(fsPath);
+                if (!stat.isFile()) return false;
 
-            const stream = this._fs.createReadStream(fsPath);
-            const ext = this._path.extname(fsPath).toLowerCase();
-            const headers = {
-                [this._H2.HTTP2_HEADER_CONTENT_LENGTH]: stat.size,
-                [this._H2.HTTP2_HEADER_CONTENT_TYPE]: this._helpMime.getByExt(ext),
-                [this._H2.HTTP2_HEADER_LAST_MODIFIED]: stat.mtime.toUTCString(),
-            };
-            res.writeHead(this._H2.HTTP_STATUS_OK, headers);
-            stream.pipe(res);
-            return true;
-        } catch (e) {
-            this._logger.exception(e);
-            return false;
-        }
+                const stream = fs.createReadStream(fsPath);
+                const ext = path.extname(fsPath).toLowerCase();
+                const headers = {
+                    [H2.HTTP2_HEADER_CONTENT_LENGTH]: stat.size,
+                    [H2.HTTP2_HEADER_CONTENT_TYPE]: helpMime.getByExt(ext),
+                    [H2.HTTP2_HEADER_LAST_MODIFIED]: stat.mtime.toUTCString(),
+                };
+                res.writeHead(H2.HTTP_STATUS_OK, headers);
+                stream.pipe(res);
+                return true;
+            } catch (e) {
+                logger.exception(e);
+                return false;
+            }
+        };
     }
 }

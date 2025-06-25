@@ -24,10 +24,6 @@ export default class Fl32_Web_Back_Handler_Static {
         }
     ) {
         /* eslint-enable jsdoc/check-param-names */
-        this._registry = registry;
-        this._fileService = fileService;
-        this._respond = respond;
-        this._logger = logger;
 
         const _info = dtoInfo.create();
         _info.name = this.constructor.name;
@@ -41,7 +37,7 @@ export default class Fl32_Web_Back_Handler_Static {
          * @returns {Promise<void>}
          */
         this.init = async ({sources = []} = {}) => {
-            this._registry.setConfigs(sources);
+            registry.setConfigs(sources);
         };
 
         /**
@@ -52,11 +48,11 @@ export default class Fl32_Web_Back_Handler_Static {
          * @returns {Promise<boolean>} True if file served
          */
         this.handle = async (req, res) => {
-            if (!this._respond.isWritable(res)) return false;
+            if (!respond.isWritable(res)) return false;
             const urlPath = decodeURIComponent(req.url.split('?')[0]);
-            const match = this._registry.find(urlPath);
+            const match = registry.find(urlPath);
             if (!match) return false;
-            return this._fileService.serve(match.config, match.rel, req, res);
+            return fileService.serve(match.config, match.rel, req, res);
         };
 
         /**

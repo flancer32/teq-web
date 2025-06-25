@@ -9,7 +9,6 @@ export default class Fl32_Web_Back_Handler_Static_A_Registry {
         }
     ) {
         /* eslint-enable jsdoc/check-param-names */
-        this._factory = configFactory;
         /** @type {ReturnType<Fl32_Web_Back_Handler_Static_A_Config['create']>[]} */
         let _configs = [];
 
@@ -20,7 +19,7 @@ export default class Fl32_Web_Back_Handler_Static_A_Registry {
          */
         this.setConfigs = function (dtoList = []) {
             _configs = dtoList
-                .map(dto => this._factory.create(dto))
+                .map(dto => configFactory.create(dto))
                 .sort((a, b) => b.prefix.length - a.prefix.length);
         };
 
