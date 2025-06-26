@@ -20,11 +20,11 @@ export default class Fl32_Web_Back_Handler_Static_A_Config {
          */
         this.create = (dto) => {
             if (!dto || typeof dto.root !== 'string') {
-                throw new Error('Source root must be a string');
+                throw new Error("Field 'root' must be a string");
             }
             let prefix = dto.prefix ?? '/';
             if (typeof prefix !== 'string') {
-                throw new Error('Source prefix must be a string');
+                throw new Error("Field 'prefix' must be a string");
             }
             if (!prefix.endsWith('/')) prefix += '/';
 
@@ -33,11 +33,11 @@ export default class Fl32_Web_Back_Handler_Static_A_Config {
             let allow;
             if (dto.allow !== undefined) {
                 if (typeof dto.allow !== 'object' || dto.allow === null || Array.isArray(dto.allow)) {
-                    throw new Error('Allow must be an object');
+                    throw new Error("Field 'allow' must be an object");
                 }
                 for (const [k, arr] of Object.entries(dto.allow)) {
                     if (!Array.isArray(arr) || arr.some(v => typeof v !== 'string')) {
-                        throw new Error(`Invalid allow list for ${k}`);
+                        throw new Error(`Field 'allow.${k}' must be an array of strings`);
                     }
                 }
                 allow = dto.allow;
@@ -46,7 +46,7 @@ export default class Fl32_Web_Back_Handler_Static_A_Config {
             let defaults = dto.defaults;
             if (defaults !== undefined && defaults.length) {
                 if (!Array.isArray(defaults) || defaults.some(v => typeof v !== 'string')) {
-                    throw new Error('Defaults must be an array of strings');
+                    throw new Error("Field 'defaults' must be an array of strings");
                 }
             } else {
                 defaults = Fl32_Web_Back_Handler_Static_A_Config.DEFAULT_FILES;

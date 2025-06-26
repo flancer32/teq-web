@@ -40,13 +40,13 @@ describe('Fl32_Web_Back_Handler_Static_A_Config', () => {
         // missing root should throw an error about root
         assert.throws(
             () => factory.create({prefix: '/'}),
-            /root must be a string/
+            /Field 'root' must be a string/
         );
 
         // non-string prefix should throw an error about prefix
         assert.throws(
             () => factory.create({root: 'a', prefix: 5}),
-            /prefix must be a string/i
+            /Field 'prefix' must be a string/
         );
     });
 });
