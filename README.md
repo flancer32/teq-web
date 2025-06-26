@@ -62,6 +62,11 @@ This example shows how to create a minimal application that:
 * Registers two handlers: a logger and a static file server
 * Starts a secure HTTPS server using built-in components
 
+The static handler reads from one or more **sources** described by the
+`Handler_Source` DTO. To expose selected files from `node_modules`, create a
+source with `root: 'node_modules'` and pass it to `Handler_Static` during
+initialization.
+
 ```js
 import Container from '@teqfw/di';
 import {readFileSync} from 'node:fs';
