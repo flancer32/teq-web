@@ -1,5 +1,18 @@
 # Changelog
 
+## [0.3.0] - 2025-06-26
+
+### Added
+- Generalized NPM handler into a Source handler with DTO-based configuration.
+- Unit tests for the dispatcher and built-in handlers.
+
+### Changed
+- Static handler refactored into modular components with before/after ordering.
+
+### Fixed
+- Improved validation messages for static handler configuration.
+- File service now reports specific filesystem errors.
+
 ## [0.2.0] - 2025-06-21
 
 ### Added

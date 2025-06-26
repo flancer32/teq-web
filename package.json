@@ -1,6 +1,6 @@
 {
   "name": "@flancer32/teq-web",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "Node.js web plugin supporting Express and Fastify integration, with built-in server for standalone operation",
   "type": "module",
   "keywords": [
