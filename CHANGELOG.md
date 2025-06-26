@@ -3,9 +3,9 @@
 ## [0.2.0] - 2025-06-21
 
 ### Added
-- Integration test covering NPM handler with the built-in server.
-- Built-in NPM handler for serving files from `node_modules`.
-- JSDoc examples for NPM handler initialization.
+- Integration test covering static file serving from `node_modules`.
+- Static handler can serve files from `node_modules` via `Handler_Source`.
+- JSDoc examples for initializing the static handler with a `Handler_Source` DTO.
 
 ## [0.1.0] - 2025-06-11
 
