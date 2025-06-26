@@ -13,15 +13,21 @@ export default class Fl32_Web_Back_Handler_Static_A_Registry {
         let _configs = [];
 
         /**
-         * Store configuration list sorted by prefix length.
+         * Add configurations ensuring unique prefixes.
+         * Existing entries are not modified.
          *
          * @param {Fl32_Web_Back_Dto_Handler_Source.Dto[]} dtoList
          */
-        this.setConfigs = function (dtoList = []) {
-            _configs = dtoList
-                .map(dto => configFactory.create(dto))
-                .sort((a, b) => b.prefix.length - a.prefix.length);
+        this.addConfigs = function (dtoList = []) {
+            const list = dtoList.map(dto => configFactory.create(dto));
+            for (const cfg of list) {
+                if (!_configs.some(c => c.prefix === cfg.prefix)) {
+                    _configs.push(cfg);
+                }
+            }
+            _configs.sort((a, b) => b.prefix.length - a.prefix.length);
         };
+
 
         /**
          * Find configuration by matching URL prefix.
