@@ -2,10 +2,12 @@ export default class Fl32_Web_Back_Handler_Static_A_Registry {
     /* eslint-disable jsdoc/require-param-description,jsdoc/check-param-names */
     /**
      * @param {Fl32_Web_Back_Handler_Static_A_Config} configFactory
+     * @param {Fl32_Web_Back_Logger} logger
      */
     constructor(
         {
             Fl32_Web_Back_Handler_Static_A_Config$: configFactory,
+            Fl32_Web_Back_Logger$: logger,
         }
     ) {
         /* eslint-enable jsdoc/check-param-names */
@@ -23,6 +25,8 @@ export default class Fl32_Web_Back_Handler_Static_A_Registry {
             for (const cfg of list) {
                 if (!_configs.some(c => c.prefix === cfg.prefix)) {
                     _configs.push(cfg);
+                } else {
+                    logger.warn(`Static config with prefix ${cfg.prefix} already exists`);
                 }
             }
             _configs.sort((a, b) => b.prefix.length - a.prefix.length);
