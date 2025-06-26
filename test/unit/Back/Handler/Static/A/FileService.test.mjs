@@ -36,7 +36,7 @@ class MockRes extends EventEmitter {
 }
 
 describe('Fl32_Web_Back_Handler_Static_A_FileService', () => {
-  let storage, mockFs, mime, logger, addFile, addDir;
+  let storage, mockFs, mime, logger, logs, addFile, addDir;
 
   beforeEach(() => {
     storage = new Map();
@@ -73,9 +73,12 @@ describe('Fl32_Web_Back_Handler_Static_A_FileService', () => {
       getByExt: () => 'text/plain'
     };
 
-    // simple logger
+    logs = [];
+    // simple logger collecting calls
     logger = {
-      exception: () => {}
+      info: (...args) => logs.push(['info', ...args]),
+      warn: (...args) => logs.push(['warn', ...args]),
+      exception: (...args) => logs.push(['exception', ...args])
     };
 
     // helpers to populate mock FS
@@ -140,5 +143,83 @@ describe('Fl32_Web_Back_Handler_Static_A_FileService', () => {
 
     const ok = await service.serve(config, 'missing.txt', {}, res);
     assert.strictEqual(ok, false);
+  });
+
+  it('logs info when file is missing during stat', async () => {
+    mockFs.promises.stat = async () => {
+      const err = new Error('ENOENT');
+      err.code = 'ENOENT';
+      throw err;
+    };
+    /** @type {{ root: string, prefix: string, defaults: string[] }} */
+    const config = { root: '/root', prefix: '/p/', defaults: [] };
+    const res = new MockRes();
+
+    const container = buildTestContainer();
+    container.register('node:fs', mockFs);
+    container.register('Fl32_Web_Back_Helper_Mime$', mime);
+    container.register('Fl32_Web_Back_Logger$', logger);
+    container.register('Fl32_Web_Back_Handler_Static_A_Fallback$', { apply: async p => p });
+
+    /** @type {Fl32_Web_Back_Handler_Static_A_FileService} */
+    const service = await container.get('Fl32_Web_Back_Handler_Static_A_FileService$');
+
+    const ok = await service.serve(config, 'missing.txt', {}, res);
+
+    assert.strictEqual(ok, false);
+    assert.strictEqual(logs.length, 1);
+    assert.strictEqual(logs[0][0], 'info');
+  });
+
+  it('logs warn on access errors', async () => {
+    /** force EACCES error */
+    mockFs.promises.stat = async () => {
+      const err = new Error('EACCES');
+      err.code = 'EACCES';
+      throw err;
+    };
+
+    /** @type {{ root: string, prefix: string, defaults: string[] }} */
+    const config = { root: '/root', prefix: '/p/', defaults: [] };
+    const res = new MockRes();
+
+    const container = buildTestContainer();
+    container.register('node:fs', mockFs);
+    container.register('Fl32_Web_Back_Helper_Mime$', mime);
+    container.register('Fl32_Web_Back_Logger$', logger);
+    container.register('Fl32_Web_Back_Handler_Static_A_Fallback$', { apply: async p => p });
+
+    /** @type {Fl32_Web_Back_Handler_Static_A_FileService} */
+    const service = await container.get('Fl32_Web_Back_Handler_Static_A_FileService$');
+
+    const ok = await service.serve(config, 'denied.txt', {}, res);
+
+    assert.strictEqual(ok, false);
+    assert.strictEqual(logs.length, 1);
+    assert.strictEqual(logs[0][0], 'warn');
+  });
+
+  it('logs exception on unexpected errors', async () => {
+    addFile('/root/x.txt', 'X');
+    mockFs.createReadStream = () => { throw new Error('boom'); };
+
+    /** @type {{ root: string, prefix: string, defaults: string[] }} */
+    const config = { root: '/root', prefix: '/p/', defaults: [] };
+    const res = new MockRes();
+
+    const container = buildTestContainer();
+    container.register('node:fs', mockFs);
+    container.register('Fl32_Web_Back_Helper_Mime$', mime);
+    container.register('Fl32_Web_Back_Logger$', logger);
+    container.register('Fl32_Web_Back_Handler_Static_A_Fallback$', { apply: async p => p });
+
+    /** @type {Fl32_Web_Back_Handler_Static_A_FileService} */
+    const service = await container.get('Fl32_Web_Back_Handler_Static_A_FileService$');
+
+    const ok = await service.serve(config, 'x.txt', {}, res);
+
+    assert.strictEqual(ok, false);
+    assert.strictEqual(logs.length, 1);
+    assert.strictEqual(logs[0][0], 'exception');
   });
 });
