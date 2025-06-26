@@ -9,7 +9,7 @@ export default class Fl32_Web_Back_Handler_Static_A_Registry {
         }
     ) {
         /* eslint-enable jsdoc/check-param-names */
-        /** @type {ReturnType<Fl32_Web_Back_Handler_Static_A_Config['create']>[]} */
+        /** @type {Fl32_Web_Back_Dto_Handler_Source.Dto[]} */
         let _configs = [];
 
         /**

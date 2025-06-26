@@ -57,13 +57,90 @@ export default class Fl32_Web_Back_Helper_Respond {
         };
 
         /** @see send */
+        this.code201_Created = function ({res, headers = {}, body = ''}) {
+            return send({res, headers, body}, HTTP_STATUS_CREATED);
+        };
+
+        /** @see send */
+        this.code204_NoContent = function ({res, headers = {}}) {
+            return send({res, headers}, HTTP_STATUS_NO_CONTENT);
+        };
+
+        /** @see send */
+        this.code301_MovedPermanently = function ({res, headers = {}, body = ''}) {
+            return send({res, headers, body}, HTTP_STATUS_MOVED_PERMANENTLY);
+        };
+
+        /** @see send */
+        this.code302_Found = function ({res, headers = {}, body = ''}) {
+            return send({res, headers, body}, HTTP_STATUS_FOUND);
+        };
+
+        /** @see send */
+        this.code303_SeeOther = function ({res, headers = {}, body = ''}) {
+            return send({res, headers, body}, HTTP_STATUS_SEE_OTHER);
+        };
+
+        /** @see send */
+        this.code304_NotModified = function ({res, headers = {}, body = ''}) {
+            return send({res, headers, body}, HTTP_STATUS_NOT_MODIFIED);
+        };
+
+        /** @see send */
+        this.code400_BadRequest = function ({res, headers = {}, body = ''}) {
+            return send({res, headers, body}, HTTP_STATUS_BAD_REQUEST);
+        };
+
+        /** @see send */
+        this.code401_Unauthorized = function ({res, headers = {}, body = ''}) {
+            return send({res, headers, body}, HTTP_STATUS_UNAUTHORIZED);
+        };
+
+        /** @see send */
+        this.code402_PaymentRequired = function ({res, headers = {}, body = ''}) {
+            return send({res, headers, body}, HTTP_STATUS_PAYMENT_REQUIRED);
+        };
+
+        /** @see send */
+        this.code403_Forbidden = function ({res, headers = {}, body = ''}) {
+            return send({res, headers, body}, HTTP_STATUS_FORBIDDEN);
+        };
+
+        /** @see send */
         this.code404_NotFound = function ({res, headers = {}, body = ''}) {
             return send({res, headers, body}, HTTP_STATUS_NOT_FOUND);
         };
 
         /** @see send */
+        this.code405_MethodNotAllowed = function ({res, headers = {}, body = '', allowed = 'HEAD, GET, POST'}) {
+            return send(
+                {
+                    res,
+                    headers: {...headers, [HTTP2_HEADER_ALLOW]: allowed},
+                    body,
+                },
+                HTTP_STATUS_METHOD_NOT_ALLOWED
+            );
+        };
+
+        /** @see send */
+        this.code409_Conflict = function ({res, headers = {}, body = ''}) {
+            return send({res, headers, body}, HTTP_STATUS_CONFLICT);
+        };
+
+        /** @see send */
         this.code500_InternalServerError = function ({res, headers = {}, body = 'Internal Server Error'}) {
             return send({res, headers, body}, HTTP_STATUS_INTERNAL_SERVER_ERROR);
+        };
+
+        /** @see send */
+        this.code502_BadGateway = function ({res, headers = {}, body = ''}) {
+            return send({res, headers, body}, HTTP_STATUS_BAD_GATEWAY);
+        };
+
+        /** @see send */
+        this.code503_ServiceUnavailable = function ({res, headers = {}, body = ''}) {
+            return send({res, headers, body}, HTTP_STATUS_SERVICE_UNAVAILABLE);
         };
 
         /**
