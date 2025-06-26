@@ -112,5 +112,39 @@ describe('Fl32_Web_Back_Dispatcher', () => {
         assert.strictEqual(res.code, 404);
         assert.deepStrictEqual(log, ['pre', 'p1', 'post']);
     });
+
+    it('orders handlers according to before/after dependencies', async () => {
+        const localLog = [];
+        const container2 = buildTestContainer();
+
+        container2.register('Fl32_Web_Back_Logger$', {
+            info: () => {},
+            error: () => {},
+            exception: () => {},
+        });
+
+        const respond2 = {
+            isWritable: res => !res.headersSent && !res.writableEnded,
+            code404_NotFound: ({res}) => { res.code = 404; res.headersSent = true; },
+            code500_InternalServerError: ({res}) => { res.code = 500; res.headersSent = true; },
+        };
+        container2.register('Fl32_Web_Back_Helper_Respond$', respond2);
+
+        const STAGE2 = await container2.get('Fl32_Web_Back_Enum_Stage$');
+        const mk = (name, after = []) => ({
+            getRegistrationInfo: () => ({name, stage: STAGE2.PRE, after}),
+            handle: async () => { localLog.push(name); },
+        });
+
+        const dispatcher = await container2.get('Fl32_Web_Back_Dispatcher$');
+        dispatcher.addHandler(mk('a', ['c']));
+        dispatcher.addHandler(mk('b', ['a']));
+        dispatcher.addHandler(mk('c'));
+        dispatcher.orderHandlers();
+
+        await dispatcher.onEventRequest({}, {});
+
+        assert.deepStrictEqual(localLog, ['c', 'a', 'b']);
+    });
 });
 
