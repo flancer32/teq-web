@@ -48,6 +48,22 @@ describe('Fl32_Web_Back_Handler_Static_A_Registry', () => {
         assert.strictEqual(match.config.root, '/b');
     });
 
+    it('logs warning when prefix already exists', async () => {
+        const log = [];
+        const container = buildTestContainer();
+        container.register('Fl32_Web_Back_Handler_Static_A_Config$', getMockFactory());
+        container.register('Fl32_Web_Back_Logger$', {
+            warn: (...args) => log.push(args)
+        });
+        const registry = await container.get('Fl32_Web_Back_Handler_Static_A_Registry$');
+
+        registry.addConfigs([{ root: '/a', prefix: '/p/' }]);
+        registry.addConfigs([{ root: '/b', prefix: '/p/' }]);
+
+        assert.strictEqual(log.length, 1);
+        assert.ok(log[0][0].includes('/p/'));
+    });
+
     it('prefers longer prefix when matching', async () => {
         const container = buildTestContainer();
         container.register('Fl32_Web_Back_Handler_Static_A_Config$', getMockFactory());
