@@ -33,8 +33,9 @@ export default class Fl32_Web_Back_Handler_Static_A_FileService {
          * @returns {Promise<boolean>} true if served
          */
         this.serve = async (config, rel, req, res) => {
+            let fsPath;
             try {
-                let fsPath = resolver.resolve(config, rel);
+                fsPath = resolver.resolve(config, rel);
                 if (!fsPath) return false;
 
                 fsPath = await fallback.apply(fsPath, config.defaults);
@@ -54,7 +55,13 @@ export default class Fl32_Web_Back_Handler_Static_A_FileService {
                 stream.pipe(res);
                 return true;
             } catch (e) {
-                logger.exception(e);
+                if (e?.code === 'ENOENT') {
+                    logger.info(`File not found: ${fsPath}`);
+                } else if (e?.code === 'EACCES' || e?.code === 'EPERM') {
+                    logger.warn(`Access denied: ${fsPath}`);
+                } else {
+                    logger.exception(e);
+                }
                 return false;
             }
         };
