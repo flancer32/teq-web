@@ -37,7 +37,7 @@ export default class Fl32_Web_Back_Handler_Static {
          * @returns {Promise<void>}
          */
         this.init = async ({sources = []} = {}) => {
-            registry.setConfigs(sources);
+            registry.addConfigs(sources);
         };
 
         /**
