@@ -1,5 +1,10 @@
 # Changelog
 
+## [0.3.1] - 2025-08-21
+
+### Added
+- Added TeqFW descriptor to define package namespace for @teqfw/core.
+
 ## [0.3.0] - 2025-06-26
 
 ### Added
