@@ -1,101 +1,166 @@
-# AGENTS.md
+# AGENTS.md — Entry Instruction for LLM Agents
 
-## Project: @flancer32/teq-web
+- Path: `AGENTS.md`
+- Version: `20251218`
 
-This project implements a request dispatcher plugin for Tequila Framework (TeqFW).  
-The plugin provides a multi-stage handler system (`pre`, `process`, `post`) and integrates directly with Node.js servers (`http`, `http2`, `https`) without external dependencies.
+## Purpose
 
----
-
-## Project Structure
-
-| Directory                  | Description                                                                |
-|----------------------------|----------------------------------------------------------------------------|
-| `/src/Back/Api/Handler.js` | Interface for all request handlers.                                        |
-| `/src/Back/Dispatcher.js`  | Core dispatcher that orchestrates handler execution.                       |
-| `/src/Back/Handler/`       | Built-in request handlers (`Pre_Log`, `Static`, `Source`, etc).            |
-| `/src/Back/Helper/`        | Internal helpers (`Mime`, `Respond`, `Order_Kahn`, etc).                   |
-| `/src/Back/Dto/`           | DTO factories used to pass typed configuration and metadata.               |
-| `/src/Back/Server.js`      | Standalone HTTP(S) server implementation using built-in Node.js libraries. |
+Root file for projects using ADSM (Agent-Driven Software Management).
+Defines the roles of the Human and the Agent, the context structure, and operational invariants.
+This file is read by the agent first, before loading any local instructions.
 
 ---
 
-## Execution Agents
+## ADSM Principles
 
-### Dispatcher
+### Project Spaces
 
-- File: `Back/Dispatcher.js`
-- Role: Core runtime coordinator for HTTP requests.
-- Interface: uses `Fl32_Web_Back_Api_Handler` and topological ordering via `Order_Kahn`.
+A project consists of two interconnected spaces:
 
-### Server
+- **Cognitive Context** (`./ctx/`) — documentation, rules, specifications.
+- **Software Product** (everything outside `ctx/`) — source code and executable artifacts.
 
-- File: `Back/Server.js`
-- Role: HTTP/1.1, HTTP/2, or HTTPS web server.
-- Launches `Dispatcher.onEventRequest()` on each request.
+The context defines the rules for modifying the product;  
+the product reflects the application of the context.
 
-### Handlers
+### Interaction Model
 
-- Files: `Back/Handler/Pre_Log.js`, `.../Static.js`, `.../Source.js`
-- Role: Modular request processors, registered via `Dispatcher.addHandler()`.
-- Lifecycle: Initialized once, executed per request by dispatcher.
+- The Human formulates goals, manages the context, and approves changes.
+- The Agent interprets the context and modifies the product within its boundaries.
+- Each iteration ends with a report.
 
 ---
 
-## Code Style
+## Roles
 
-- Language: Modern JavaScript (ES2022+).
-- No static imports (uses DI-based module resolution).
-- All comments and messages must be in English (strict rule).
-- File naming: PascalCase with dot-separated exports, e.g. `Fl32_Web_Back_Enum_Stage`.
+**Human:** goals, context, approval of changes, evolution of structure.  
+**Agent:** task execution within the context, product modification, consistency maintenance, reporting.
 
 ---
 
-## Testing
+## Minimal Project Structure
 
-- Unit tests must be provided for all runtime agents (Dispatcher, Handlers).
-- Test framework: `node:test`.
-- Mocks: registered via custom `buildTestContainer()` helper.
-- Location: colocated or `/test/` folder depending on iteration.
-
----
-
-## Build & Execution
-
-- This project is a TeqFW plugin. It is not compiled or bundled.
-- Executed in-place by Tequila runtime.
-- Requires a DI container to resolve dependencies at runtime.
+```text
+/
+├─ ctx/         ← cognitive context
+├─ AGENTS.md    ← agent instruction
+└─ README.md    ← project description
+```
 
 ---
 
-## Contribution Rules (for AI Agents)
+## Context Dependencies
 
-- When creating new Handlers, they **must** implement `Fl32_Web_Back_Api_Handler` and provide `getRegistrationInfo()`.
-- Handlers must be registered with `Dispatcher.addHandler()` and ordered with `orderHandlers()`.
-- All request-handling code **must** call `respond.isWritable(res)` before sending a response.
-- Do not modify existing dispatcher logic directly — create a new handler or helper instead.
+Agent behavior is determined by documents located in:
 
----
+```text
+./ctx/
+```
 
-## Conventions for AI Tools (Codex, etc.)
+Recommended documents:
 
-- Start by inspecting `Dispatcher.js` and `Handler/` folder to locate runtime behavior.
-- DTOs are created via `*.create(data)` methods and used to validate configs.
-- Use `getRegistrationInfo().stage` to determine when a handler runs (`pre`, `process`, `post`).
-- Prefer composition over inheritance. Avoid using `extends`.
-- Respect topological order defined via `before`/`after`.
+- `ctx/AGENTS.md` — structure of the project cognitive context;
+- `ctx/agent/AGENTS.md` — local agent rules;
+- `ctx/docs/product/AGENTS.md` — base product description;
 
 ---
 
-## CI/Automation
+## AGENTS.md Hierarchy in the Project
 
-- No CI defined yet. Future CI will:
-    - Validate handler registration structure.
-    - Enforce code style and comment policy.
-    - Run full test suite before merge.
+If additional `AGENTS.md` files are present in the project
+(for example, `ctx/docs/architecture/AGENTS.md`, `src/module/AGENTS.md`),
+they are considered part of the cognitive context **within their level boundaries**.
+
+### ADSM Rule
+
+When executing a task in directory `X`, the agent’s working context is the combination of all `AGENTS.md` files located on the path from the project root to directory `X`.
+
+Priority rule:
+rules defined in deeper directories override rules from higher levels **within their scope**.
+
+The agent must:
+
+- treat all discovered `AGENTS.md` files as a single coherent rule system;
+- resolve overlaps according to directory hierarchy;
+- comply with invariants defined in the root `AGENTS.md`.
 
 ---
 
-## License
+## Requirements for Local AGENTS.md (Level Maps)
 
-This project is licensed under the Apache-2.0 license.
+Each `AGENTS.md` located inside subdirectories of `ctx/` must contain a **Level Map** —
+a formalized description of the documentation structure of that directory.
+
+### “Level Map” Invariant
+
+#### Mandatory Section
+
+```md
+## Level Map
+
+- `<directory>/` — description of the directory’s purpose.
+- …
+- `<file>.md` — description of the file’s purpose.
+- …
+```
+
+#### Formatting Rules
+
+- The list starts with **directories**, followed by **files**.
+- Directories are sorted **alphabetically**.
+- Files are sorted **alphabetically**.
+- Each element description must declaratively state its purpose.
+- The `AGENTS.md` file of the level itself must be included as an element of the map.
+- The level map must match the actual directory structure and serve as a navigational anchor for the agent.
+
+### Purpose of the Level Map
+
+- defines the boundaries of the space governed by the level rules;
+- provides documentation navigation without filesystem analysis;
+- ensures uniform context structure across all levels in accordance with the root document.
+
+---
+
+## `@LLM-DOC` Comments
+
+`@LLM-DOC` is a built-in protected context inside source code.
+
+Rules:
+
+1. Used only in source files.
+2. Must be written in English.
+3. The agent must recognize the marker and must not modify or remove it.
+4. Violation results in an `execution error`.
+
+---
+
+## Reporting
+
+Each iteration must end with a report:
+
+```text
+./ctx/agent/report/YYYY/MM/DD/HH-MM-{title}.md
+```
+
+The report contains the goal, performed actions, and produced artifacts.
+
+Absence of a report is an `execution error`.
+
+If `ctx/agent/report-template.md` exists, the agent must use it.
+
+Each iteration is considered incomplete until the report is created.
+
+---
+
+## Compatibility
+
+The root `AGENTS.md` defines methodology invariants and is used **unchanged** across all projects.
+Project-specific rules are placed in `./ctx/` and in `@LLM-DOC`.
+
+---
+
+## `output.md` Files
+
+Files named `output.md` are not part of the context and must be ignored by the agent.
+
+---
