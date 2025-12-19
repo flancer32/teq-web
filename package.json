@@ -1,8 +1,9 @@
 {
   "name": "@flancer32/teq-web",
-  "version": "0.3.1",
+  "version": "0.4.0",
   "description": "Node.js web plugin supporting Express and Fastify integration, with built-in server for standalone operation",
   "type": "module",
+  "types": "types.d.ts",
   "keywords": [
     "es6+",
     "teqfw",
@@ -19,6 +20,14 @@
     "email": "alex@flancer64.com",
     "url": "https://github.com/flancer64"
   },
+  "files": [
+    "src/",
+    "CHANGELOG.md",
+    "LICENSE",
+    "README.md",
+    "teqfw.json",
+    "types.d.ts"
+  ],
   "repository": {
     "type": "git",
     "url": "git+https://github.com/flancer32/teq-web.git"
@@ -29,7 +38,7 @@
     "test:unit": "node --test $(find ./test/unit -name '*.test.mjs')"
   },
   "dependencies": {
-    "@teqfw/di": ">=0.34.0"
+    "@teqfw/di": "^1.1.3"
   },
   "devDependencies": {
     "@eslint/js": "^9.25.0",

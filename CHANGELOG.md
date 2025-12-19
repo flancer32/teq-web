@@ -1,5 +1,11 @@
 # Changelog
 
+## [0.4.0] - 2025-12-20
+
+### Added
+- TypeScript type declarations for the public API via `types.d.ts`.
+- ADSM cognitive context in `ctx/`.
+
 ## [0.3.1] - 2025-08-21
 
 ### Added
@@ -35,4 +41,3 @@
 - Basic Node.js HTTP server implementation for standalone use cases.
 - Unified interfaces for registering request handlers from other teq-plugins.
 - Modular architecture compatible with Tequila Framework philosophy.
-
