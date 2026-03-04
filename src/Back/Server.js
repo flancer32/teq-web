@@ -9,12 +9,14 @@
 export default class Fl32_Web_Back_Server {
     /* eslint-disable jsdoc/require-param-description,jsdoc/check-param-names */
     /**
-     * @param {typeof import('node:http')} http
-     * @param {typeof import('node:http2')} http2
-     * @param {Fl32_Web_Back_Defaults} DEF
-     * @param {Fl32_Web_Back_Logger} logger
-     * @param {Fl32_Web_Back_Dispatcher} dispatcher
-     * @param {typeof Fl32_Web_Back_Enum_Server_Type} SERVER_TYPE
+     * @param {{
+     *   'node:http': typeof import('node:http'),
+     *   'node:http2': typeof import('node:http2'),
+     *   Fl32_Web_Back_Defaults$: import('./Defaults.js').default,
+     *   Fl32_Web_Back_Logger$: Fl32_Web_Back_Logger,
+     *   Fl32_Web_Back_Dispatcher$: Fl32_Web_Back_Dispatcher,
+     *   Fl32_Web_Back_Enum_Server_Type$: Fl32_Web_Back_Enum_Server_Type,
+     * }} deps
      */
     constructor(
         {
@@ -28,8 +30,8 @@ export default class Fl32_Web_Back_Server {
     ) {
         /* eslint-enable jsdoc/require-param-description,jsdoc/check-param-names */
         // VARS
-        const {createServer} = http;
-        const {createServer: createServerH2, createSecureServer} = http2;
+        const { createServer } = http;
+        const { createServer: createServerH2, createSecureServer } = http2;
         /** @type {module:http.Server} */
         let _instance;
 

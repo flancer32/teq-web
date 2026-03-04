@@ -1,6 +1,6 @@
 # Type Maps in TeqFW
 
-Path: `ctx/docs/architecture/types-map.md`
+Path: `./ctx/docs/code/conventions/types-map.md`
 
 ## 1. Purpose and role
 

@@ -1,7 +1,7 @@
 declare global {
   type Fl32_Web_Back_Api_Handler = import("./src/Back/Api/Handler.js").default;
   type Fl32_Web_Back_Defaults = import("./src/Back/Defaults.js").default;
-  type Fl32_Web_Back_Dispatcher = import("./src/Back/Dispatcher.js").default;
+  type Fl32_Web_Back_Dispatcher = InstanceType<typeof import("./src/Back/Dispatcher.js").default>;
   type Fl32_Web_Back_Dto_Handler_Info = import("./src/Back/Dto/Handler/Info.js").default;
   type Fl32_Web_Back_Dto_Handler_Source = import("./src/Back/Dto/Handler/Source.js").default;
   type Fl32_Web_Back_Enum_Server_Type = import("./src/Back/Enum/Server/Type.js").default;
@@ -17,7 +17,7 @@ declare global {
   type Fl32_Web_Back_Helper_Mime = import("./src/Back/Helper/Mime.js").default;
   type Fl32_Web_Back_Helper_Order_Kahn = import("./src/Back/Helper/Order/Kahn.js").default;
   type Fl32_Web_Back_Helper_Respond = import("./src/Back/Helper/Respond.js").default;
-  type Fl32_Web_Back_Logger = import("./src/Back/Logger.js").default;
+  type Fl32_Web_Back_Logger = InstanceType<typeof import("./src/Back/Logger.js").default>;
   type Fl32_Web_Back_Server = import("./src/Back/Server.js").default;
   type Fl32_Web_Back_Server_Config = import("./src/Back/Server/Config.js").default;
   type Fl32_Web_Back_Server_Config_Tls = import("./src/Back/Server/Config/Tls.js").default;

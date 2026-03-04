@@ -1,103 +1,92 @@
-# Teq Web Dispatcher Plugin
+# Product Overview
 
 Path: `./ctx/docs/product/overview.md`
+Version: `20260304`
 
-## Product Purpose
+## 1. Product Purpose
 
-This project is a server-side plugin for the Tequila Framework (TeqFW) that implements a universal HTTP request dispatcher with a multi-stage processing model.  
-The product is designed for use in a Node.js environment and provides declarative, extensible, and predictable handling of incoming requests without relying on external dependencies or frameworks.
+`@flancer32/teq-web` enables server-side processing of web requests in applications built in accordance with the Tequila Framework philosophy and allows Teq applications to exist as network web services within the modular monolith model.
 
-The plugin is not a general-purpose web framework and does not introduce its own application model. It solves a narrow and explicit task: **coordinating HTTP request processing through a set of independent handlers**.
+## 2. Context of Existence
 
-## Responsibility Boundaries
+The product exists exclusively within the context of TeqFW, a platform based on modular monolith architecture, late binding, and composition. In this model, an application consists of independent modules unified by shared infrastructure and a single dependency container, and server-side coordination of web requests is standardized without imposing application architecture or introducing an additional framework model. The product is not intended to serve as a universal server tool outside the TeqFW philosophy.
+
+## 3. Subject Model
+
+Core entities of the product:
+
+- Server
+- Dispatcher
+- Web Request
+- Request Context
+- Handler
+- Processing Pipeline
+- Processing Error
+- Processing Result
+
+Server is a conceptual product-level entity. Its architectural realization is defined at the architecture level.
+
+The central entity of the model is the Dispatcher. The Server receives an external Web Request and transfers it to the Dispatcher; the request is represented as a Request Context. The Dispatcher conducts the context through a pipeline consisting of ordered Handlers. Handlers are independent modules of the monolith and have no knowledge of one another beyond declarative ordering metadata applied by the infrastructure. Processing terminates with either a Processing Result or a Processing Error, and the atomic unit of request processing is the Handler. Within the processing pipeline the Sequential Processing Phase is structured into three stages: PRE stage, PROCESS stage, and POST stage.
+
+## 4. Product Invariants
+
+1. The Dispatcher is the unique semantic authority of the request lifecycle within the product.
+2. Request processing outside the Dispatcher is not permitted.
+3. Handlers are isolated and have no knowledge of each other.
+4. The execution order of handlers is strict and determined by the infrastructure.
+5. The product does not contain application-level business logic.
+6. The product is an infrastructural module of a modular monolith.
+7. The use of TeqFW DI is mandatory for the product to function.
+8. The product is server-agnostic within the supported transport modes.
+9. The product has no standalone meaning outside the TeqFW ecosystem.
+
+Changing any of these statements implies a change in the product’s essence.
+
+## 5. Product Boundaries
 
 The product is responsible for:
 
-- receiving HTTP requests from built-in Node.js servers (`http`, `http2`, `https`);
-- ordered execution of registered handlers;
-- propagation of request context across processing stages;
-- response generation when the response stream is in a writable state.
+- coordinating the execution of web requests through the Dispatcher;
+- ensuring consistent processing of a request by modules within the monolith;
+- providing a unified infrastructural framework for the server side of a Teq application.
 
-The product is **not responsible** for:
+The product is not responsible for:
 
-- application business logic;
-- MVC-style routing;
-- session state management;
-- deployment, infrastructure, or network configuration.
+- application routing frameworks or application structure;
+- data models or database interaction;
+- session management;
+- semantic interpretation of representation formats;
+- implementation of application-level protocols;
+- deployment, clustering, or process management;
+- business logic of the application.
 
-## Request Processing Model
+The responsibility of the product ends with coordination of request processing.
 
-Request handling is organized as a linear sequence of stages:
+The product may include optional infrastructural Handler implementations and helper utilities intended to be composed into the request-processing pipeline of an application, including request logging and static file serving, without redefining the product’s semantic frame.
 
-1. **pre** — preliminary processing (logging, context preparation);
-2. **process** — main request processing;
-3. **post** — finalization stage (cleanup, completion, metrics).
+## 6. User Role
 
-Each handler:
+The primary user of the product is a Teq application developer. The product is used as an infrastructural module of the monolith by including it as part of an application, defining the set of Handlers, and configuring the server mode. The product is not intended for end users and does not provide a user interface.
 
-- is initialized once;
-- is executed for every request;
-- has no knowledge of concrete implementations of other handlers.
+## 7. Modes of Existence
 
-Execution order within a stage is defined declaratively via `before` / `after` dependencies and is computed using topological sorting.
+The product has no semantic modes of existence. Configuration modes, including selection of transport protocol, do not alter the subject model. Error handling is an obligatory part of the lifecycle and cannot be disabled.
 
-## Key Components
+## 8. Systemic Value
 
-### Dispatcher
+The product establishes a standard for server-side coordination of web requests within the TeqFW modular monolith and creates a stable infrastructural framework that ensures consistent processing among modules without redesigning the server layer per application.
 
-The central coordination component.
+## 9. Outside the Model
 
-- manages handler registration;
-- computes execution order;
-- invokes handlers within a single request lifecycle;
-- contains no application-specific logic.
+The product is not a universal Node.js web framework, an independent server platform, a tool for microservice architectures, a distributed system orchestrator, or a user-facing product. It exists as an infrastructural module of Teq applications and has no standalone meaning outside the Tequila Framework philosophy.
 
-### Server
+## 10. Relation to Other ADSM Levels
 
-A minimal HTTP server implementation.
+- `./ctx/docs/product/constraints.md`
+- `./ctx/docs/architecture/overview.md`
+- `./ctx/docs/architecture/constraints.md`
+- `./ctx/docs/composition/overview.md`
+- `./ctx/docs/composition/constraints.md`
+- `./ctx/docs/code/`
 
-- accepts incoming connections;
-- delegates request handling to the Dispatcher;
-- does not interpret request content.
-
-### Handlers
-
-A set of modular request handlers.
-
-- implement a unified handler interface;
-- are registered declaratively;
-- can be added or removed without modifying the Dispatcher.
-
-## Product Invariants
-
-- The architecture is based on **composition**, not inheritance.
-- All dependencies are resolved through the TeqFW DI container.
-- No static imports are used between components.
-- The code is written in modern JavaScript (ES2022+).
-- All comments and messages in the code are written **in English only**.
-- The plugin is executed as-is and does not require a build step.
-
-## Extension Model
-
-Functionality is extended by:
-
-- adding new handlers;
-- connecting auxiliary components;
-- configuring handler execution order.
-
-Modifying existing Dispatcher components is not considered a primary extension scenario.
-
-## Testing
-
-The product assumes the presence of unit tests for all runtime components:
-
-- Dispatcher;
-- Server;
-- Handlers.
-
-Testing is performed in Node.js without external testing frameworks, using the standard platform facilities.
-
-## Final Statement
-
-The product is an infrastructure module of TeqFW that fixes a minimalistic and strictly defined HTTP request processing model.  
-It serves as a building block for server-side applications where execution transparency, extensibility, and architectural control are required, without imposing higher-level frameworks or patterns.
+Scope: this document describes only the `product` level, and statements from other levels are not duplicated.

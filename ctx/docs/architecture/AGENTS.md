@@ -12,7 +12,6 @@ It declares what structural rules are valid and binding for all lower documentat
 ## Level Map
 
 - `AGENTS.md` — this document.
-- `types-map.md` — normative rules for namespace-to-source mappings used by IDEs and static analyzers.
 
 ---
 
