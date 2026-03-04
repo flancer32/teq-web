@@ -1,6 +1,6 @@
-import { describe, it } from 'node:test';
+import { describe, test } from 'node:test';
 import assert from 'node:assert/strict';
-import { buildTestContainer } from '../../../../common.js';
+import Fl32_Web_Back_Handler_Static_A_Registry from '../../../../../../src/Back/Handler/Static/A/Registry.mjs';
 
 /** Simple config factory mock */
 function getMockFactory() {
@@ -8,11 +8,12 @@ function getMockFactory() {
 }
 
 describe('Fl32_Web_Back_Handler_Static_A_Registry', () => {
-    it('stores initial config', async () => {
-        const container = buildTestContainer();
-        container.register('Fl32_Web_Back_Handler_Static_A_Config$', getMockFactory());
+    test('stores initial config', async () => {
         /** @type {Fl32_Web_Back_Handler_Static_A_Registry} */
-        const registry = await container.get('Fl32_Web_Back_Handler_Static_A_Registry$');
+        const registry = new Fl32_Web_Back_Handler_Static_A_Registry({
+            configFactory: getMockFactory(),
+            logger: {warn: () => {}},
+        });
 
         registry.addConfigs([{ root: '/a', prefix: '/p/' }]);
         const match = registry.find('/p/file.txt');
@@ -21,10 +22,12 @@ describe('Fl32_Web_Back_Handler_Static_A_Registry', () => {
         assert.strictEqual(match.config.root, '/a');
     });
 
-    it('adds config with new prefix', async () => {
-        const container = buildTestContainer();
-        container.register('Fl32_Web_Back_Handler_Static_A_Config$', getMockFactory());
-        const registry = await container.get('Fl32_Web_Back_Handler_Static_A_Registry$');
+    test('adds config with new prefix', async () => {
+        /** @type {Fl32_Web_Back_Handler_Static_A_Registry} */
+        const registry = new Fl32_Web_Back_Handler_Static_A_Registry({
+            configFactory: getMockFactory(),
+            logger: {warn: () => {}},
+        });
 
         registry.addConfigs([{ root: '/a', prefix: '/p/' }]);
         registry.addConfigs([{ root: '/b', prefix: '/p/s/' }]);
@@ -34,10 +37,12 @@ describe('Fl32_Web_Back_Handler_Static_A_Registry', () => {
         assert.strictEqual(match.config.root, '/b');
     });
 
-    it('ignores config with existing prefix', async () => {
-        const container = buildTestContainer();
-        container.register('Fl32_Web_Back_Handler_Static_A_Config$', getMockFactory());
-        const registry = await container.get('Fl32_Web_Back_Handler_Static_A_Registry$');
+    test('ignores config with existing prefix', async () => {
+        /** @type {Fl32_Web_Back_Handler_Static_A_Registry} */
+        const registry = new Fl32_Web_Back_Handler_Static_A_Registry({
+            configFactory: getMockFactory(),
+            logger: {warn: () => {}},
+        });
 
         registry.addConfigs([{ root: '/a', prefix: '/p/' }]);
         registry.addConfigs([{ root: '/b', prefix: '/p/s/' }]);
@@ -48,14 +53,13 @@ describe('Fl32_Web_Back_Handler_Static_A_Registry', () => {
         assert.strictEqual(match.config.root, '/b');
     });
 
-    it('logs warning when prefix already exists', async () => {
+    test('logs warning when prefix already exists', async () => {
         const log = [];
-        const container = buildTestContainer();
-        container.register('Fl32_Web_Back_Handler_Static_A_Config$', getMockFactory());
-        container.register('Fl32_Web_Back_Logger$', {
-            warn: (...args) => log.push(args)
+        /** @type {Fl32_Web_Back_Handler_Static_A_Registry} */
+        const registry = new Fl32_Web_Back_Handler_Static_A_Registry({
+            configFactory: getMockFactory(),
+            logger: {warn: (...args) => log.push(args)},
         });
-        const registry = await container.get('Fl32_Web_Back_Handler_Static_A_Registry$');
 
         registry.addConfigs([{ root: '/a', prefix: '/p/' }]);
         registry.addConfigs([{ root: '/b', prefix: '/p/' }]);
@@ -64,10 +68,12 @@ describe('Fl32_Web_Back_Handler_Static_A_Registry', () => {
         assert.ok(log[0][0].includes('/p/'));
     });
 
-    it('prefers longer prefix when matching', async () => {
-        const container = buildTestContainer();
-        container.register('Fl32_Web_Back_Handler_Static_A_Config$', getMockFactory());
-        const registry = await container.get('Fl32_Web_Back_Handler_Static_A_Registry$');
+    test('prefers longer prefix when matching', async () => {
+        /** @type {Fl32_Web_Back_Handler_Static_A_Registry} */
+        const registry = new Fl32_Web_Back_Handler_Static_A_Registry({
+            configFactory: getMockFactory(),
+            logger: {warn: () => {}},
+        });
 
         registry.addConfigs([
             { root: '/a', prefix: '/p/' },

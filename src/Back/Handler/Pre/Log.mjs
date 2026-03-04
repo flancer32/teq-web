@@ -2,18 +2,29 @@
  * Logs basic request information at the beginning of the request lifecycle.
  * @implements Fl32_Web_Back_Api_Handler
  */
+export const __deps__ = {
+    logger: 'Fl32_Web_Back_Logger$',
+    dtoInfo: 'Fl32_Web_Back_Dto_Handler_Info$',
+    STAGE: 'Fl32_Web_Back_Enum_Stage$',
+};
+
+/**
+ * @typedef {object} Fl32_Web_Back_Handler_Pre_LogConstructorParams
+ * @property {Fl32_Web_Back_Logger} logger
+ * @property {Fl32_Web_Back_Dto_Handler_Info} dtoInfo
+ * @property {Fl32_Web_Back_Enum_Stage} STAGE
+ */
+
 export default class Fl32_Web_Back_Handler_Pre_Log {
     /* eslint-disable jsdoc/require-param-description,jsdoc/check-param-names */
     /**
-     * @param {Fl32_Web_Back_Logger} logger
-     * @param {Fl32_Web_Back_Dto_Handler_Info} dtoInfo
-     * @param {typeof Fl32_Web_Back_Enum_Stage} STAGE
+     * @param {Fl32_Web_Back_Handler_Pre_LogConstructorParams} params
      */
     constructor(
         {
-            Fl32_Web_Back_Logger$: logger,
-            Fl32_Web_Back_Dto_Handler_Info$: dtoInfo,
-            Fl32_Web_Back_Enum_Stage$: STAGE,
+            logger,
+            dtoInfo,
+            STAGE,
         }
     ) {
         /* eslint-enable jsdoc/check-param-names */

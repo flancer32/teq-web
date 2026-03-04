@@ -44,11 +44,12 @@
     "@teqfw/di": "^2.0.0"
   },
   "devDependencies": {
+    "@types/node": "^25.3.3",
     "eslint": "^9.0.0"
   },
   "scripts": {
-    "test:unit": "node --test ./test/unit",
-    "test:integration": "node --test ./test/integration",
+    "test:unit": "find test/unit -name '*.test.mjs' -print0 | xargs -0 node --test",
+    "test:integration": "find test/accept -name '*.test.mjs' -print0 | xargs -0 node --test",
     "test": "npm run test:unit && npm run test:integration"
   },
   "files": [
@@ -56,6 +57,7 @@
     "types.d.ts",
     "README.md",
     "LICENSE",
-    "CHANGELOG.md"
+    "CHANGELOG.md",
+    "types.d.ts"
   ]
 }

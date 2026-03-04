@@ -1,7 +1,16 @@
-import {describe, it, beforeEach} from 'node:test';
+import {describe, test, beforeEach} from 'node:test';
 import assert from 'node:assert/strict';
 import {EventEmitter} from 'node:events';
-import {buildTestContainer} from '../../../common.js';
+import Fl32_Web_Back_Handler_Static from '../../../../../src/Back/Handler/Static.mjs';
+import Fl32_Web_Back_Handler_Static_A_Config from '../../../../../src/Back/Handler/Static/A/Config.mjs';
+import Fl32_Web_Back_Handler_Static_A_Registry from '../../../../../src/Back/Handler/Static/A/Registry.mjs';
+import Fl32_Web_Back_Handler_Static_A_Resolver from '../../../../../src/Back/Handler/Static/A/Resolver.mjs';
+import Fl32_Web_Back_Handler_Static_A_Fallback from '../../../../../src/Back/Handler/Static/A/Fallback.mjs';
+import Fl32_Web_Back_Handler_Static_A_FileService from '../../../../../src/Back/Handler/Static/A/FileService.mjs';
+import Fl32_Web_Back_Helper_Respond from '../../../../../src/Back/Helper/Respond.mjs';
+import Fl32_Web_Back_Helper_Cast from '../../../../../src/Back/Helper/Cast.mjs';
+import Fl32_Web_Back_Dto_Handler_Source from '../../../../../src/Back/Dto/Handler/Source.mjs';
+import Fl32_Web_Back_Dto_Handler_Info from '../../../../../src/Back/Dto/Handler/Info.mjs';
 
 /** Simple HTTP/2 constants mock */
 const mockHttp2 = {
@@ -115,29 +124,41 @@ class MockRes extends EventEmitter {
 }
 
 describe('Fl32_Web_Back_Handler_Static', () => {
-    let container;
+    const STAGE = Object.freeze({PRE: 'pre', PROCESS: 'process', POST: 'post'});
+    let logger;
+    let dtoSource;
+    let handler;
 
     beforeEach(() => {
-        container = buildTestContainer();
-        container.register('node:fs', mockFs);
-        container.register('node:http2', mockHttp2);
-        container.register('node:path', mockPath);
-        container.register('Fl32_Web_Back_Logger$', {
+        logger = {
             warn: () => {},
             exception: () => {}
+        };
+        const cast = new Fl32_Web_Back_Helper_Cast();
+        dtoSource = new Fl32_Web_Back_Dto_Handler_Source({cast});
+        const dtoInfo = new Fl32_Web_Back_Dto_Handler_Info({cast, STAGE});
+        const configFactory = new Fl32_Web_Back_Handler_Static_A_Config({path: mockPath});
+        const registry = new Fl32_Web_Back_Handler_Static_A_Registry({configFactory, logger});
+        const resolver = new Fl32_Web_Back_Handler_Static_A_Resolver({path: mockPath});
+        const fallback = new Fl32_Web_Back_Handler_Static_A_Fallback({fs: mockFs, path: mockPath});
+        const fileService = new Fl32_Web_Back_Handler_Static_A_FileService({
+            fs: mockFs,
+            http2: mockHttp2,
+            path: mockPath,
+            logger,
+            helpMime: {getByExt: () => 'text/plain'},
+            resolver,
+            fallback,
         });
+        const respond = new Fl32_Web_Back_Helper_Respond({http2: mockHttp2});
+        handler = new Fl32_Web_Back_Handler_Static({registry, fileService, respond, logger, dtoInfo, STAGE});
     });
 
-    it('serves from the most specific source', async () => {
+    test('serves from the most specific source', async () => {
         addDir('/a');
         addFile('/a/test.txt', 'A');
         addDir('/b');
         addFile('/b/test.txt', 'B');
-
-        /** @type {Fl32_Web_Back_Dto_Handler_Source} */
-        const dtoSource = await container.get('Fl32_Web_Back_Dto_Handler_Source$');
-        /** @type {Fl32_Web_Back_Handler_Static} */
-        const handler = await container.get('Fl32_Web_Back_Handler_Static$');
 
         await handler.init({
             sources: [
@@ -154,41 +175,31 @@ describe('Fl32_Web_Back_Handler_Static', () => {
         assert.strictEqual(res.data.toString(), 'B');
     });
 
-    it('enforces allow-list rules', async () => {
-        addFile('src/Back/Server.js', 'class X {}');
-        addFile('src/Back/Handler/Static.js', 'ignore');
-
-        /** @type {Fl32_Web_Back_Dto_Handler_Source} */
-        const dtoSource = await container.get('Fl32_Web_Back_Dto_Handler_Source$');
-        /** @type {Fl32_Web_Back_Handler_Static} */
-        const handler = await container.get('Fl32_Web_Back_Handler_Static$');
+    test('enforces allow-list rules', async () => {
+        addFile('src/Back/Server.mjs', 'class X {}');
+        addFile('src/Back/Handler/Static.mjs', 'ignore');
 
         await handler.init({
             sources: [
-                dtoSource.create({prefix: '/s/', root: 'src', allow: {Back: ['Server.js']}, defaults: []})
+                dtoSource.create({prefix: '/s/', root: 'src', allow: {Back: ['Server.mjs']}, defaults: []})
             ]
         });
 
         const okRes = new MockRes();
-        const ok = await handler.handle({url: '/s/Back/Server.js'}, okRes);
+        const ok = await handler.handle({url: '/s/Back/Server.mjs'}, okRes);
         await new Promise(r => okRes.on('finish', r));
         assert.strictEqual(ok, true);
 
         const badRes = new MockRes();
-        const bad = await handler.handle({url: '/s/Back/Handler/Static.js'}, badRes);
+        const bad = await handler.handle({url: '/s/Back/Handler/Static.mjs'}, badRes);
         assert.strictEqual(bad, false);
         assert.strictEqual(badRes.headersSent, false);
     });
 
-    it('serves index files in directories', async () => {
+    test('serves index files in directories', async () => {
         addDir('/dir');
         addDir('/dir/d');
         addFile('/dir/d/index.txt', 'INDEX');
-
-        /** @type {Fl32_Web_Back_Dto_Handler_Source} */
-        const dtoSource = await container.get('Fl32_Web_Back_Dto_Handler_Source$');
-        /** @type {Fl32_Web_Back_Handler_Static} */
-        const handler = await container.get('Fl32_Web_Back_Handler_Static$');
 
         await handler.init({
             sources: [
@@ -209,13 +220,8 @@ describe('Fl32_Web_Back_Handler_Static', () => {
         assert.strictEqual(res.data.toString(), 'INDEX');
     });
 
-    it('rejects traversal and unmatched prefixes', async () => {
+    test('rejects traversal and unmatched prefixes', async () => {
         addFile('/safe/file.txt', 'ok');
-
-        /** @type {Fl32_Web_Back_Dto_Handler_Source} */
-        const dtoSource = await container.get('Fl32_Web_Back_Dto_Handler_Source$');
-        /** @type {Fl32_Web_Back_Handler_Static} */
-        const handler = await container.get('Fl32_Web_Back_Handler_Static$');
 
         await handler.init({
             sources: [

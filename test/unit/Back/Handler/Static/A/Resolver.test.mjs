@@ -1,12 +1,12 @@
-import { describe, it } from 'node:test';
+import { describe, test } from 'node:test';
 import assert from 'node:assert/strict';
-import { buildTestContainer } from '../../../../common.js';
+import path from 'node:path';
+import Fl32_Web_Back_Handler_Static_A_Resolver from '../../../../../../src/Back/Handler/Static/A/Resolver.mjs';
 
 describe('Fl32_Web_Back_Handler_Static_A_Resolver', () => {
-    it('resolves allowed path', async () => {
-        const container = buildTestContainer();
+    test('resolves allowed path', async () => {
         /** @type {Fl32_Web_Back_Handler_Static_A_Resolver} */
-        const resolver = await container.get('Fl32_Web_Back_Handler_Static_A_Resolver$');
+        const resolver = new Fl32_Web_Back_Handler_Static_A_Resolver({path});
 
         const { resolve } = await import('node:path');
         const config = {
@@ -19,10 +19,9 @@ describe('Fl32_Web_Back_Handler_Static_A_Resolver', () => {
         assert.strictEqual(fsPath, resolve('/root/pkg/a.txt'));
     });
 
-    it('returns null for disallowed path', async () => {
-        const container = buildTestContainer();
+    test('returns null for disallowed path', async () => {
         /** @type {Fl32_Web_Back_Handler_Static_A_Resolver} */
-        const resolver = await container.get('Fl32_Web_Back_Handler_Static_A_Resolver$');
+        const resolver = new Fl32_Web_Back_Handler_Static_A_Resolver({path});
 
         const { resolve } = await import('node:path');
         const config = {
@@ -35,10 +34,9 @@ describe('Fl32_Web_Back_Handler_Static_A_Resolver', () => {
         assert.strictEqual(result, null);
     });
 
-    it('throws on path traversal attempts', async () => {
-        const container = buildTestContainer();
+    test('throws on path traversal attempts', async () => {
         /** @type {Fl32_Web_Back_Handler_Static_A_Resolver} */
-        const resolver = await container.get('Fl32_Web_Back_Handler_Static_A_Resolver$');
+        const resolver = new Fl32_Web_Back_Handler_Static_A_Resolver({path});
 
         const { resolve } = await import('node:path');
         const config = {
@@ -53,10 +51,9 @@ describe('Fl32_Web_Back_Handler_Static_A_Resolver', () => {
         );
     });
 
-    it('throws on absolute rel paths', async () => {
-        const container = buildTestContainer();
+    test('throws on absolute rel paths', async () => {
         /** @type {Fl32_Web_Back_Handler_Static_A_Resolver} */
-        const resolver = await container.get('Fl32_Web_Back_Handler_Static_A_Resolver$');
+        const resolver = new Fl32_Web_Back_Handler_Static_A_Resolver({path});
 
         const { resolve } = await import('node:path');
         const config = {

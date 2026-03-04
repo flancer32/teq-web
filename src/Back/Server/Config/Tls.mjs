@@ -2,14 +2,23 @@
  * Factory for TLS configuration DTO.
  * Produces validated DTOs for HTTPS server configuration.
  */
+export const __deps__ = {
+    cast: 'Fl32_Web_Back_Helper_Cast$',
+};
+
+/**
+ * @typedef {object} Fl32_Web_Back_Server_Config_TlsConstructorParams
+ * @property {Fl32_Web_Back_Helper_Cast} cast
+ */
+
 export default class Fl32_Web_Back_Server_Config_Tls {
     /* eslint-disable jsdoc/require-param-description,jsdoc/check-param-names */
     /**
-     * @param {Fl32_Web_Back_Helper_Cast} cast
+     * @param {Fl32_Web_Back_Server_Config_TlsConstructorParams} params
      */
     constructor(
         {
-            Fl32_Web_Back_Helper_Cast$: cast,
+            cast,
         }
     ) {
         /* eslint-enable jsdoc/require-param-description,jsdoc/check-param-names */

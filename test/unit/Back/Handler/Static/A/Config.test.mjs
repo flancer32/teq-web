@@ -1,12 +1,12 @@
-import {describe, it} from 'node:test';
+import {describe, test} from 'node:test';
 import assert from 'node:assert/strict';
-import {buildTestContainer} from '../../../../common.js';
+import path from 'node:path';
+import Fl32_Web_Back_Handler_Static_A_Config from '../../../../../../src/Back/Handler/Static/A/Config.mjs';
 
 describe('Fl32_Web_Back_Handler_Static_A_Config', () => {
-    it('normalizes root, prefix, allow and defaults', async () => {
-        const container = buildTestContainer();
+    test('normalizes root, prefix, allow and defaults', async () => {
         /** @type {Fl32_Web_Back_Handler_Static_A_Config} */
-        const factory = await container.get('Fl32_Web_Back_Handler_Static_A_Config$');
+        const factory = new Fl32_Web_Back_Handler_Static_A_Config({path});
 
         const dto = {
             root: './r',
@@ -33,9 +33,9 @@ describe('Fl32_Web_Back_Handler_Static_A_Config', () => {
         );
     });
 
-    it('throws on invalid data', async () => {
-        const container = buildTestContainer();
-        const factory = await container.get('Fl32_Web_Back_Handler_Static_A_Config$');
+    test('throws on invalid data', async () => {
+        /** @type {Fl32_Web_Back_Handler_Static_A_Config} */
+        const factory = new Fl32_Web_Back_Handler_Static_A_Config({path});
 
         // missing root should throw an error about root
         assert.throws(

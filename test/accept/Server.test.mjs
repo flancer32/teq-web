@@ -1,9 +1,9 @@
-import {describe, it} from 'node:test';
+import {describe, test} from 'node:test';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import {join, dirname} from 'node:path';
 import {fileURLToPath} from 'node:url';
-import {buildTestContainer} from '../unit/common.js';
+import {buildTestContainer} from '../unit/common.mjs';
 
 async function waitListening(server) {
   if (!server.getInstance().listening) {
@@ -12,12 +12,12 @@ async function waitListening(server) {
 }
 
 describe('Fl32_Web_Back_Server', () => {
-  it('should start and respond in HTTP/1 mode', async () => {
+  test('should start and respond in HTTP/1 mode', async () => {
     const container = buildTestContainer();
     const server = await container.get('Fl32_Web_Back_Server$');
     const SERVER_TYPE = await container.get('Fl32_Web_Back_Enum_Server_Type$');
     const Config = await container.get('Fl32_Web_Back_Server_Config$');
-    const http = await container.get('node:http');
+    const http = await container.get('node_http');
 
     const cfg = Config.create({ port: 3051, type: SERVER_TYPE.HTTP });
     await server.start(cfg);
@@ -36,12 +36,12 @@ describe('Fl32_Web_Back_Server', () => {
     assert.strictEqual(server.getInstance(), undefined);
   });
 
-  it('should start and respond in HTTP/2 mode', async () => {
+  test('should start and respond in HTTP/2 mode', async () => {
     const container = buildTestContainer();
     const server = await container.get('Fl32_Web_Back_Server$');
     const SERVER_TYPE = await container.get('Fl32_Web_Back_Enum_Server_Type$');
     const Config = await container.get('Fl32_Web_Back_Server_Config$');
-    const http2 = await container.get('node:http2');
+    const http2 = await container.get('node_http2');
 
     const cfg = Config.create({ port: 3052, type: SERVER_TYPE.HTTP2 });
     await server.start(cfg);
@@ -63,12 +63,12 @@ describe('Fl32_Web_Back_Server', () => {
     assert.strictEqual(server.getInstance(), undefined);
   });
 
-  it('should start and respond in HTTPS mode', async () => {
+  test('should start and respond in HTTPS mode', async () => {
     const container = buildTestContainer();
     const server = await container.get('Fl32_Web_Back_Server$');
     const SERVER_TYPE = await container.get('Fl32_Web_Back_Enum_Server_Type$');
     const Config = await container.get('Fl32_Web_Back_Server_Config$');
-    const http2 = await container.get('node:http2');
+    const http2 = await container.get('node_http2');
 
     const dir = dirname(fileURLToPath(import.meta.url));
     const certDir = join(dir, '..', 'certs');
@@ -105,7 +105,7 @@ describe('Fl32_Web_Back_Server', () => {
 });
 
 describe('Fl32_Web_Back_Api_Handler', () => {
-  it('should serve allowed NPM file', async () => {
+  test('should serve allowed NPM file', async () => {
     const container = buildTestContainer();
     const dispatcher = await container.get('Fl32_Web_Back_Dispatcher$');
     const handler = await container.get('Fl32_Web_Back_Handler_Static$');
@@ -125,7 +125,7 @@ describe('Fl32_Web_Back_Api_Handler', () => {
     const server = await container.get('Fl32_Web_Back_Server$');
     const SERVER_TYPE = await container.get('Fl32_Web_Back_Enum_Server_Type$');
     const Config = await container.get('Fl32_Web_Back_Server_Config$');
-    const http = await container.get('node:http');
+    const http = await container.get('node_http');
 
     const cfg = Config.create({ port: 3056, type: SERVER_TYPE.HTTP });
     await server.start(cfg);
@@ -135,7 +135,7 @@ describe('Fl32_Web_Back_Api_Handler', () => {
       const req = http.get({
         hostname: 'localhost',
         port: cfg.port,
-        path: '/npm/@teqfw/di/src/Api/Container/Parser/Chunk.js',
+        path: '/npm/@teqfw/di/src/Container.mjs',
       }, res => {
         const chunks = [];
         res.on('data', ch => chunks.push(ch));
@@ -153,7 +153,7 @@ describe('Fl32_Web_Back_Api_Handler', () => {
     assert.strictEqual(server.getInstance(), undefined);
   });
 
-  it('should serve allowed source file', async () => {
+  test('should serve allowed source file', async () => {
     const container = buildTestContainer();
     const dispatcher = await container.get('Fl32_Web_Back_Dispatcher$');
     const handler = await container.get('Fl32_Web_Back_Handler_Static$');
@@ -163,7 +163,7 @@ describe('Fl32_Web_Back_Api_Handler', () => {
         root: 'src',
         prefix: '/sources/',
         allow: {
-          Back: ['Server.js'],
+          Back: ['Server.mjs'],
         },
       })],
     });
@@ -173,7 +173,7 @@ describe('Fl32_Web_Back_Api_Handler', () => {
     const server = await container.get('Fl32_Web_Back_Server$');
     const SERVER_TYPE = await container.get('Fl32_Web_Back_Enum_Server_Type$');
     const Config = await container.get('Fl32_Web_Back_Server_Config$');
-    const http = await container.get('node:http');
+    const http = await container.get('node_http');
 
     const cfg = Config.create({ port: 3057, type: SERVER_TYPE.HTTP });
     await server.start(cfg);
@@ -183,7 +183,7 @@ describe('Fl32_Web_Back_Api_Handler', () => {
       const req = http.get({
         hostname: 'localhost',
         port: cfg.port,
-        path: '/sources/Back/Server.js',
+        path: '/sources/Back/Server.mjs',
       }, res => {
         const chunks = [];
         res.on('data', ch => chunks.push(ch));

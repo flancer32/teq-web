@@ -1,12 +1,21 @@
+export const __deps__ = {
+    path: 'node_path',
+};
+
+/**
+ * @typedef {object} Fl32_Web_Back_Handler_Static_A_ConfigConstructorParams
+ * @property {typeof import('node:path')} path
+ */
+
 export default class Fl32_Web_Back_Handler_Static_A_Config {
     static DEFAULT_FILES = ['index.html', 'index.htm', 'index.txt'];
     /* eslint-disable jsdoc/require-param-description,jsdoc/check-param-names */
     /**
-     * @param {typeof import('node:path')} path
+     * @param {Fl32_Web_Back_Handler_Static_A_ConfigConstructorParams} params
      */
     constructor(
         {
-            'node:path': path,
+            path,
         }
     ) {
         /* eslint-enable jsdoc/check-param-names */

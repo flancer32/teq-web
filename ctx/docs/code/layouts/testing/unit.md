@@ -7,9 +7,9 @@ Version: `20260304`
 
 This document defines the normative unit-testing contract for TeqFW-based projects.
 
-Unit testing verifies correctness of individual implementation modules at the module contract boundary. The goal of unit testing is to ensure that each module behaves deterministically, enforces its documented invariants, and fails immediately when invalid input is provided.
+Unit testing verifies correctness of individual implementation modules at the module contract boundary. Unit tests ensure that each module behaves deterministically, enforces its documented invariants, and fails immediately when invalid input is provided.
 
-This document defines placement rules, structural mirroring requirements, isolation constraints, determinism expectations, and failure semantics for unit tests.
+The contract defined in this document is designed to support **deterministic generation, analysis, and modification of tests by automated agents**.
 
 Unit testing governs implementation-level verification only and does not validate runtime composition or system-level behavior.
 
@@ -33,8 +33,6 @@ test/unit/
 
 The directory structure inside `test/unit/` MUST mirror the structure of the primary source directory.
 
-Structural mirroring is mandatory.
-
 Example:
 
 ```
@@ -43,11 +41,11 @@ src/Dto/DepId.mjs
 test/unit/Dto/DepId.test.mjs
 ```
 
-This rule ensures predictable discoverability of tests and deterministic navigation between implementation modules and their corresponding unit tests.
+Structural mirroring is mandatory and ensures deterministic navigation between implementation modules and their corresponding tests.
 
 ## 4. One-to-One Test Mapping
 
-TeqFW enforces a strict unit test coverage rule:
+TeqFW enforces the following rule:
 
 ```
 1 source file = 1 unit test
@@ -55,13 +53,97 @@ TeqFW enforces a strict unit test coverage rule:
 
 For every testable source module there MUST exist exactly one corresponding unit test file.
 
-The unit test file must verify the complete public contract of the corresponding module.
-
 Multiple modules must not share a single unit test file.
 
-This invariant ensures that module contracts remain explicitly verifiable and traceable across the codebase.
+This rule guarantees explicit traceability between implementation modules and their unit tests.
 
-## 5. Isolation Invariant
+## 5. Test File Naming
+
+Unit test file names MUST match the name of the implementation module.
+
+The test file name is formed by appending the suffix `.test.mjs` to the module name.
+
+Example:
+
+```
+src/Back/Dispatcher.mjs
+→
+test/unit/Back/Dispatcher.test.mjs
+```
+
+This deterministic naming rule allows agents to locate tests without search heuristics.
+
+## 6. Test Suite Structure
+
+Each unit test file MUST contain a test suite corresponding to exactly one implementation module.
+
+Example:
+
+```
+describe('Dispatcher', () => {
+    test('should execute handlers in order', ...)
+});
+```
+
+A test suite must not combine tests for multiple modules.
+
+The suite name must correspond to the tested module.
+
+## 7. Test Declaration Form
+
+Tests MUST be declared using the `test()` function from `node:test`.
+
+Use of the Mocha-style alias `it()` is prohibited.
+
+Example:
+
+```
+test('should normalize dependency identifier', ...)
+```
+
+This rule ensures reliable test detection by development tools and automated agents.
+
+## 8. Test Structure
+
+Each test should follow the structure:
+
+Arrange → Act → Assert
+
+Example:
+
+```
+test('should normalize identifier', () => {
+
+    // Arrange
+    const input = 'Module.Component';
+
+    // Act
+    const result = normalize(input);
+
+    // Assert
+    assert.equal(result, 'Module_Component');
+});
+```
+
+This structure ensures predictable interpretation of tests by automated agents.
+
+## 9. Shared Test Bootstrap
+
+Test environment initialization must be centralized.
+
+Unit tests MUST use a shared bootstrap utility for test setup when runtime infrastructure is required.
+
+Example pattern:
+
+```
+const container = buildTestContainer();
+```
+
+Unit tests must not construct complex runtime infrastructure directly.
+
+This rule guarantees deterministic setup behavior and simplifies automated test generation.
+
+## 10. Isolation Invariant
 
 Unit tests MUST operate in a fully isolated environment.
 
@@ -70,40 +152,34 @@ Unit tests MUST NOT perform:
 - filesystem access
 - network access
 - timer-based execution
-- environment-variable access
+- environment variable access
 - mutation of global process state
 
-Unit tests must not depend on global mutable state.
+Tests must not depend on shared mutable state.
 
-If a module interacts with external facilities, those interactions must be abstracted and controlled within the test boundary.
+Isolation guarantees deterministic and repeatable test execution.
 
-Isolation ensures that unit tests remain deterministic and repeatable.
-
-## 6. Determinism Invariant
+## 11. Determinism Invariant
 
 For modules that define deterministic behavior, unit tests MUST verify that:
 
-- identical input produces structurally identical output
+- identical input produces identical output
 - repeated invocation does not mutate prior results
 - no hidden state persists across calls
 
-Determinism verification applies only to behaviors defined in the module contract.
+Random values, timestamps, or nondeterministic input must not be used.
 
-Modules that intentionally rely on nondeterministic behavior must explicitly document that behavior.
+## 12. Public Contract Verification
 
-## 7. Failure Semantics
+Unit tests MUST verify only the public contract of the module.
 
-For modules that define fail-fast behavior, unit tests MUST verify that:
+Internal implementation details must not be accessed or asserted.
 
-- invalid input results in immediate failure
-- no partial structures are returned
-- failure is expressed through a standard `Error`
+Tests must not depend on private state, internal helper functions, or hidden structures.
 
-Error message wording is not part of the contract unless explicitly specified in documentation.
+This rule protects tests from breaking during internal refactoring.
 
-Unit tests must validate failure conditions defined in module contracts.
-
-## 8. Structural Verification
+## 13. Structural Verification
 
 Where applicable, unit tests MUST verify:
 
@@ -112,9 +188,19 @@ Where applicable, unit tests MUST verify:
 - immutability guarantees when specified
 - absence of unintended mutation
 
-Unit tests must validate behavior defined in the module contract and MUST NOT depend on undocumented internal implementation details.
+Tests must validate behavior defined in the module contract only.
 
-## 9. Tooling
+## 14. Failure Semantics
+
+For modules that define fail-fast behavior, unit tests MUST verify that:
+
+- invalid input results in immediate failure
+- no partial structures are returned
+- failure is expressed through a standard `Error`
+
+Exact error message wording is not part of the contract unless explicitly documented.
+
+## 15. Tooling
 
 The normative testing stack for unit tests consists of:
 
@@ -123,9 +209,9 @@ The normative testing stack for unit tests consists of:
 
 External testing frameworks are not part of the TeqFW testing contract.
 
-This invariant ensures consistent execution semantics across all TeqFW projects.
+This rule guarantees consistent execution semantics across TeqFW projects.
 
-## 10. Environment Neutrality
+## 16. Environment Neutrality
 
 TeqFW packages may contain modules intended for:
 
@@ -135,26 +221,21 @@ TeqFW packages may contain modules intended for:
 
 Unit tests verify JavaScript module behavior and must not depend on deployment environment characteristics.
 
-Unit tests operate purely at the module contract boundary.
+## 17. Agent Compatibility
 
-## 11. Contract Boundary
+Unit tests must be structured so that automated agents can deterministically:
 
-The unit-testing contract governs verification of individual implementation modules.
+- locate tests
+- understand tested behavior
+- generate new tests
+- modify existing tests
 
-Unit tests:
+To support agent operation, unit tests must avoid ambiguous structures, implicit dependencies, and hidden test infrastructure.
 
-- validate module-level correctness
-- enforce isolation invariants
-- verify deterministic behavior where defined
-
-Unit tests do not verify system-level composition or runtime lifecycle behavior.
-
-Those concerns belong to integration testing.
-
-## 12. Summary
+## 18. Summary
 
 Each testable module MUST have exactly one corresponding unit test file.
 
-Unit tests MUST mirror the source directory structure, operate in a fully isolated environment, verify deterministic behavior where specified, enforce fail-fast semantics where defined, and validate structural correctness of module outputs.
+Unit tests MUST mirror the source directory structure, follow deterministic naming rules, declare tests using `test()`, verify only the public contract of modules, operate in a fully isolated environment, and use a centralized bootstrap when runtime infrastructure is required.
 
-Unit testing protects correctness of implementation modules and forms the foundation of the TeqFW testing model.
+These rules ensure that unit tests remain deterministic, maintainable, and suitable for automated agent-driven development.

@@ -2,11 +2,20 @@
  * Enforces allow‐list rules and security checks when resolving
  * a relative URL to an absolute filesystem path under a given root.
  */
+export const __deps__ = {
+    path: 'node_path',
+};
+
+/**
+ * @typedef {object} Fl32_Web_Back_Handler_Static_A_ResolverConstructorParams
+ * @property {typeof import('node:path')} path
+ */
+
 export default class Fl32_Web_Back_Handler_Static_A_Resolver {
     /**
-     * @param {typeof import('node:path')} path
+     * @param {Fl32_Web_Back_Handler_Static_A_ResolverConstructorParams} params
      */
-    constructor({'node:path': path}) {
+    constructor({path}) {
         /**
          * Resolve a filesystem path for given config and relative URL part.
          * Applies allow rules and prevents path traversal.

@@ -93,7 +93,7 @@ const srcNpm = SourceCfg.create({
     prefix: '/node_modules/',
     allow: {
         vue: ['dist/vue.global.prod.js'],
-        '@teqfw/di': ['src/Container.js'],
+        '@teqfw/di': ['src/Container.mjs'],
     }
 });
 const srcWeb = SourceCfg.create({ root: webRoot, prefix: '/' });

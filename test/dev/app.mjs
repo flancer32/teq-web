@@ -17,11 +17,8 @@ const root = join(cur, '..', '..');
 
 // Create a new instance of the container
 const container = new Container();
-
-// Get the resolver from the container
-const resolver = container.getResolver();
-resolver.addNamespaceRoot('Fl32_Web_', join(root, 'src'));
-resolver.addNamespaceRoot('App_', join(cur, 'app'));
+container.addNamespaceRoot('Fl32_Web_', join(root, 'src'), '.mjs');
+container.addNamespaceRoot('App_', join(cur, 'app'), '.mjs');
 
 // init the app (add the handlers to the Dispatcher)
 /** @type {function} */

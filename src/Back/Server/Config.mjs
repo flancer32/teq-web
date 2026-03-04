@@ -2,18 +2,29 @@
  * Factory for server configuration DTO.
  * Supports HTTP, HTTPS and HTTP2 server types with TLS configuration.
  */
+export const __deps__ = {
+    cast: 'Fl32_Web_Back_Helper_Cast$',
+    SERVER_TYPE: 'Fl32_Web_Back_Enum_Server_Type$',
+    tlsFactory: 'Fl32_Web_Back_Server_Config_Tls$',
+};
+
+/**
+ * @typedef {object} Fl32_Web_Back_Server_ConfigConstructorParams
+ * @property {Fl32_Web_Back_Helper_Cast} cast
+ * @property {Fl32_Web_Back_Enum_Server_Type} SERVER_TYPE
+ * @property {Fl32_Web_Back_Server_Config_Tls} tlsFactory
+ */
+
 export default class Fl32_Web_Back_Server_Config {
     /* eslint-disable jsdoc/require-param-description,jsdoc/check-param-names */
     /**
-     * @param {Fl32_Web_Back_Helper_Cast} cast
-     * @param {typeof Fl32_Web_Back_Enum_Server_Type} SERVER_TYPE
-     * @param {Fl32_Web_Back_Server_Config_Tls} tlsFactory
+     * @param {Fl32_Web_Back_Server_ConfigConstructorParams} params
      */
     constructor(
         {
-            Fl32_Web_Back_Helper_Cast$: cast,
-            Fl32_Web_Back_Enum_Server_Type$: SERVER_TYPE,
-            Fl32_Web_Back_Server_Config_Tls$: tlsFactory,
+            cast,
+            SERVER_TYPE,
+            tlsFactory,
         }
     ) {
         /* eslint-enable jsdoc/require-param-description,jsdoc/check-param-names */

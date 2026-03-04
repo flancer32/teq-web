@@ -1,6 +1,6 @@
-import {describe, it, beforeEach} from 'node:test';
+import {describe, test, beforeEach} from 'node:test';
 import assert from 'node:assert/strict';
-import {buildTestContainer} from '../../common.js';
+import Fl32_Web_Back_Helper_Respond from '../../../../src/Back/Helper/Respond.mjs';
 
 /** Minimal HTTP/2 constants mock */
 const mockHttp2 = {
@@ -48,16 +48,15 @@ class MockRes {
 }
 
 describe('Fl32_Web_Back_Helper_Respond', () => {
-    let container;
+    /** @type {Fl32_Web_Back_Helper_Respond} */
     let respond;
 
-    beforeEach(async () => {
-        container = buildTestContainer();
-        container.register('node:http2', mockHttp2);
-        respond = await container.get('Fl32_Web_Back_Helper_Respond$');
+    beforeEach(() => {
+        /** @type {Fl32_Web_Back_Helper_Respond} */
+        respond = new Fl32_Web_Back_Helper_Respond({http2: mockHttp2});
     });
 
-    it('sends 200 OK response', () => {
+    test('sends 200 OK response', () => {
         const res = new MockRes();
         const ok = respond.code200_Ok({res, headers: {a: 'b'}, body: 'hi'});
         assert.strictEqual(ok, true);
@@ -66,14 +65,14 @@ describe('Fl32_Web_Back_Helper_Respond', () => {
         assert.strictEqual(res.body, 'hi');
     });
 
-    it('adds Allow header for 405 Method Not Allowed', () => {
+    test('adds Allow header for 405 Method Not Allowed', () => {
         const res = new MockRes();
         respond.code405_MethodNotAllowed({res});
         assert.strictEqual(res.statusCode, 405);
         assert.strictEqual(res.headers.allow, 'HEAD, GET, POST');
     });
 
-    it('isWritable detects ended responses', () => {
+    test('isWritable detects ended responses', () => {
         const res = new MockRes();
         respond.code200_Ok({res});
         assert.strictEqual(respond.isWritable(res), false);

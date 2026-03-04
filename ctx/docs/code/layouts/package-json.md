@@ -1,7 +1,6 @@
 # package.json — Library Package Layout
 
 Path: `ctx/docs/code/layouts/package-json.md`
-Version: `20260304`
 
 ## 1. Purpose of the Document
 
@@ -171,13 +170,68 @@ No additional runtime dependencies are currently required.
 
 Development dependencies include tools used during development but not required during runtime.
 
-The project uses:
+The project currently uses:
 
 ```
 eslint
 ```
 
-Development dependencies do not influence runtime behavior.
+### Node.js Type Definitions
+
+Because the project targets the Node.js runtime and uses Node built-in modules, the development environment must include Node.js type definitions.
+
+The following package must be present in `devDependencies`:
+
+```
+@types/node
+```
+
+Example:
+
+```
+"devDependencies": {
+  "@types/node": "^20",
+  "eslint": "^9.0.0"
+}
+```
+
+The `@types/node` package provides type declarations for Node.js built-in modules and enables correct operation of IDE language services such as **tsserver**.
+
+Without this package, IDE tooling may fail to resolve Node built-in modules referenced using the `node:` specifier.
+
+Examples:
+
+```
+node:http
+node:fs
+node:path
+node:stream
+node:crypto
+node:test
+```
+
+These identifiers may appear in:
+
+- JSDoc type annotations;
+- TypeScript declaration files (`types.d.ts`);
+- static analysis performed by IDE tooling.
+
+If `@types/node` is not installed, IDE tooling may produce errors such as:
+
+```
+Cannot find module 'node:http'
+```
+
+The `@types/node` dependency affects only development tooling and does not influence runtime execution.
+
+The version of `@types/node` should correspond to the Node.js runtime version targeted by the project.
+
+Example:
+
+```
+Node runtime: >=20
+Types package: @types/node ^20
+```
 
 ## 11. Test Environment
 
@@ -187,7 +241,7 @@ Test environments:
 
 ```
 ./test/unit
-./test/integration
+./test/accept
 ```
 
 The following npm scripts are used:
@@ -199,6 +253,30 @@ test
 ```
 
 These scripts support development workflow.
+
+### Unit Test Script Contract
+
+The `test:unit` script must discover test files recursively without relying on shell globstar expansion.
+
+Required form:
+
+```
+"test:unit": "find test/unit -name '*.test.mjs' -print0 | xargs -0 node --test"
+```
+
+This form ensures stable behavior across environments where `**` is not expanded recursively by default shell settings.
+
+### Integration Test Script Contract
+
+The `test:integration` script must discover integration test files recursively without relying on shell globstar expansion.
+
+Required form:
+
+```
+"test:integration": "find test/accept -name '*.test.mjs' -print0 | xargs -0 node --test"
+```
+
+This form ensures stable behavior across environments where `**` is not expanded recursively by default shell settings.
 
 ## 12. Published File Scope
 
@@ -226,6 +304,8 @@ engines.node >= 20
 
 This version provides stable ECMAScript module support and includes the built-in `node:test` framework used by the project.
 
+For development tooling compatibility, the version of `@types/node` should correspond to the declared Node.js runtime version.
+
 ## 14. Absence of Runtime Entrypoint
 
 Because this package is a library module:
@@ -246,7 +326,6 @@ The following JSON fragment illustrates the canonical structure of the `package.
   "version": "0.5.0",
   "description": "Server-side web request coordination infrastructure for TeqFW modular monolith applications.",
   "type": "module",
-
   "license": "Apache-2.0",
 
   "author": {
@@ -298,12 +377,13 @@ The following JSON fragment illustrates the canonical structure of the `package.
   },
 
   "devDependencies": {
+    "@types/node": "^20",
     "eslint": "^9.0.0"
   },
 
   "scripts": {
-    "test:unit": "node --test ./test/unit",
-    "test:integration": "node --test ./test/integration",
+    "test:unit": "find test/unit -name '*.test.mjs' -print0 | xargs -0 node --test",
+    "test:integration": "find test/accept -name '*.test.mjs' -print0 | xargs -0 node --test",
     "test": "npm run test:unit && npm run test:integration"
   },
 
@@ -311,7 +391,7 @@ The following JSON fragment illustrates the canonical structure of the `package.
 }
 ```
 
-This fragment serves as a reference layout used by agents when generating or verifying the `package.json` file.
+This fragment serves as the reference layout used by agents when generating or validating the `package.json` file.
 
 ## 16. Summary
 
@@ -325,5 +405,7 @@ It specifies:
 - runtime and development dependencies;
 - testing scripts;
 - publication scope of the package.
+
+For correct operation of IDE tooling and static analysis, the development environment must include the `@types/node` package.
 
 The package functions as an infrastructure module within the TeqFW ecosystem and does not define its own runtime entrypoint.

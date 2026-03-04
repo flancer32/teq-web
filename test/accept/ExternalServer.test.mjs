@@ -1,7 +1,7 @@
-import {describe, it} from 'node:test';
+import {describe, test} from 'node:test';
 import assert from 'node:assert/strict';
 import http from 'node:http';
-import {buildTestContainer} from '../unit/common.js';
+import {buildTestContainer} from '../unit/common.mjs';
 import Express from 'express';
 import Fastify from 'fastify';
 
@@ -28,7 +28,7 @@ async function startFastify(port, dispatcher) {
 }
 
 describe('Dispatcher integration with external servers', () => {
-  it('should respond via express', async () => {
+  test('should respond via express', async () => {
     const container = buildTestContainer();
     const dispatcher = await container.get('Fl32_Web_Back_Dispatcher$');
     const port = 3054;
@@ -46,7 +46,7 @@ describe('Dispatcher integration with external servers', () => {
     await new Promise(resolve => server.close(resolve));
   });
 
-  it('should respond via fastify', async () => {
+  test('should respond via fastify', async () => {
     const container = buildTestContainer();
     const dispatcher = await container.get('Fl32_Web_Back_Dispatcher$');
     const port = 3055;

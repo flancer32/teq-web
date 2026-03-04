@@ -1,13 +1,13 @@
-import {describe, it} from 'node:test';
+import {describe, test} from 'node:test';
 import assert from 'node:assert/strict';
-import {buildTestContainer} from '../../../common.js';
+import Fl32_Web_Back_Helper_Order_Kahn from '../../../../../src/Back/Helper/Order/Kahn.mjs';
 
 describe('Fl32_Web_Back_Helper_Order_Kahn', () => {
 
     describe('sort', () => {
-        it('should sort handlers respecting after/before constraints', async () => {
-            const container = buildTestContainer();
-            const sorter = await container.get('Fl32_Web_Back_Helper_Order_Kahn$');
+        test('should sort handlers respecting after/before constraints', async () => {
+            /** @type {Fl32_Web_Back_Helper_Order_Kahn} */
+            const sorter = new Fl32_Web_Back_Helper_Order_Kahn();
 
             // Mock handlers with dependencies
             const mk = (name, after = [], before = []) => ({
@@ -24,9 +24,9 @@ describe('Fl32_Web_Back_Helper_Order_Kahn', () => {
             assert.deepStrictEqual(names, ['a', 'c', 'b', 'd']);
         });
 
-        it('should detect circular dependency', async () => {
-            const container = buildTestContainer();
-            const sorter = await container.get('Fl32_Web_Back_Helper_Order_Kahn$');
+        test('should detect circular dependency', async () => {
+            /** @type {Fl32_Web_Back_Helper_Order_Kahn} */
+            const sorter = new Fl32_Web_Back_Helper_Order_Kahn();
 
             const mk = (name, after = [], before = []) => ({
                 getRegistrationInfo: () => ({name, after, before})
@@ -40,9 +40,9 @@ describe('Fl32_Web_Back_Helper_Order_Kahn', () => {
             }, /Circular dependency detected/);
         });
 
-        it('should ignore references to unknown handlers', async () => {
-            const container = buildTestContainer();
-            const sorter = await container.get('Fl32_Web_Back_Helper_Order_Kahn$');
+        test('should ignore references to unknown handlers', async () => {
+            /** @type {Fl32_Web_Back_Helper_Order_Kahn} */
+            const sorter = new Fl32_Web_Back_Helper_Order_Kahn();
 
             const mk = (name, after = [], before = []) => ({
                 getRegistrationInfo: () => ({name, after, before})

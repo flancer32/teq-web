@@ -1,13 +1,23 @@
+export const __deps__ = {
+    configFactory: 'Fl32_Web_Back_Handler_Static_A_Config$',
+    logger: 'Fl32_Web_Back_Logger$',
+};
+
+/**
+ * @typedef {object} Fl32_Web_Back_Handler_Static_A_RegistryConstructorParams
+ * @property {Fl32_Web_Back_Handler_Static_A_Config} configFactory
+ * @property {Fl32_Web_Back_Logger} logger
+ */
+
 export default class Fl32_Web_Back_Handler_Static_A_Registry {
     /* eslint-disable jsdoc/require-param-description,jsdoc/check-param-names */
     /**
-     * @param {Fl32_Web_Back_Handler_Static_A_Config} configFactory
-     * @param {Fl32_Web_Back_Logger} logger
+     * @param {Fl32_Web_Back_Handler_Static_A_RegistryConstructorParams} params
      */
     constructor(
         {
-            Fl32_Web_Back_Handler_Static_A_Config$: configFactory,
-            Fl32_Web_Back_Logger$: logger,
+            configFactory,
+            logger,
         }
     ) {
         /* eslint-enable jsdoc/check-param-names */

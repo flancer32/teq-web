@@ -1,11 +1,20 @@
 /* eslint-disable jsdoc/require-param-description,jsdoc/check-param-names */
+export const __deps__ = {
+    http2: 'node_http2',
+};
+
+/**
+ * @typedef {object} Fl32_Web_Back_Helper_RespondConstructorParams
+ * @property {typeof import('node:http2')} http2
+ */
+
 export default class Fl32_Web_Back_Helper_Respond {
     /**
-     * @param {typeof import('node:http2')} http2
+     * @param {Fl32_Web_Back_Helper_RespondConstructorParams} params
      */
     constructor(
         {
-            'node:http2': http2,
+            http2,
         }
     ) {
         // VARS

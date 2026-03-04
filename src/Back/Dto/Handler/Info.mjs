@@ -5,16 +5,26 @@
  *
  * @see TeqFw_Core_Shared_Api_Factory
  */
+export const __deps__ = {
+    cast: 'Fl32_Web_Back_Helper_Cast$',
+    STAGE: 'Fl32_Web_Back_Enum_Stage$',
+};
+
+/**
+ * @typedef {object} Fl32_Web_Back_Dto_Handler_InfoConstructorParams
+ * @property {Fl32_Web_Back_Helper_Cast} cast
+ * @property {Fl32_Web_Back_Enum_Stage} STAGE
+ */
+
 export default class Fl32_Web_Back_Dto_Handler_Info {
     /* eslint-disable jsdoc/require-param-description,jsdoc/check-param-names */
     /**
-     * @param {Fl32_Web_Back_Helper_Cast} cast
-     * @param {typeof Fl32_Web_Back_Enum_Stage} STAGE
+     * @param {Fl32_Web_Back_Dto_Handler_InfoConstructorParams} params
      */
     constructor(
         {
-            Fl32_Web_Back_Helper_Cast$: cast,
-            Fl32_Web_Back_Enum_Stage$: STAGE,
+            cast,
+            STAGE,
         }
     ) {
         /* eslint-enable jsdoc/check-param-names */

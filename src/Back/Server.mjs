@@ -6,26 +6,38 @@
  * @property {function(Fl32_Web_Back_Server_Config.Dto): Promise<void>} start - Starts the server with given configuration.
  * @property {function(): Promise<void>} stop - Stops the server.
  */
+export const __deps__ = {
+    http: 'node_http',
+    http2: 'node_http2',
+    DEF: 'Fl32_Web_Back_Defaults$',
+    logger: 'Fl32_Web_Back_Logger$',
+    dispatcher: 'Fl32_Web_Back_Dispatcher$',
+    SERVER_TYPE: 'Fl32_Web_Back_Enum_Server_Type$',
+};
+
+/**
+ * @typedef {object} Fl32_Web_Back_ServerConstructorParams
+ * @property {typeof import('node:http')} http
+ * @property {typeof import('node:http2')} http2
+ * @property {import('./Defaults.mjs').default} DEF
+ * @property {Fl32_Web_Back_Logger} logger
+ * @property {Fl32_Web_Back_Dispatcher} dispatcher
+ * @property {Fl32_Web_Back_Enum_Server_Type} SERVER_TYPE
+ */
+
 export default class Fl32_Web_Back_Server {
     /* eslint-disable jsdoc/require-param-description,jsdoc/check-param-names */
     /**
-     * @param {{
-     *   'node:http': typeof import('node:http'),
-     *   'node:http2': typeof import('node:http2'),
-     *   Fl32_Web_Back_Defaults$: import('./Defaults.js').default,
-     *   Fl32_Web_Back_Logger$: Fl32_Web_Back_Logger,
-     *   Fl32_Web_Back_Dispatcher$: Fl32_Web_Back_Dispatcher,
-     *   Fl32_Web_Back_Enum_Server_Type$: Fl32_Web_Back_Enum_Server_Type,
-     * }} deps
+     * @param {Fl32_Web_Back_ServerConstructorParams} deps
      */
     constructor(
         {
-            'node:http': http,
-            'node:http2': http2,
-            Fl32_Web_Back_Defaults$: DEF,
-            Fl32_Web_Back_Logger$: logger,
-            Fl32_Web_Back_Dispatcher$: dispatcher,
-            Fl32_Web_Back_Enum_Server_Type$: SERVER_TYPE,
+            http,
+            http2,
+            DEF,
+            logger,
+            dispatcher,
+            SERVER_TYPE,
         }
     ) {
         /* eslint-enable jsdoc/require-param-description,jsdoc/check-param-names */

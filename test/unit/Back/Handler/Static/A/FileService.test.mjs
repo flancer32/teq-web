@@ -1,9 +1,28 @@
-import { describe, it, beforeEach } from 'node:test';
+import { describe, test, beforeEach } from 'node:test';
 import assert from 'node:assert/strict';
 import { EventEmitter } from 'node:events';
-import { buildTestContainer } from '../../../../common.js';
+import Fl32_Web_Back_Handler_Static_A_FileService from '../../../../../../src/Back/Handler/Static/A/FileService.mjs';
+import Fl32_Web_Back_Handler_Static_A_Resolver from '../../../../../../src/Back/Handler/Static/A/Resolver.mjs';
+import Fl32_Web_Back_Handler_Static_A_Fallback from '../../../../../../src/Back/Handler/Static/A/Fallback.mjs';
 
 const normalize = p => p.replace(/\\/g, '/').replace(/\/+/g, '/').replace(/\/$/, '');
+const mockPath = {
+  resolve: (...parts) => normalize(parts.join('/')),
+  join: (...parts) => normalize(parts.join('/')),
+  isAbsolute: p => String(p).startsWith('/'),
+  extname: p => {
+    const m = String(p).match(/(\.[^./]+)$/);
+    return m ? m[1] : '';
+  }
+};
+const mockHttp2 = {
+  constants: {
+    HTTP2_HEADER_CONTENT_LENGTH: 'content-length',
+    HTTP2_HEADER_CONTENT_TYPE: 'content-type',
+    HTTP2_HEADER_LAST_MODIFIED: 'last-modified',
+    HTTP_STATUS_OK: 200
+  }
+};
 
 class MockRes extends EventEmitter {
   constructor() {
@@ -103,20 +122,23 @@ describe('Fl32_Web_Back_Handler_Static_A_FileService', () => {
     };
   });
 
-  it('serves existing file', async () => {
+  test('serves existing file', async () => {
     addFile('/root/a.txt', 'A');
 
     /** @type {{ root: string, prefix: string, defaults: string[] }} */
     const config = { root: '/root', prefix: '/p/', defaults: ['index.html'] };
     const res = new MockRes();
 
-    const container = buildTestContainer();
-    container.register('node:fs', mockFs);
-    container.register('Fl32_Web_Back_Helper_Mime$', mime);
-    container.register('Fl32_Web_Back_Logger$', logger);
-
     /** @type {Fl32_Web_Back_Handler_Static_A_FileService} */
-    const service = await container.get('Fl32_Web_Back_Handler_Static_A_FileService$');
+    const service = new Fl32_Web_Back_Handler_Static_A_FileService({
+      fs: mockFs,
+      http2: mockHttp2,
+      path: mockPath,
+      logger,
+      helpMime: mime,
+      resolver: new Fl32_Web_Back_Handler_Static_A_Resolver({path: mockPath}),
+      fallback: new Fl32_Web_Back_Handler_Static_A_Fallback({fs: mockFs, path: mockPath}),
+    });
 
     const ok = await service.serve(config, 'a.txt', {}, res);
     await new Promise(r => res.on('finish', r));
@@ -126,26 +148,29 @@ describe('Fl32_Web_Back_Handler_Static_A_FileService', () => {
     assert.strictEqual(res.data, 'A');
   });
 
-  it('returns false when file not found', async () => {
+  test('returns false when file not found', async () => {
     addDir('/root');
 
     /** @type {{ root: string, prefix: string, defaults: string[] }} */
     const config = { root: '/root', prefix: '/p/', defaults: ['index.html'] };
     const res = new MockRes();
 
-    const container = buildTestContainer();
-    container.register('node:fs', mockFs);
-    container.register('Fl32_Web_Back_Helper_Mime$', mime);
-    container.register('Fl32_Web_Back_Logger$', logger);
-
     /** @type {Fl32_Web_Back_Handler_Static_A_FileService} */
-    const service = await container.get('Fl32_Web_Back_Handler_Static_A_FileService$');
+    const service = new Fl32_Web_Back_Handler_Static_A_FileService({
+      fs: mockFs,
+      http2: mockHttp2,
+      path: mockPath,
+      logger,
+      helpMime: mime,
+      resolver: new Fl32_Web_Back_Handler_Static_A_Resolver({path: mockPath}),
+      fallback: new Fl32_Web_Back_Handler_Static_A_Fallback({fs: mockFs, path: mockPath}),
+    });
 
     const ok = await service.serve(config, 'missing.txt', {}, res);
     assert.strictEqual(ok, false);
   });
 
-  it('logs info when file is missing during stat', async () => {
+  test('logs info when file is missing during stat', async () => {
     mockFs.promises.stat = async () => {
       const err = new Error('ENOENT');
       err.code = 'ENOENT';
@@ -155,14 +180,16 @@ describe('Fl32_Web_Back_Handler_Static_A_FileService', () => {
     const config = { root: '/root', prefix: '/p/', defaults: [] };
     const res = new MockRes();
 
-    const container = buildTestContainer();
-    container.register('node:fs', mockFs);
-    container.register('Fl32_Web_Back_Helper_Mime$', mime);
-    container.register('Fl32_Web_Back_Logger$', logger);
-    container.register('Fl32_Web_Back_Handler_Static_A_Fallback$', { apply: async p => p });
-
     /** @type {Fl32_Web_Back_Handler_Static_A_FileService} */
-    const service = await container.get('Fl32_Web_Back_Handler_Static_A_FileService$');
+    const service = new Fl32_Web_Back_Handler_Static_A_FileService({
+      fs: mockFs,
+      http2: mockHttp2,
+      path: mockPath,
+      logger,
+      helpMime: mime,
+      resolver: new Fl32_Web_Back_Handler_Static_A_Resolver({path: mockPath}),
+      fallback: { apply: async p => p },
+    });
 
     const ok = await service.serve(config, 'missing.txt', {}, res);
 
@@ -171,7 +198,7 @@ describe('Fl32_Web_Back_Handler_Static_A_FileService', () => {
     assert.strictEqual(logs[0][0], 'info');
   });
 
-  it('logs warn on access errors', async () => {
+  test('logs warn on access errors', async () => {
     /** force EACCES error */
     mockFs.promises.stat = async () => {
       const err = new Error('EACCES');
@@ -183,14 +210,16 @@ describe('Fl32_Web_Back_Handler_Static_A_FileService', () => {
     const config = { root: '/root', prefix: '/p/', defaults: [] };
     const res = new MockRes();
 
-    const container = buildTestContainer();
-    container.register('node:fs', mockFs);
-    container.register('Fl32_Web_Back_Helper_Mime$', mime);
-    container.register('Fl32_Web_Back_Logger$', logger);
-    container.register('Fl32_Web_Back_Handler_Static_A_Fallback$', { apply: async p => p });
-
     /** @type {Fl32_Web_Back_Handler_Static_A_FileService} */
-    const service = await container.get('Fl32_Web_Back_Handler_Static_A_FileService$');
+    const service = new Fl32_Web_Back_Handler_Static_A_FileService({
+      fs: mockFs,
+      http2: mockHttp2,
+      path: mockPath,
+      logger,
+      helpMime: mime,
+      resolver: new Fl32_Web_Back_Handler_Static_A_Resolver({path: mockPath}),
+      fallback: { apply: async p => p },
+    });
 
     const ok = await service.serve(config, 'denied.txt', {}, res);
 
@@ -199,7 +228,7 @@ describe('Fl32_Web_Back_Handler_Static_A_FileService', () => {
     assert.strictEqual(logs[0][0], 'warn');
   });
 
-  it('logs exception on unexpected errors', async () => {
+  test('logs exception on unexpected errors', async () => {
     addFile('/root/x.txt', 'X');
     mockFs.createReadStream = () => { throw new Error('boom'); };
 
@@ -207,14 +236,16 @@ describe('Fl32_Web_Back_Handler_Static_A_FileService', () => {
     const config = { root: '/root', prefix: '/p/', defaults: [] };
     const res = new MockRes();
 
-    const container = buildTestContainer();
-    container.register('node:fs', mockFs);
-    container.register('Fl32_Web_Back_Helper_Mime$', mime);
-    container.register('Fl32_Web_Back_Logger$', logger);
-    container.register('Fl32_Web_Back_Handler_Static_A_Fallback$', { apply: async p => p });
-
     /** @type {Fl32_Web_Back_Handler_Static_A_FileService} */
-    const service = await container.get('Fl32_Web_Back_Handler_Static_A_FileService$');
+    const service = new Fl32_Web_Back_Handler_Static_A_FileService({
+      fs: mockFs,
+      http2: mockHttp2,
+      path: mockPath,
+      logger,
+      helpMime: mime,
+      resolver: new Fl32_Web_Back_Handler_Static_A_Resolver({path: mockPath}),
+      fallback: { apply: async p => p },
+    });
 
     const ok = await service.serve(config, 'x.txt', {}, res);
 

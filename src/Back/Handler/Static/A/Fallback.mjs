@@ -1,13 +1,23 @@
+export const __deps__ = {
+    fs: 'node_fs',
+    path: 'node_path',
+};
+
+/**
+ * @typedef {object} Fl32_Web_Back_Handler_Static_A_FallbackConstructorParams
+ * @property {typeof import('node:fs')} fs
+ * @property {typeof import('node:path')} path
+ */
+
 export default class Fl32_Web_Back_Handler_Static_A_Fallback {
     /* eslint-disable jsdoc/require-param-description,jsdoc/check-param-names */
     /**
-     * @param {typeof import('node:fs')} fs
-     * @param {typeof import('node:path')} path
+     * @param {Fl32_Web_Back_Handler_Static_A_FallbackConstructorParams} params
      */
     constructor(
         {
-            'node:fs': fs,
-            'node:path': path,
+            fs,
+            path,
         }
     ) {
         /* eslint-enable jsdoc/check-param-names */

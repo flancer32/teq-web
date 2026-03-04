@@ -7,20 +7,32 @@
  *
  * If no process handler responds, a 404 is sent. If one throws, a 500 is returned.
  */
+export const __deps__ = {
+    logger: 'Fl32_Web_Back_Logger$',
+    respond: 'Fl32_Web_Back_Helper_Respond$',
+    helpOrder: 'Fl32_Web_Back_Helper_Order_Kahn$',
+    STAGE: 'Fl32_Web_Back_Enum_Stage$',
+};
+
+/**
+ * @typedef {object} Fl32_Web_Back_DispatcherConstructorParams
+ * @property {Fl32_Web_Back_Logger} logger
+ * @property {Fl32_Web_Back_Helper_Respond} respond
+ * @property {Fl32_Web_Back_Helper_Order_Kahn} helpOrder
+ * @property {Fl32_Web_Back_Enum_Stage} STAGE
+ */
+
 export default class Fl32_Web_Back_Dispatcher {
     /* eslint-disable jsdoc/require-param-description,jsdoc/check-param-names */
     /**
-     * @param {Fl32_Web_Back_Logger} logger
-     * @param {Fl32_Web_Back_Helper_Respond} respond
-     * @param {Fl32_Web_Back_Helper_Order_Kahn} helpOrder
-     * @param {typeof Fl32_Web_Back_Enum_Stage} STAGE
+     * @param {Fl32_Web_Back_DispatcherConstructorParams} params
      */
     constructor(
         {
-            Fl32_Web_Back_Logger$: logger,
-            Fl32_Web_Back_Helper_Respond$: respond,
-            Fl32_Web_Back_Helper_Order_Kahn$: helpOrder,
-            Fl32_Web_Back_Enum_Stage$: STAGE,
+            logger,
+            respond,
+            helpOrder,
+            STAGE,
         }
     ) {
         /* eslint-enable jsdoc/check-param-names */

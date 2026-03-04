@@ -1,23 +1,38 @@
+export const __deps__ = {
+    fs: 'node_fs',
+    http2: 'node_http2',
+    path: 'node_path',
+    logger: 'Fl32_Web_Back_Logger$',
+    helpMime: 'Fl32_Web_Back_Helper_Mime$',
+    resolver: 'Fl32_Web_Back_Handler_Static_A_Resolver$',
+    fallback: 'Fl32_Web_Back_Handler_Static_A_Fallback$',
+};
+
+/**
+ * @typedef {object} Fl32_Web_Back_Handler_Static_A_FileServiceConstructorParams
+ * @property {typeof import('node:fs')} fs
+ * @property {typeof import('node:http2')} http2
+ * @property {typeof import('node:path')} path
+ * @property {Fl32_Web_Back_Logger} logger
+ * @property {Fl32_Web_Back_Helper_Mime} helpMime
+ * @property {Fl32_Web_Back_Handler_Static_A_Resolver} resolver
+ * @property {Fl32_Web_Back_Handler_Static_A_Fallback} fallback
+ */
+
 export default class Fl32_Web_Back_Handler_Static_A_FileService {
     /* eslint-disable jsdoc/require-param-description,jsdoc/check-param-names */
     /**
-     * @param {typeof import('node:fs')} fs
-     * @param {typeof import('node:http2')} http2
-     * @param {typeof import('node:path')} path
-     * @param {Fl32_Web_Back_Logger} logger
-     * @param {Fl32_Web_Back_Helper_Mime} helpMime
-     * @param {Fl32_Web_Back_Handler_Static_A_Resolver} resolver
-     * @param {Fl32_Web_Back_Handler_Static_A_Fallback} fallback
+     * @param {Fl32_Web_Back_Handler_Static_A_FileServiceConstructorParams} params
      */
     constructor(
         {
-            'node:fs': fs,
-            'node:http2': http2,
-            'node:path': path,
-            Fl32_Web_Back_Logger$: logger,
-            Fl32_Web_Back_Helper_Mime$: helpMime,
-            Fl32_Web_Back_Handler_Static_A_Resolver$: resolver,
-            Fl32_Web_Back_Handler_Static_A_Fallback$: fallback,
+            fs,
+            http2,
+            path,
+            logger,
+            helpMime,
+            resolver,
+            fallback,
         }
     ) {
         /* eslint-enable jsdoc/check-param-names */

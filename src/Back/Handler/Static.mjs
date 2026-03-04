@@ -3,24 +3,38 @@
  *
  * @implements Fl32_Web_Back_Api_Handler
  */
+export const __deps__ = {
+    registry: 'Fl32_Web_Back_Handler_Static_A_Registry$',
+    fileService: 'Fl32_Web_Back_Handler_Static_A_FileService$',
+    respond: 'Fl32_Web_Back_Helper_Respond$',
+    logger: 'Fl32_Web_Back_Logger$',
+    dtoInfo: 'Fl32_Web_Back_Dto_Handler_Info$',
+    STAGE: 'Fl32_Web_Back_Enum_Stage$',
+};
+
+/**
+ * @typedef {object} Fl32_Web_Back_Handler_StaticConstructorParams
+ * @property {Fl32_Web_Back_Handler_Static_A_Registry} registry
+ * @property {Fl32_Web_Back_Handler_Static_A_FileService} fileService
+ * @property {Fl32_Web_Back_Helper_Respond} respond
+ * @property {Fl32_Web_Back_Logger} logger
+ * @property {Fl32_Web_Back_Dto_Handler_Info} dtoInfo
+ * @property {Fl32_Web_Back_Enum_Stage} STAGE
+ */
+
 export default class Fl32_Web_Back_Handler_Static {
     /* eslint-disable jsdoc/require-param-description,jsdoc/check-param-names */
     /**
-     * @param {Fl32_Web_Back_Handler_Static_A_Registry} registry
-     * @param {Fl32_Web_Back_Handler_Static_A_FileService} fileService
-     * @param {Fl32_Web_Back_Helper_Respond} respond
-     * @param {Fl32_Web_Back_Logger} logger
-     * @param {Fl32_Web_Back_Dto_Handler_Info} dtoInfo
-     * @param {typeof Fl32_Web_Back_Enum_Stage} STAGE
+     * @param {Fl32_Web_Back_Handler_StaticConstructorParams} params
      */
     constructor(
         {
-            Fl32_Web_Back_Handler_Static_A_Registry$: registry,
-            Fl32_Web_Back_Handler_Static_A_FileService$: fileService,
-            Fl32_Web_Back_Helper_Respond$: respond,
-            Fl32_Web_Back_Logger$: logger,
-            Fl32_Web_Back_Dto_Handler_Info$: dtoInfo,
-            Fl32_Web_Back_Enum_Stage$: STAGE,
+            registry,
+            fileService,
+            respond,
+            logger,
+            dtoInfo,
+            STAGE,
         }
     ) {
         /* eslint-enable jsdoc/check-param-names */

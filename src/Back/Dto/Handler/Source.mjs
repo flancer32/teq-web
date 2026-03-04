@@ -1,14 +1,23 @@
 /**
  * Factory for file source configuration DTO used by Static handler.
  */
+export const __deps__ = {
+    cast: 'Fl32_Web_Back_Helper_Cast$',
+};
+
+/**
+ * @typedef {object} Fl32_Web_Back_Dto_Handler_SourceConstructorParams
+ * @property {Fl32_Web_Back_Helper_Cast} cast
+ */
+
 export default class Fl32_Web_Back_Dto_Handler_Source {
     /* eslint-disable jsdoc/require-param-description */
     /**
-     * @param {Fl32_Web_Back_Helper_Cast} cast
+     * @param {Fl32_Web_Back_Dto_Handler_SourceConstructorParams} params
      */
     constructor(
         {
-            Fl32_Web_Back_Helper_Cast$: cast,
+            cast,
         }
     ) {
         /* eslint-enable jsdoc/require-param-description */

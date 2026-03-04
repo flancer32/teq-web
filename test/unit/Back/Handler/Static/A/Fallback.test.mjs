@@ -1,6 +1,7 @@
-import {describe, it, beforeEach} from 'node:test';
+import {describe, test, beforeEach} from 'node:test';
 import assert from 'node:assert/strict';
-import {buildTestContainer} from '../../../../common.js';
+import path from 'node:path';
+import Fl32_Web_Back_Handler_Static_A_Fallback from '../../../../../../src/Back/Handler/Static/A/Fallback.mjs';
 
 describe('Fl32_Web_Back_Handler_Static_A_Fallback', () => {
     /** @type {{ promises: { stat: (p: string) => Promise<any> }, _add: (p: string, isFile: boolean) => void }} */
@@ -35,13 +36,12 @@ describe('Fl32_Web_Back_Handler_Static_A_Fallback', () => {
 
     /** Creates and returns a configured Fallback instance */
     async function getFallback() {
-        const container = buildTestContainer();
-        container.register('node:fs', mockFs);
         /** @type {Fl32_Web_Back_Handler_Static_A_Fallback} */
-        return container.get('Fl32_Web_Back_Handler_Static_A_Fallback$');
+        const fallback = new Fl32_Web_Back_Handler_Static_A_Fallback({fs: mockFs, path});
+        return fallback;
     }
 
-    it('returns index file for a directory', async () => {
+    test('returns index file for a directory', async () => {
         addDir('/d');
         addFile('/d/index.html');
 
@@ -50,7 +50,7 @@ describe('Fl32_Web_Back_Handler_Static_A_Fallback', () => {
         assert.strictEqual(result, '/d/index.html');
     });
 
-    it('returns null when nothing found', async () => {
+    test('returns null when nothing found', async () => {
         addDir('/x');
 
         const fb = await getFallback();
