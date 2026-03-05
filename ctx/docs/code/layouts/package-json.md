@@ -349,7 +349,7 @@ The following JSON fragment illustrates the canonical structure of the `package.
     "teqfw",
     "tequila-framework",
     "web",
-    "dispatcher",
+    "pipeline-engine",
     "request-pipeline",
     "dependency-injection",
     "modular-monolith",

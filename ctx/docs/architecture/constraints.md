@@ -23,12 +23,12 @@ Any transformation that changes the architectural class defined in `./ctx/docs/a
 
 The following transformations constitute architectural reclassification:
 
-- introduction of additional lifecycle execution centers outside the Dispatcher;
+- introduction of additional lifecycle execution centers outside the Pipeline Engine;
 - introduction of distributed, nested, or peer orchestration structures within the system boundary;
 - replacement of the pipeline-centered architecture with a framework-style layered abstraction as the primary system form;
 - introduction of a transport-framework-dependent execution model as an architectural requirement;
 - introduction of global mutable processing state governing request lifecycle behavior;
-- replacement of the Dispatcher with alternative or competing coordination centers within the same architectural instance.
+- replacement of the Pipeline Engine with alternative or competing coordination centers within the same architectural instance.
 
 ## 3. Configuration Invariants
 
@@ -43,7 +43,7 @@ The following transformations are prohibited:
 - runtime modification of Server operational parameters after activation;
 - runtime registration, removal, or replacement of Handlers after Configuration Phase;
 - runtime mutation of Processing Pipeline ordering or composition;
-- runtime replacement or rebinding of the Dispatcher to a different handler set;
+- runtime replacement or rebinding of the Pipeline Engine to a different handler set;
 - introduction of mechanisms whose purpose is architectural reconfiguration during Execution Phase.
 
 Relaxation of the one-time configuration rule constitutes architectural restructuring and requires explicit revision of `./ctx/docs/architecture/overview.md`.
@@ -99,7 +99,7 @@ Any structural change must be explicitly documented in the architectural overvie
 
 Architectural identity collapses if any of the following occur:
 
-- the execution topology introduces more than one lifecycle coordination authority or removes the Dispatcher as the unique execution center;
+- the execution topology introduces more than one lifecycle coordination authority or removes the Pipeline Engine as the unique execution center;
 - the Configuration/Execution separation is violated by runtime reconfiguration;
 - the Processing Pipeline becomes structurally mutable during Execution Phase;
 - request-scoped processing state loses isolation or becomes persistent beyond a single request lifecycle;

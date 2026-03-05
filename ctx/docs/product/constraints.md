@@ -33,14 +33,14 @@ The product cannot be redefined as:
 
 Changing this frame constitutes a different product.
 
-## 3. Dispatcher Authority
+## 3. Pipeline Engine Authority
 
-The Dispatcher defined in the product overview must remain the single lifecycle coordination authority of request processing.
+The Pipeline Engine defined in the product overview must remain the single lifecycle coordination authority of request processing.
 
 The following transformations are prohibited:
 
 - introduction of a second coordination center for request processing;
-- request processing executed outside the Dispatcher;
+- request processing executed outside the Pipeline Engine;
 - relocation of request-processing control to the Server or to handlers.
 
 ## 4. Processing Pipeline Model
@@ -49,7 +49,7 @@ The Processing Pipeline model defined in the product overview must remain unchan
 
 The following transformations are prohibited:
 
-- replacement of the three-stage model `pre → process → post`;
+- replacement of the three-stage model `INIT → PROCESS → FINALIZE`;
 - removal of any stage;
 - introduction of alternative request-processing execution models alongside the pipeline;
 - dynamic reordering of handlers during request processing.
@@ -68,9 +68,9 @@ The following transformations are prohibited:
 
 The following runtime semantics must remain unchanged:
 
-- `pre` and `post` handler failures are isolated and do not terminate request processing;
-- a `process` handler failure may produce a `500 Internal Server Error` if the response is still writable;
-- if no `process` handler handles the request, the Dispatcher produces a `404 Not Found` response;
+- `INIT` and `FINALIZE` handler failures are isolated and do not terminate request processing;
+- a `PROCESS` handler failure may produce a `500 Internal Server Error` if the response is still writable;
+- if no `PROCESS` handler handles the request, the Pipeline Engine produces a `404 Not Found` response;
 - each request produces exactly one HTTP response.
 
 ## 7. Prohibited Domain Expansions
@@ -113,10 +113,9 @@ When changes are produced by an LLM agent:
 
 The product remains within its identity as long as:
 
-- the Dispatcher remains the single lifecycle coordination authority;
+- the Pipeline Engine remains the single lifecycle coordination authority;
 - the Processing Pipeline remains the only form of request processing;
-- the pipeline stage model remains `pre → process → post`;
+- the pipeline stage model remains `INIT → PROCESS → FINALIZE`;
 - handlers remain isolated and ordered only by declarative metadata;
 - the product retains its purely infrastructural nature;
 - the inseparable link to TeqFW and `@teqfw/di` is preserved.
-

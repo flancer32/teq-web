@@ -25,9 +25,9 @@ This classification defines the system as a structural coordination mechanism fo
 
 The architecture has a structural coordination locus:
 
-- Dispatcher
+- Pipeline Engine
 
-The Dispatcher is the single coordination locus in the architecture. All request-processing orchestration is routed through it, and no distributed, nested, or peer coordination structures exist within the architectural boundary.
+The Pipeline Engine is the single coordination locus in the architecture. All request-processing orchestration is routed through it, and no distributed, nested, or peer coordination structures exist within the architectural boundary.
 
 ## 4. Architectural Units
 
@@ -44,7 +44,7 @@ These units are conceptual and do not imply specific modules, classes, or folder
 An Architectural Instance is one configured structural assembly of the architectural units defined at this level:
 
 - Server
-- Dispatcher
+- Pipeline Engine
 - Handlers
 
 An Architectural Instance exists within a single runtime process boundary.
@@ -55,27 +55,27 @@ Multiple Architectural Instances may coexist concurrently but are structurally i
 
 The system consists of the following stable contours:
 
-1. Transport Contour: includes the Server component; receives external web requests and forwards them to the Dispatcher; delivers the resulting transport response.
-2. Coordination Contour: includes the Dispatcher; defines lifecycle control, handler ordering, and request processing execution.
+1. Transport Contour: includes the Server component; receives external web requests and forwards them to the Pipeline Engine; delivers the resulting transport response.
+2. Coordination Contour: includes the Pipeline Engine; defines lifecycle control, handler ordering, and request processing execution.
 3. Processing Contour: includes Handlers; performs atomic processing steps over one request lifecycle.
 
 Contours define responsibility separation and structural boundaries without implying technical layering.
 
 ## 6. Processing Pipeline
 
-The Dispatcher executes request processing as a Processing Pipeline of handlers.
+The Pipeline Engine executes request processing as a Processing Pipeline of handlers.
 
 Handlers are partitioned into three stages:
 
-- `pre`
-- `process`
-- `post`
+- `INIT`
+- `PROCESS`
+- `FINALIZE`
 
 Stage semantics:
 
-- `pre` handlers run first and are always executed.
-- `process` handlers run next until one handler reports the request has been handled.
-- `post` handlers run last and are always executed.
+- `INIT` handlers run first and are always executed.
+- `PROCESS` handlers run next until one handler reports the request has been handled.
+- `FINALIZE` handlers run last and are always executed.
 
 Within each stage, handler order is derived from declarative `before` and `after` constraints and is deterministic.
 
@@ -95,7 +95,7 @@ Configuration Phase is a one-time structural act performed before the Server beg
 During Configuration Phase:
 
 - server operational parameters are defined;
-- handlers are registered into the Dispatcher;
+- handlers are registered into the Pipeline Engine;
 - handler ordering is derived and locked.
 
 ### 7.2 Execution Phase
@@ -105,8 +105,8 @@ Execution Phase begins when the Server starts accepting web requests.
 During Execution Phase:
 
 1. The Server receives a web request.
-2. The Server transfers the request to the Dispatcher.
-3. The Dispatcher executes the Processing Pipeline.
+2. The Server transfers the request to the Pipeline Engine.
+3. The Pipeline Engine executes the Processing Pipeline.
 4. Request processing terminates by producing a transport response.
 
 The structural configuration established during Configuration Phase remains immutable throughout Execution Phase.
@@ -127,7 +127,7 @@ They do not define serialization, transport encoding, or storage representation.
 Belongs to the system:
 
 - Server
-- Dispatcher
+- Pipeline Engine
 - Handlers
 
 Belongs to the external environment:
@@ -159,9 +159,8 @@ These documents may elaborate structural details while preserving the architectu
 The architecture is defined as:
 
 - an infrastructural request-processing subsystem;
-- centered around the Dispatcher as the unique coordination locus;
+- centered around the Pipeline Engine as the unique coordination locus;
 - organized into transport, coordination, and processing contours;
 - operating through a deterministic three-stage handler pipeline;
 - existing in two structural modes: Configuration and Execution;
 - bounded by Web Request input and transport response output.
-

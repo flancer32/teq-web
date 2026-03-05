@@ -27,18 +27,18 @@ This document is descriptive of the current implementation shape and does not re
 
 ### Coordination
 
-- `Fl32_Web_Back_Dispatcher` — dispatcher that applies registered handlers within the request lifecycle and enforces stage ordering semantics; `src/Back/Dispatcher.mjs`.
+- `Fl32_Web_Back_Pipeline_Engine` — Pipeline Engine component that applies registered handlers within the request lifecycle and enforces stage ordering semantics; `src/Back/PipelineEngine.mjs`.
 
 ### Handler Contract
 
 - `Fl32_Web_Back_Api_Handler` — handler interface that defines the handler contract and registration metadata access; `src/Back/Api/Handler.mjs`.
 - `Fl32_Web_Back_Dto_Handler_Info` — handler registration DTO factory defining `name`, `stage`, and relative ordering metadata; `src/Back/Dto/Handler/Info.mjs`.
-- `Fl32_Web_Back_Enum_Stage` — handler stage enumeration (`pre`, `process`, `post`); `src/Back/Enum/Stage.mjs`.
+- `Fl32_Web_Back_Enum_Stage` — handler stage enumeration (`INIT`, `PROCESS`, `FINALIZE`); `src/Back/Enum/Stage.mjs`.
 
 ### Built-in Handlers
 
-- `Fl32_Web_Back_Handler_Pre_Log` — pre-stage handler that logs request method and URL; `src/Back/Handler/Pre/Log.mjs`.
-- `Fl32_Web_Back_Handler_Static` — process-stage handler that serves static files from configured sources; `src/Back/Handler/Static.mjs`.
+- `Fl32_Web_Back_Handler_Pre_Log` — INIT-stage handler that logs request method and URL; `src/Back/Handler/Pre/Log.mjs`.
+- `Fl32_Web_Back_Handler_Static` — PROCESS-stage handler that serves static files from configured sources; `src/Back/Handler/Static.mjs`.
 
 ### Static Handler Subsystem
 

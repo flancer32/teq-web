@@ -19,15 +19,15 @@ Core entities of the product:
 
 - Server
 - Web Request
-- Dispatcher
+- Pipeline Engine
 - Handler
 - Processing Pipeline
 
 Server is a conceptual product-level entity whose architectural implementation is defined at the architecture level.
 
-The Server receives an external Web Request and transfers it to the Dispatcher.
+The Server receives an external Web Request and transfers it to the Pipeline Engine.
 
-The Dispatcher executes the Processing Pipeline.
+The Pipeline Engine executes the Processing Pipeline.
 
 Handlers are independently developed modules of the modular monolith and are isolated from one another. Handlers may declare ordering constraints, but they do not directly coordinate with other handlers.
 
@@ -36,7 +36,7 @@ Handlers are independently developed modules of the modular monolith and are iso
 Each handler provides registration metadata that includes:
 
 - unique handler name
-- execution stage: `pre`, `process`, or `post`
+- execution stage: `INIT`, `PROCESS`, or `FINALIZE`
 - relative ordering constraints expressed as `before` and `after` references to other handler names
 
 Handler ordering is derived from the registered set and is locked before the Server begins accepting requests.
@@ -47,32 +47,32 @@ The Processing Pipeline is the only mechanism of request processing within the p
 
 The pipeline is structured into three stages:
 
-- `pre`
-- `process`
-- `post`
+- `INIT`
+- `PROCESS`
+- `FINALIZE`
 
 Stage semantics:
 
-- `pre` handlers are always executed and must not terminate request processing.
-- `process` handlers are executed in order until one handler reports that the request has been handled.
-- `post` handlers are always executed after request processing, regardless of whether a handler handled the request or whether processing terminated due to an error.
+- `INIT` handlers are always executed and must not terminate request processing.
+- `PROCESS` handlers are executed in order until one handler reports that the request has been handled.
+- `FINALIZE` handlers are always executed after request processing, regardless of whether a handler handled the request or whether processing terminated due to an error.
 
 ## 6. Runtime Outcomes
 
 For each incoming request, the system produces exactly one HTTP response.
 
-If no `process` handler handles the request, the Dispatcher produces a `404 Not Found` response.
+If no `PROCESS` handler handles the request, the Pipeline Engine produces a `404 Not Found` response.
 
-If a `process` handler throws an exception while the response is still writable, the Dispatcher produces a `500 Internal Server Error` response.
+If a `PROCESS` handler throws an exception while the response is still writable, the Pipeline Engine produces a `500 Internal Server Error` response.
 
-Exceptions thrown by `pre` and `post` handlers do not terminate request processing and are treated as isolated failures.
+Exceptions thrown by `INIT` and `FINALIZE` handlers do not terminate request processing and are treated as isolated failures.
 
 ## 7. Product Invariants
 
-1. The Dispatcher is the unique lifecycle coordination authority of request processing within the product.
-2. Request processing outside the Dispatcher is not permitted.
+1. The Pipeline Engine is the unique lifecycle coordination authority of request processing within the product.
+2. Request processing outside the Pipeline Engine is not permitted.
 3. The Processing Pipeline is the only form of request processing.
-4. The pipeline stage model is fixed as `pre → process → post`.
+4. The pipeline stage model is fixed as `INIT → PROCESS → FINALIZE`.
 5. Handler execution order is deterministic and derived from declarative handler metadata.
 6. Handler registration and ordering occur only during system initialization and are immutable during request processing.
 7. The product contains no application-level business logic.
@@ -116,4 +116,3 @@ By standardizing the lifecycle of request processing, the product allows indepen
 - `./ctx/docs/code/`
 
 Scope: this document defines the semantic model of the product and does not describe architectural implementation or code-level mechanisms.
-

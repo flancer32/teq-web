@@ -121,7 +121,7 @@ Belongs to the environment:
 
 Belongs to the system (not environment):
 
-- Dispatcher;
+- Pipeline Engine;
 - Server component as architectural unit;
 - Handlers;
 - internal configuration phase logic.

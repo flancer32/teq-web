@@ -66,9 +66,9 @@ The test file name is formed by appending the suffix `.test.mjs` to the module n
 Example:
 
 ```
-src/Back/Dispatcher.mjs
+src/Back/PipelineEngine.mjs
 →
-test/unit/Back/Dispatcher.test.mjs
+test/unit/Back/PipelineEngine.test.mjs
 ```
 
 This deterministic naming rule allows agents to locate tests without search heuristics.
@@ -80,14 +80,15 @@ Each unit test file MUST contain a test suite corresponding to exactly one imple
 Example:
 
 ```
-describe('Dispatcher', () => {
+describe('Pipeline Engine', () => {
     test('should execute handlers in order', ...)
 });
 ```
 
 A test suite must not combine tests for multiple modules.
 
-The suite name must correspond to the tested module.
+The suite name must correspond to the tested module role.
+
 
 ## 7. Test Declaration Form
 
