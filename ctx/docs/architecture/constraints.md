@@ -71,6 +71,12 @@ The following transformations are prohibited:
 - allowing `INIT` or `FINALIZE` handlers to mark request processing as completed;
 - allowing request processing completion to be reset after it has been marked completed.
 
+Handlers must not perform transport-level operations.
+
+Handlers produce Transport Response specifications but must not directly write to network sockets or perform HTTP response transmission.
+
+Actual network transmission of responses is performed exclusively by the Server component after pipeline completion.
+
 These constraints guarantee that request processing remains a deterministic pipeline-based execution model.
 
 ## 6. Prohibited Structural Transformations

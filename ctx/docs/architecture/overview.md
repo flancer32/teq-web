@@ -89,6 +89,18 @@ The completion attribute may be set only by `PROCESS` handlers. `INIT` and `FINA
 
 The Pipeline Engine terminates `PROCESS` stage execution when the completion attribute becomes completed.
 
+### Request Context
+
+Request Context is an execution-scoped structure associated with a single Web Request.
+
+The Request Context is created by the Pipeline Engine at the start of request processing and exists only for the duration of the pipeline execution.
+
+The Request Context is owned by the Pipeline Engine and is passed to all handlers participating in the pipeline.
+
+The Request Context stores execution state, including the request completion flag and any intermediate processing data required by handlers.
+
+Handlers may read and modify the Request Context but must not replace it.
+
 ## 7. Structural Modes of Existence
 
 The architecture distinguishes two structural modes of existence of a single architectural instance:
