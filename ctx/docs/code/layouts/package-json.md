@@ -241,7 +241,7 @@ Test environments:
 
 ```
 ./test/unit
-./test/accept
+./test/integration
 ```
 
 The following npm scripts are used:
@@ -273,7 +273,7 @@ The `test:integration` script must discover integration test files recursively w
 Required form:
 
 ```
-"test:integration": "find test/accept -name '*.test.mjs' -print0 | xargs -0 node --test"
+"test:integration": "find test/integration -name '*.test.mjs' -print0 | xargs -0 node --test"
 ```
 
 This form ensures stable behavior across environments where `**` is not expanded recursively by default shell settings.
@@ -383,7 +383,7 @@ The following JSON fragment illustrates the canonical structure of the `package.
 
   "scripts": {
     "test:unit": "find test/unit -name '*.test.mjs' -print0 | xargs -0 node --test",
-    "test:integration": "find test/accept -name '*.test.mjs' -print0 | xargs -0 node --test",
+    "test:integration": "find test/integration -name '*.test.mjs' -print0 | xargs -0 node --test",
     "test": "npm run test:unit && npm run test:integration"
   },
 

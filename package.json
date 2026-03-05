@@ -49,7 +49,7 @@
   },
   "scripts": {
     "test:unit": "find test/unit -name '*.test.mjs' -print0 | xargs -0 node --test",
-    "test:integration": "find test/accept -name '*.test.mjs' -print0 | xargs -0 node --test",
+    "test:integration": "find test/integration -name '*.test.mjs' -print0 | xargs -0 node --test",
     "test": "npm run test:unit && npm run test:integration"
   },
   "files": [
