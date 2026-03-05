@@ -1,38 +1,52 @@
 # Project Documentation (`./ctx/docs/`)
 
 Path: `./ctx/docs/AGENTS.md`
-Version: `20260228`
+Template Version: `20260305`
 
 ## Purpose
 
-The `ctx/docs/` directory contains the declarative description of the project structured according to ADSM levels and defines the meaning, structural form, and engineering invariants of the system without including organizational instructions for the agent.
+The `ctx/docs/` directory contains the declarative description of the system organized by ADSM documentation levels. These documents define system meaning, architectural form, operational environment, and engineering implementation rules.
 
-## Level Model
+Documentation at this level describes the system as a design object. Organizational instructions, execution procedures, and agent operational rules are excluded and belong to `ctx/agent/`.
 
-Documentation at the `docs/` level is organized in accordance with the ADSM levels:
+## Level Map
 
-- `product/` — system meaning, domain invariants, and mandatory product-level constraints;
-- `architecture/` — structural form of the system and its boundaries;
-- `composition/` — execution model and scenario dynamics;
-- `environment/` — execution conditions and infrastructural prerequisites;
-- `code/` — engineering invariants of implementation and code organization conventions.
+- `architecture/` — structural form of the system, architectural entities, boundaries, and interaction model.
+- `code/` — engineering invariants governing how architecture is expressed in source code.
+- `environment/` — runtime environment and infrastructural prerequisites required for system operation.
+- `product/` — system meaning, domain entities, and product-level invariants.
+- `AGENTS.md` — documentation structure and level boundaries of `ctx/docs/`.
 
-Each subdirectory defines a distinct type of knowledge and does not duplicate statements established at other levels.
+## Level Order
 
-## Level Boundaries
+Documentation levels form a strict dependency order:
 
-`ctx/docs/` describes the system as a design object: its purpose, constraints, structural form, execution dynamics, and engineering rules. Instructions governing agent behavior, reporting modes, and organizational procedures are excluded from this level and belong exclusively to the `ctx/agent/` branch.
+```
+product
+↓
+architecture
+↓
+environment
+↓
+code
+```
 
-Relationships between subdirectories are defined declaratively through references to documents within `ctx/docs/` without procedural descriptions and without role overlap.
+Lower levels may refine but must not redefine statements established at higher levels.
 
-## Document Requirements
+## Documentation Rules
 
-Documents at the `docs/` level must be written in a declarative style and define the invariants, boundaries, and definitions of the corresponding ADSM level. Repetition of statements established at other levels is not permitted. Text within paragraphs must be written without manual line breaks and without using section separators such as `---`.
+Documents in `ctx/docs/` must:
 
-Documentation must comply with the eight ADSM quality criteria: declarativity, completeness, consistency, coherence, density, compactness, non-redundancy, and absence of the obvious.
+- be declarative and define invariants, boundaries, or definitions of their level;
+- avoid duplication of statements defined at other levels;
+- contain no agent instructions or procedural workflows;
+- use paragraphs without manual line breaks;
+- avoid section separators such as `---`.
 
-The size of an individual document must not exceed 5,000 tokens.
+Documentation must satisfy the eight ADSM quality criteria: declarativity, completeness, consistency, coherence, density, compactness, non-redundancy, and absence of the obvious.
+
+Individual documents must not exceed 5,000 tokens.
 
 ## Summary
 
-`ctx/docs/AGENTS.md` defines the structure and boundaries of project documentation in accordance with ADSM levels and ensures consistent distribution of system meaning, product-level constraints, structural form, execution dynamics, and engineering invariants within the `docs/` branch.
+`ctx/docs/AGENTS.md` defines the documentation structure and boundaries of the `ctx/docs/` branch and serves as the navigational index for ADSM documentation levels.

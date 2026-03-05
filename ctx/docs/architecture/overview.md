@@ -1,26 +1,31 @@
 # Architecture Overview
 
 Path: `./ctx/docs/architecture/overview.md`
+Version: `20260305`
 
 ## 1. Purpose of the Level
 
-The architectural form of the system is defined at this level, including structural shape, responsibility boundaries, architectural entities, and execution structure. Architectural constraints are defined in `./ctx/docs/architecture/constraints.md`. Architecture is derived strictly from `./ctx/docs/product/overview.md` and does not introduce new product-level entities.
+The architectural form of the system is defined at this level, including structural shape, responsibility boundaries, architectural entities, and execution structure.
+
+Architectural constraints are defined in `./ctx/docs/architecture/constraints.md`.
+
+Architecture is derived strictly from `./ctx/docs/product/overview.md` and does not introduce new product-level entities.
 
 ## 2. Architectural Classification
 
 The system belongs to the following architectural class:
 
-- infrastructural server coordination component;
+- infrastructural request-processing subsystem;
 - coordinator-centered runtime structure;
-- modular monolith internal web-processing subsystem.
+- modular monolith internal web-processing component.
 
-This classification defines the system as a structural coordination mechanism for web request processing inside a modular monolith.
+This classification defines the system as a structural coordination mechanism for deterministic processing of web requests inside a modular monolith.
 
 ## 3. Architectural Center
 
 The architecture has a structural coordination locus:
 
-- Dispatcher.
+- Dispatcher
 
 The Dispatcher is the single coordination locus in the architecture. All request-processing orchestration is routed through it, and no distributed, nested, or peer coordination structures exist within the architectural boundary.
 
@@ -28,132 +33,135 @@ The Dispatcher is the single coordination locus in the architecture. All request
 
 The architecture recognizes the following structural units:
 
-- Contour — a responsibility boundary within the system;
-- Context — a bounded architectural space of request processing;
-- Component — a structural participant within a contour;
-- Architectural Data Entity — a canonical structural entity defining context identity.
+- Contour: a responsibility boundary within the system.
+- Component: a structural participant within a contour.
+- Architectural Data Entity: a canonical structural entity defining runtime interaction boundaries.
 
 These units are conceptual and do not imply specific modules, classes, or folders.
 
 ### 4.1 Architectural Instance
 
-An Architectural Instance is one configured structural assembly of the architectural units defined at this level: Server + Dispatcher + Handler Registry + Handlers + Context Contour. An Architectural Instance exists within a single runtime process boundary. Multiple Architectural Instances may coexist concurrently but are structurally independent and do not share configuration or context spaces.
+An Architectural Instance is one configured structural assembly of the architectural units defined at this level:
+
+- Server
+- Dispatcher
+- Handlers
+
+An Architectural Instance exists within a single runtime process boundary.
+
+Multiple Architectural Instances may coexist concurrently but are structurally independent and do not share configuration or handler sets.
 
 ## 5. Architectural Contours
 
 The system consists of the following stable contours:
 
-1. Transport Contour: includes the Server component; receives external web requests and normalizes them into a unified internal representation. This Server component is the architectural realization of the product-level Server entity.
-
-2. Coordination Contour: includes the Dispatcher and Handler Registry; defines structural ordering, lifecycle control, and coordination of request processing.
-
-3. Processing Contour: includes Handlers; performs atomic processing steps over a bounded Request Context.
-
-4. Context Contour: includes Request Context and Processing Result/Error entities; defines the bounded structural space of a single request lifecycle.
+1. Transport Contour: includes the Server component; receives external web requests and forwards them to the Dispatcher; delivers the resulting transport response.
+2. Coordination Contour: includes the Dispatcher; defines lifecycle control, handler ordering, and request processing execution.
+3. Processing Contour: includes Handlers; performs atomic processing steps over one request lifecycle.
 
 Contours define responsibility separation and structural boundaries without implying technical layering.
 
-## 6. Structural Modes of Existence
+## 6. Processing Pipeline
+
+The Dispatcher executes request processing as a Processing Pipeline of handlers.
+
+Handlers are partitioned into three stages:
+
+- `pre`
+- `process`
+- `post`
+
+Stage semantics:
+
+- `pre` handlers run first and are always executed.
+- `process` handlers run next until one handler reports the request has been handled.
+- `post` handlers run last and are always executed.
+
+Within each stage, handler order is derived from declarative `before` and `after` constraints and is deterministic.
+
+The derived handler order is locked during system initialization.
+
+## 7. Structural Modes of Existence
 
 The architecture distinguishes two structural modes of existence of a single architectural instance:
 
 1. Configuration Phase
 2. Execution Phase
 
-### 6.1 Configuration Phase
+### 7.1 Configuration Phase
 
-Configuration Phase is a one-time structural act performed before the Server begins accepting Web Requests.
+Configuration Phase is a one-time structural act performed before the Server begins accepting web requests.
 
 During Configuration Phase:
 
-- operational parameters of the Server are defined (including transport mode and port);
-- Handlers are registered in the Handler Registry;
-- structural ordering of the processing pipeline is established;
-- the Dispatcher is structurally bound to the finalized Handler Registry.
+- server operational parameters are defined;
+- handlers are registered into the Dispatcher;
+- handler ordering is derived and locked.
 
-Handler registration includes stage membership within the processing pipeline (PRE, PROCESS, POST) and may include declarative relative ordering metadata between Handlers. Structural ordering is derived from the registered set and is locked before Server activation. References to unknown Handlers do not influence ordering, and circular ordering constraints are a configuration-time structural error.
+### 7.2 Execution Phase
 
-Configuration Phase applies globally to the architectural instance and is executed exactly once.
-
-Server activation completes the Configuration Phase and establishes the transition into Execution Phase.
-
-### 6.2 Execution Phase
-
-Execution Phase begins when the Server starts accepting Web Requests.
+Execution Phase begins when the Server starts accepting web requests.
 
 During Execution Phase:
 
-- each incoming Web Request is normalized by the Server;
-- the Dispatcher creates a Request Context;
-- the Dispatcher applies registered Handlers sequentially;
-- processing terminates with either a Processing Result or a Processing Error.
-
-Handlers operate primarily on the Request Context as the transport-neutral internal boundary of the lifecycle. The Request Context may retain access to raw transport request and response objects as an escape hatch for advanced use cases, but the architectural contract does not require Handlers to depend on transport-specific APIs.
+1. The Server receives a web request.
+2. The Server transfers the request to the Dispatcher.
+3. The Dispatcher executes the Processing Pipeline.
+4. Request processing terminates by producing a transport response.
 
 The structural configuration established during Configuration Phase remains immutable throughout Execution Phase.
-
-## 7. State Model
-
-State exists only within bounded Request Context instances during Execution Phase.
-
-- Each Web Request creates a transient Request Context.
-- Multiple contexts may coexist concurrently.
-- Contexts are isolated and exist only for the duration of request processing.
-
-There is no global mutable processing state governing lifecycle behavior. Structural configuration is fixed prior to execution and does not change at runtime.
 
 ## 8. Architectural Data
 
 The architecture operates on a minimal set of structural entities:
 
-- Web Request (normalized internal representation);
-- Request Context;
-- Processing Result;
-- Processing Error.
+- Web Request
+- Transport Response
 
-These entities define structural identity and coordination but do not define storage, serialization, or transport encoding.
+These entities define the system boundary of interaction.
 
-Web Request and Request Context jointly define the transport-neutral internal interface of the system. The normalized representation contains only the information required for request coordination and handler execution, while raw transport objects may be carried as optional, non-normative attachments to support advanced scenarios without redefining the architectural boundary.
+They do not define serialization, transport encoding, or storage representation.
 
 ## 9. System Boundary
 
 Belongs to the system:
 
-- Server (as transport adapter);
-- Dispatcher;
-- Handler Registry;
-- Handlers;
-- Request Context;
-- Processing Result and Processing Error.
+- Server
+- Dispatcher
+- Handlers
 
 Belongs to the external environment:
 
-- network stack;
-- HTTP/HTTPS/HTTP2 implementations;
-- DI container (`@teqfw/di`);
-- application-level modules and business logic;
-- infrastructure and deployment environment.
+- network stack
+- HTTP/HTTPS/HTTP2 implementations
+- DI container (`@teqfw/di`)
+- application modules
+- business logic
+- infrastructure and deployment environment
 
-Interaction with the environment occurs only through normalized Web Requests and structural Processing Results or Errors.
+Interaction with the environment occurs through Web Requests entering the system and transport responses leaving the system.
 
 ## 10. Structural Map of the Level
 
 Permitted extensions of this overview include documents such as:
 
-- `architecture/contours/*.md`
-- `architecture/boundaries/*.md`
-- `architecture/data-flow/*.md`
-- `architecture/lifecycle/*.md`
+```
+architecture/contours/*.md
+architecture/boundaries/*.md
+architecture/data-flow/*.md
+architecture/lifecycle/*.md
+```
 
-These documents may elaborate the structural form; architectural entities remain the set defined at this level.
+These documents may elaborate structural details while preserving the architectural entities and execution semantics defined in this document.
 
 ## 11. Summary of Architectural Form
 
 The architecture is defined as:
 
-- a coordinator-centered infrastructural subsystem;
-- structured into transport, coordination, processing, and context contours;
-- existing in two structural modes: one-time Configuration and repeated Execution;
-- operating through a fixed, preconfigured processing pipeline;
-- bounded by normalized request input and structural result/error output;
-- organized around the Dispatcher as the unique orchestration hub for request processing.
+- an infrastructural request-processing subsystem;
+- centered around the Dispatcher as the unique coordination locus;
+- organized into transport, coordination, and processing contours;
+- operating through a deterministic three-stage handler pipeline;
+- existing in two structural modes: Configuration and Execution;
+- bounded by Web Request input and transport response output.
+

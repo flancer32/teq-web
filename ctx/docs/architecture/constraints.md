@@ -1,81 +1,109 @@
 # Architecture Constraints
 
 Path: `./ctx/docs/architecture/constraints.md`
-Version: `20260303`
+Version: `20260305`
 
 ## 1. Purpose of the Document
 
-Mandatory architectural constraints are defined in this document. The constraints establish the boundaries of the system’s structural form, its modes of existence, and prohibited directions of architectural transformation. This document does not describe product semantics, composition dynamics, environment conditions, or implementation details.
+This document defines mandatory architectural constraints of the system.
+
+The constraints establish the boundaries of the system’s structural form, its permitted modes of existence, and prohibited directions of architectural transformation.
+
+This document does not define product semantics, environment conditions, or implementation techniques.
+
+Architectural form is defined in:
+
+`./ctx/docs/architecture/overview.md`
+
+This document protects that architectural form from structural transformation.
 
 ## 2. Prohibited Architectural Reclassification
 
-Any transformation that changes the architectural class fixed in `./ctx/docs/architecture/overview.md` is prohibited.
+Any transformation that changes the architectural class defined in `./ctx/docs/architecture/overview.md` is prohibited.
 
-The following changes constitute architectural reclassification:
+The following transformations constitute architectural reclassification:
 
-- introduction of additional coordination loci or redistribution of lifecycle control outside the Dispatcher;
-- introduction of distributed, nested, or peer orchestration within the system boundary;
-- replacement of the coordinator-centered structure with a framework-like layered abstraction as the primary architectural form;
+- introduction of additional lifecycle execution centers outside the Dispatcher;
+- introduction of distributed, nested, or peer orchestration structures within the system boundary;
+- replacement of the pipeline-centered architecture with a framework-style layered abstraction as the primary system form;
 - introduction of a transport-framework-dependent execution model as an architectural requirement;
 - introduction of global mutable processing state governing request lifecycle behavior;
-- replacement of the orchestration core with alternative or competing coordination centers within the same architectural instance.
+- replacement of the Dispatcher with alternative or competing coordination centers within the same architectural instance.
 
 ## 3. Configuration Invariants
 
-The architecture operates in two structural modes: Configuration Phase and Execution Phase.
+The architecture operates in two structural modes:
+
+- Configuration Phase
+- Execution Phase
 
 The following transformations are prohibited:
 
-- re-entry into Configuration Phase after Execution has begun;
+- re-entry into Configuration Phase after Execution Phase has begun;
 - runtime modification of Server operational parameters after activation;
-- runtime Handler registration, removal, or replacement after Configuration;
-- runtime mutation of processing pipeline ordering or composition;
-- runtime replacement or re-binding of the Dispatcher to a different Handler Registry;
-- introduction of runtime mechanisms whose purpose is architectural reconfiguration.
+- runtime registration, removal, or replacement of Handlers after Configuration Phase;
+- runtime mutation of Processing Pipeline ordering or composition;
+- runtime replacement or rebinding of the Dispatcher to a different handler set;
+- introduction of mechanisms whose purpose is architectural reconfiguration during Execution Phase.
 
-Any relaxation of the phase separation or one-time configuration act constitutes architectural restructuring and requires explicit revision of `./ctx/docs/architecture/overview.md`.
+Relaxation of the one-time configuration rule constitutes architectural restructuring and requires explicit revision of `./ctx/docs/architecture/overview.md`.
 
 ## 4. Prohibited Structural Expansions
 
 The architecture must not be expanded in the following directions:
 
-- implicit creation of new architectural contours or architectural units beyond those defined in `./ctx/docs/architecture/overview.md`;
-- extension of the architectural data entity set beyond Web Request, Request Context, Processing Result, and Processing Error;
+- implicit creation of new architectural contours or structural units beyond those defined in `./ctx/docs/architecture/overview.md`;
+- extension of the architectural data entity set beyond Web Request and Transport Response;
 - embedding external framework-specific transport abstractions inside architectural data entities;
 - inclusion of DI container (`@teqfw/di`) or application-level modules and business logic inside the architectural boundary.
 
-## 5. Prohibited Structural Transformations
+## 5. Execution Semantics Invariants
+
+Execution semantics defined in `./ctx/docs/architecture/overview.md` must remain unchanged.
+
+The following transformations are prohibited:
+
+- introduction of execution units other than the request-processing execution instance;
+- execution instances that produce more than one terminal outcome;
+- execution instances that terminate without producing a transport response;
+- interaction or coordination between concurrent execution instances;
+- introduction of alternative request-processing execution paths bypassing the Processing Pipeline.
+
+These constraints guarantee that request processing remains a deterministic pipeline-based execution model.
+
+## 6. Prohibited Structural Transformations
 
 The following transformations are not permitted:
 
-- persistence of Request Context beyond a single request lifecycle;
-- any cross-context state sharing that breaks Request Context isolation;
-- request processing outside the architectural contours fixed in `./ctx/docs/architecture/overview.md`;
+- persistence of request-processing state beyond the lifetime of a single request;
+- cross-request shared mutable state that violates request isolation;
+- request processing performed outside the Processing Pipeline;
 - framework-dependent transformation of Web Request into transport-specific objects as a structural requirement;
-- parallel alternative execution models within the same architectural instance.
+- introduction of parallel alternative request-processing execution models within the same architectural instance.
 
-Any of these transformations constitutes exiting the architectural boundaries.
+Any of these transformations constitutes exit from the architectural boundaries.
 
-## 6. Boundary of Permissible Evolution
+## 7. Boundary of Permissible Evolution
 
-Only the following architectural changes are permissible:
+Architectural evolution is limited to changes that:
 
-- clarification of structural definitions without altering meaning;
-- strengthening of invariants;
-- formal refinement of contour descriptions without shifting responsibility;
-- improved precision of Configuration/Execution articulation;
-- documented structural refactoring that explicitly revises `./ctx/docs/architecture/overview.md`.
+- clarify structural definitions without altering meaning;
+- strengthen architectural invariants;
+- refine descriptions of contours and responsibilities;
+- improve precision of Configuration/Execution articulation;
+- restructure the architecture only through explicit revision of `./ctx/docs/architecture/overview.md`.
 
-Architectural restructuring is possible only through explicit modification of `./ctx/docs/architecture/overview.md`.
+Any structural change must be explicitly documented in the architectural overview.
 
-## 7. Architectural Identity Boundary
+## 8. Architectural Identity Boundary
 
 Architectural identity collapses if any of the following occur:
 
-- the coordination topology ceases to have exactly one orchestration locus (Dispatcher) or introduces distributed, nested, or competing orchestration centers;
-- the Configuration/Execution separation is violated by runtime reconfiguration or re-entry into Configuration;
-- the processing pipeline becomes structurally mutable during Execution Phase;
-- Request Context loses transience or isolation, or shared mutable state is introduced as a coordination mechanism;
-- architectural contours, architectural data entities, or the system boundary are extended beyond what is fixed in `./ctx/docs/architecture/overview.md`.
+- the execution topology introduces more than one lifecycle coordination authority or removes the Dispatcher as the unique execution center;
+- the Configuration/Execution separation is violated by runtime reconfiguration;
+- the Processing Pipeline becomes structurally mutable during Execution Phase;
+- request-scoped processing state loses isolation or becomes persistent beyond a single request lifecycle;
+- shared mutable state becomes a coordination mechanism between handlers;
+- architectural contours, architectural data entities, or system boundaries expand beyond those defined in `./ctx/docs/architecture/overview.md`.
 
-Any identity collapse constitutes an architectural branch change.
+Violation of any of these conditions constitutes an architectural branch change.

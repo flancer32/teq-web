@@ -1,18 +1,26 @@
 # Product Constraints
 
 Path: `./ctx/docs/product/constraints.md`
-Version: `20260304`
+Version: `20260305`
 
 ## 1. Purpose of This Document
 
-Mandatory product-level constraints are defined in this document. The constraints establish the boundary of the product’s semantic model and prohibit directions of change that would alter its identity. This document does not describe architecture, composition, environment conditions, implementation, or code.
+Mandatory product-level constraints are defined in this document. The constraints establish the boundary of the product’s semantic model and prohibit directions of change that would alter its identity.
+
+This document does not describe architecture, environment conditions, implementation, or code.
+
+The semantic model of the product is defined in:
+
+`./ctx/docs/product/overview.md`
+
+This document protects that model from transformation.
 
 ## 2. Immutable Semantic Frame
 
 The product is permanently defined as:
 
-- an infrastructural npm package for server-side coordination of web requests in applications built according to the TeqFW philosophy;
-- a module of a modular monolith that ensures a unified request lifecycle through the Dispatcher;
+- an infrastructural npm package for coordinated server-side processing of web requests in TeqFW applications;
+- a deterministic request lifecycle executed by an ordered handler pipeline;
 - a component of the TeqFW ecosystem that functions only with mandatory use of `@teqfw/di`.
 
 The product cannot be redefined as:
@@ -25,86 +33,90 @@ The product cannot be redefined as:
 
 Changing this frame constitutes a different product.
 
-## 3. Non-Reducible Invariants
+## 3. Dispatcher Authority
 
-The following properties cannot be weakened, removed, or reinterpreted:
+The Dispatcher defined in the product overview must remain the single lifecycle coordination authority of request processing.
 
-- The product admits exactly one request-lifecycle semantics, and it is defined by the Dispatcher.
-- Request processing outside the Dispatcher is prohibited.
-- Alternative parallel processing mechanisms are not allowed.
-- The Server does not process requests outside forwarding them to the Dispatcher.
-- Handlers are isolated and have no knowledge of each other beyond declarative ordering metadata applied by the infrastructure.
-- The execution order of Handlers is fixed and does not change during processing.
-- The product contains no application-level logic.
-- The product has no meaning outside TeqFW and `@teqfw/di`.
-- The product is not intended for end users.
-- Request processing exists exclusively in the form of a pipeline.
+The following transformations are prohibited:
 
-Removal or modification of any of these statements requires revision of `./ctx/docs/product/overview.md`.
+- introduction of a second coordination center for request processing;
+- request processing executed outside the Dispatcher;
+- relocation of request-processing control to the Server or to handlers.
 
-## 4. Prohibited Domain Expansions
+## 4. Processing Pipeline Model
+
+The Processing Pipeline model defined in the product overview must remain unchanged.
+
+The following transformations are prohibited:
+
+- replacement of the three-stage model `pre → process → post`;
+- removal of any stage;
+- introduction of alternative request-processing execution models alongside the pipeline;
+- dynamic reordering of handlers during request processing.
+
+## 5. Handler Registration and Ordering
+
+Handler registration and ordering must remain an initialization-time act.
+
+The following transformations are prohibited:
+
+- registering handlers after the Server begins accepting requests;
+- removing or replacing handlers at runtime;
+- changing handler ordering during request processing.
+
+## 6. Runtime Outcome Semantics
+
+The following runtime semantics must remain unchanged:
+
+- `pre` and `post` handler failures are isolated and do not terminate request processing;
+- a `process` handler failure may produce a `500 Internal Server Error` if the response is still writable;
+- if no `process` handler handles the request, the Dispatcher produces a `404 Not Found` response;
+- each request produces exactly one HTTP response.
+
+## 7. Prohibited Domain Expansions
 
 The product cannot be extended in the following directions:
 
-- introduction of an application routing framework or mandatory route-definition model;
-- semantic interpretation of representation formats (JSON, HTML, GraphQL, etc.);
-- session management;
-- introduction of business-process abstractions;
+- inclusion of application-level business logic;
+- definition of application routing, controllers, or web framework conventions;
+- inclusion of persistence, data access, or domain modeling concerns;
 - imposition of application structure;
 - addition of any user interface;
 - introduction of mechanisms intended for end users;
-- making Handler correctness depend on specific transport implementations;
-- clustering Handlers into coupled units;
-- introducing alternative request-processing models.
+- making handler correctness depend on specific transport implementations.
 
 The product model contains no entities, roles, or modes beyond those defined in `./ctx/docs/product/overview.md`.
 
-## 5. Prohibited Model Transformations
-
-The following transformations are not permitted:
-
-- emergence of a second lifecycle control center;
-- relocation of processing logic from Handlers to the Dispatcher;
-- introduction of global processing state;
-- dynamic reordering of Handlers during request processing;
-- blurring the boundary between infrastructural and application levels;
-- evolution of the product into a universal HTTP tool.
-
-Any of these transformations constitutes an exit from the product boundary.
-
-## 6. Boundary of Permissible Evolution
+## 8. Boundary of Permissible Evolution
 
 Permissible evolution is limited to changes that:
 
 - clarify wording without altering meaning;
 - increase strictness of invariants;
 - enhance declarative precision and remove ambiguity;
-- do not introduce new entities;
-- do not alter the central role of the Dispatcher;
-- do not weaken Handler isolation.
+- do not introduce new product-level entities;
+- do not weaken handler isolation.
 
-are considered permissible.
+Any semantic transformation requires explicit revision of product-level documents.
 
-Expansion is defined only through explicit modification of product-level documents.
-
-## 7. Agent Responsibility
+## 9. Agent Responsibility
 
 When changes are produced by an LLM agent:
 
-- not expand the domain model;
-- not weaken invariants;
-- not interpret absence of prohibition as permission;
-- not transfer functionality from other ADSM levels into the `product` level;
-- request user confirmation before any potential semantic transformation.
+- the domain model must not be expanded;
+- invariants must not be weakened;
+- absence of prohibition must not be interpreted as permission;
+- functionality from other ADSM levels must not be transferred into the product level;
+- user confirmation must be requested before any potential semantic transformation.
 
-## 8. Product Identity Boundary
+## 10. Product Identity Boundary
 
 The product remains within its identity as long as:
 
-- the Dispatcher remains the product’s only lifecycle-defining authority;
-- the pipeline remains the only form of processing;
-- Handlers remain atomic and isolated;
+- the Dispatcher remains the single lifecycle coordination authority;
+- the Processing Pipeline remains the only form of request processing;
+- the pipeline stage model remains `pre → process → post`;
+- handlers remain isolated and ordered only by declarative metadata;
 - the product retains its purely infrastructural nature;
 - the inseparable link to TeqFW and `@teqfw/di` is preserved.
 
-Violation of any of these conditions implies a change of product branch.

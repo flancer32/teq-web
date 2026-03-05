@@ -7,13 +7,13 @@ Version: `20260304`
 
 This document enumerates the primary implementation components of the package at the code level and groups them by structural role for navigation, review, and agent-assisted development.
 
-This document uses concrete namespace identifiers and file paths and therefore belongs exclusively to the `code/` level. Higher levels (`product/`, `architecture/`, `composition/`) remain name-agnostic and do not reference concrete implementation identifiers.
+This document uses concrete namespace identifiers and file paths and therefore belongs exclusively to the `code/` level. Higher levels (`product/`, `architecture/`, `environment/`) remain name-agnostic and do not reference concrete implementation identifiers.
 
 ## Scope
 
 The scope of this document is the backend runtime implementation located under `src/Back/`.
 
-This document is descriptive of the current implementation shape and does not redefine product, architecture, composition, or environment semantics.
+This document is descriptive of the current implementation shape and does not redefine product, architecture, or environment semantics.
 
 ## Component Groups
 

@@ -1,92 +1,119 @@
 # Product Overview
 
 Path: `./ctx/docs/product/overview.md`
-Version: `20260304`
+Version: `20260305`
 
 ## 1. Product Purpose
 
-`@flancer32/teq-web` enables server-side processing of web requests in applications built in accordance with the Tequila Framework philosophy and allows Teq applications to exist as network web services within the modular monolith model.
+`@flancer32/teq-web` provides infrastructural server-side processing of web requests for TeqFW applications. The product standardizes the request lifecycle as an ordered handler pipeline executed by a single coordination component.
 
 ## 2. Context of Existence
 
-The product exists exclusively within the context of TeqFW, a platform based on modular monolith architecture, late binding, and composition. In this model, an application consists of independent modules unified by shared infrastructure and a single dependency container, and server-side coordination of web requests is standardized without imposing application architecture or introducing an additional framework model. The product is not intended to serve as a universal server tool outside the TeqFW philosophy.
+The product exists only within the TeqFW ecosystem and requires `@teqfw/di` for wiring and lifecycle management.
+
+The product is not a general-purpose Node.js web framework and does not impose application architecture, routing models, or business logic structures.
 
 ## 3. Subject Model
 
 Core entities of the product:
 
 - Server
-- Dispatcher
 - Web Request
-- Request Context
+- Dispatcher
 - Handler
 - Processing Pipeline
-- Processing Error
-- Processing Result
 
-Server is a conceptual product-level entity. Its architectural realization is defined at the architecture level.
+Server is a conceptual product-level entity whose architectural implementation is defined at the architecture level.
 
-The central entity of the model is the Dispatcher. The Server receives an external Web Request and transfers it to the Dispatcher; the request is represented as a Request Context. The Dispatcher conducts the context through a pipeline consisting of ordered Handlers. Handlers are independent modules of the monolith and have no knowledge of one another beyond declarative ordering metadata applied by the infrastructure. Processing terminates with either a Processing Result or a Processing Error, and the atomic unit of request processing is the Handler. Within the processing pipeline the Sequential Processing Phase is structured into three stages: PRE stage, PROCESS stage, and POST stage.
+The Server receives an external Web Request and transfers it to the Dispatcher.
 
-## 4. Product Invariants
+The Dispatcher executes the Processing Pipeline.
 
-1. The Dispatcher is the unique semantic authority of the request lifecycle within the product.
+Handlers are independently developed modules of the modular monolith and are isolated from one another. Handlers may declare ordering constraints, but they do not directly coordinate with other handlers.
+
+## 4. Handler Registration Metadata
+
+Each handler provides registration metadata that includes:
+
+- unique handler name
+- execution stage: `pre`, `process`, or `post`
+- relative ordering constraints expressed as `before` and `after` references to other handler names
+
+Handler ordering is derived from the registered set and is locked before the Server begins accepting requests.
+
+## 5. Processing Pipeline
+
+The Processing Pipeline is the only mechanism of request processing within the product.
+
+The pipeline is structured into three stages:
+
+- `pre`
+- `process`
+- `post`
+
+Stage semantics:
+
+- `pre` handlers are always executed and must not terminate request processing.
+- `process` handlers are executed in order until one handler reports that the request has been handled.
+- `post` handlers are always executed after request processing, regardless of whether a handler handled the request or whether processing terminated due to an error.
+
+## 6. Runtime Outcomes
+
+For each incoming request, the system produces exactly one HTTP response.
+
+If no `process` handler handles the request, the Dispatcher produces a `404 Not Found` response.
+
+If a `process` handler throws an exception while the response is still writable, the Dispatcher produces a `500 Internal Server Error` response.
+
+Exceptions thrown by `pre` and `post` handlers do not terminate request processing and are treated as isolated failures.
+
+## 7. Product Invariants
+
+1. The Dispatcher is the unique lifecycle coordination authority of request processing within the product.
 2. Request processing outside the Dispatcher is not permitted.
-3. Handlers are isolated and have no knowledge of each other.
-4. The execution order of handlers is strict and determined by the infrastructure.
-5. The product does not contain application-level business logic.
-6. The product is an infrastructural module of a modular monolith.
-7. The use of TeqFW DI is mandatory for the product to function.
-8. The product is server-agnostic within the supported transport modes.
-9. The product has no standalone meaning outside the TeqFW ecosystem.
+3. The Processing Pipeline is the only form of request processing.
+4. The pipeline stage model is fixed as `pre → process → post`.
+5. Handler execution order is deterministic and derived from declarative handler metadata.
+6. Handler registration and ordering occur only during system initialization and are immutable during request processing.
+7. The product contains no application-level business logic.
+8. The product exists only within TeqFW and requires `@teqfw/di`.
 
-Changing any of these statements implies a change in the product’s essence.
+Changing any of these statements implies a change in the product’s semantic identity.
 
-## 5. Product Boundaries
+## 8. Product Boundaries
 
-The product is responsible for:
+The product is responsible only for request lifecycle coordination and execution of registered handlers.
 
-- coordinating the execution of web requests through the Dispatcher;
-- ensuring consistent processing of a request by modules within the monolith;
-- providing a unified infrastructural framework for the server side of a Teq application.
+The product does not provide:
 
-The product is not responsible for:
+- application routing frameworks
+- application structure
+- data models or database interaction
+- session management
+- representation format semantics
+- business logic abstractions
+- deployment or clustering infrastructure
 
-- application routing frameworks or application structure;
-- data models or database interaction;
-- session management;
-- semantic interpretation of representation formats;
-- implementation of application-level protocols;
-- deployment, clustering, or process management;
-- business logic of the application.
+## 9. User Role
 
-The responsibility of the product ends with coordination of request processing.
+The product is used by TeqFW application developers as an infrastructural module of the modular monolith. Developers implement and register handlers and configure the server environment in which the product operates.
 
-The product may include optional infrastructural Handler implementations and helper utilities intended to be composed into the request-processing pipeline of an application, including request logging and static file serving, without redefining the product’s semantic frame.
+The product is not intended for end users and provides no user interface.
 
-## 6. User Role
+## 10. Modes of Existence
 
-The primary user of the product is a Teq application developer. The product is used as an infrastructural module of the monolith by including it as part of an application, defining the set of Handlers, and configuring the server mode. The product is not intended for end users and does not provide a user interface.
+The product has no semantic modes of existence. Transport configuration options do not alter request lifecycle semantics.
 
-## 7. Modes of Existence
+## 11. Systemic Value
 
-The product has no semantic modes of existence. Configuration modes, including selection of transport protocol, do not alter the subject model. Error handling is an obligatory part of the lifecycle and cannot be disabled.
+By standardizing the lifecycle of request processing, the product allows independent modules of the monolith to cooperate through a deterministic handler pipeline without redesigning coordination logic for each application.
 
-## 8. Systemic Value
-
-The product establishes a standard for server-side coordination of web requests within the TeqFW modular monolith and creates a stable infrastructural framework that ensures consistent processing among modules without redesigning the server layer per application.
-
-## 9. Outside the Model
-
-The product is not a universal Node.js web framework, an independent server platform, a tool for microservice architectures, a distributed system orchestrator, or a user-facing product. It exists as an infrastructural module of Teq applications and has no standalone meaning outside the Tequila Framework philosophy.
-
-## 10. Relation to Other ADSM Levels
+## 12. Relation to Other ADSM Levels
 
 - `./ctx/docs/product/constraints.md`
 - `./ctx/docs/architecture/overview.md`
 - `./ctx/docs/architecture/constraints.md`
-- `./ctx/docs/composition/overview.md`
-- `./ctx/docs/composition/constraints.md`
 - `./ctx/docs/code/`
 
-Scope: this document describes only the `product` level, and statements from other levels are not duplicated.
+Scope: this document defines the semantic model of the product and does not describe architectural implementation or code-level mechanisms.
+

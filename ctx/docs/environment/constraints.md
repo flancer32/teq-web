@@ -5,7 +5,7 @@ Version: `20260304`
 
 ## 1. Purpose of the Document
 
-This document defines mandatory environmental constraints. It establishes the boundaries of the system’s conditions of existence, runtime assumptions, infrastructural dependencies, and prohibited environmental transformations. The document preserves environmental identity when working with LLM agents and does not describe product semantics, architectural structure, compositional dynamics, or implementation details.
+This document defines mandatory environmental constraints. It establishes the boundaries of the system’s conditions of existence, runtime assumptions, infrastructural dependencies, and prohibited environmental transformations. The document preserves environmental identity when working with LLM agents and does not describe product semantics, architectural structure, runtime interaction dynamics, or implementation details.
 
 Environment is derived strictly from `ctx/docs/environment/overview.md`.
 

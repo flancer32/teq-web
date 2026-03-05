@@ -4,13 +4,12 @@ Path: `ctx/docs/environment/overview.md`
 
 ## 1. Purpose of the Level
 
-This document defines the environmental form of the system. It describes the conditions of existence, runtime assumptions, infrastructural dependencies, and external conditions within which the system operates, without redefining product meaning, architectural structure, compositional dynamics, or implementation details.
+This document defines the environmental form of the system. It describes the conditions of existence, runtime assumptions, infrastructural dependencies, and external conditions within which the system operates, without redefining product meaning, architectural structure, runtime interaction dynamics, or implementation details.
 
 Environment is derived strictly from:
 
 - `product/overview.md`
 - `architecture/overview.md`
-- `composition/overview.md`
 
 This document does not define restrictions; environmental constraints are defined separately if required.
 
@@ -91,7 +90,7 @@ It may:
 
 Transport infrastructure such as routing, TLS certificate management, port binding policies, and network-level balancing belongs to the environment.
 
-The system boundary begins with normalized Web Request representation and ends with Processing Result or Processing Error.
+The system boundary begins with normalized Web Request representation and ends with a transport response produced by request processing.
 
 ## 7. Deployment Assumptions
 
@@ -124,10 +123,7 @@ Belongs to the system (not environment):
 
 - Dispatcher;
 - Server component as architectural unit;
-- Handler Registry;
 - Handlers;
-- Request Context;
-- Processing Result and Processing Error;
 - internal configuration phase logic.
 
 ## 9. Stability of Environmental Assumptions
@@ -162,7 +158,7 @@ This overview may be extended by:
 - `environment/deployment/*.md`
 - `environment/infrastructure/*.md`
 
-These documents may elaborate environmental conditions but must not introduce architectural entities or compositional rules.
+These documents may elaborate environmental conditions but must not introduce architectural entities or runtime interaction rules.
 
 ## 11. Summary of Environmental Form
 
