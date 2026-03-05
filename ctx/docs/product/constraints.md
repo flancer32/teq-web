@@ -71,7 +71,8 @@ The following runtime semantics must remain unchanged:
 - `INIT` and `FINALIZE` handler failures are isolated and do not terminate request processing;
 - a `PROCESS` handler failure may produce a `500 Internal Server Error` if the response is still writable;
 - if no `PROCESS` handler handles the request, the Pipeline Engine produces a `404 Not Found` response;
-- each request produces exactly one HTTP response.
+- each request produces exactly one HTTP response;
+- request processing completion is represented by a non-resettable request-context attribute that may be set only by `PROCESS` handlers.
 
 ## 7. Prohibited Domain Expansions
 

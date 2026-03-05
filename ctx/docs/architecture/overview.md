@@ -74,12 +74,20 @@ Handlers are partitioned into three stages:
 Stage semantics:
 
 - `INIT` handlers run first and are always executed.
-- `PROCESS` handlers run next until one handler reports the request has been handled.
+- `PROCESS` handlers run next until request processing is marked as completed.
 - `FINALIZE` handlers run last and are always executed.
 
 Within each stage, handler order is derived from declarative `before` and `after` constraints and is deterministic.
 
 The derived handler order is locked during system initialization.
+
+Request processing completion is represented by a non-resettable completion attribute stored in request-scoped context associated with the Web Request.
+
+The completion attribute is monotonic within the lifetime of a single request and must not be reset.
+
+The completion attribute may be set only by `PROCESS` handlers. `INIT` and `FINALIZE` handlers must not set it.
+
+The Pipeline Engine terminates `PROCESS` stage execution when the completion attribute becomes completed.
 
 ## 7. Structural Modes of Existence
 

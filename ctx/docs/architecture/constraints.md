@@ -67,7 +67,9 @@ The following transformations are prohibited:
 - execution instances that produce more than one terminal outcome;
 - execution instances that terminate without producing a transport response;
 - interaction or coordination between concurrent execution instances;
-- introduction of alternative request-processing execution paths bypassing the Processing Pipeline.
+- introduction of alternative request-processing execution paths bypassing the Processing Pipeline;
+- allowing `INIT` or `FINALIZE` handlers to mark request processing as completed;
+- allowing request processing completion to be reset after it has been marked completed.
 
 These constraints guarantee that request processing remains a deterministic pipeline-based execution model.
 

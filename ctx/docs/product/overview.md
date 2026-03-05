@@ -54,8 +54,16 @@ The pipeline is structured into three stages:
 Stage semantics:
 
 - `INIT` handlers are always executed and must not terminate request processing.
-- `PROCESS` handlers are executed in order until one handler reports that the request has been handled.
+- `PROCESS` handlers are executed in order until request processing is marked as completed.
 - `FINALIZE` handlers are always executed after request processing, regardless of whether a handler handled the request or whether processing terminated due to an error.
+
+Request processing completion is represented by a non-resettable completion attribute stored in the request context.
+
+The completion attribute is monotonic within the lifetime of a single request: it may transition from its initial state to the completed state, but it must not be reset back.
+
+The completion attribute may be set only by `PROCESS` handlers. `INIT` and `FINALIZE` handlers must not set it.
+
+The Pipeline Engine terminates `PROCESS` stage execution when the completion attribute becomes completed.
 
 ## 6. Runtime Outcomes
 
@@ -75,8 +83,9 @@ Exceptions thrown by `INIT` and `FINALIZE` handlers do not terminate request pro
 4. The pipeline stage model is fixed as `INIT → PROCESS → FINALIZE`.
 5. Handler execution order is deterministic and derived from declarative handler metadata.
 6. Handler registration and ordering occur only during system initialization and are immutable during request processing.
-7. The product contains no application-level business logic.
-8. The product exists only within TeqFW and requires `@teqfw/di`.
+7. Request processing completion is represented by a non-resettable request-context attribute that may be set only by `PROCESS` handlers.
+8. The product contains no application-level business logic.
+9. The product exists only within TeqFW and requires `@teqfw/di`.
 
 Changing any of these statements implies a change in the product’s semantic identity.
 
