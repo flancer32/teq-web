@@ -1,0 +1,26 @@
+import {describe, test} from 'node:test';
+import assert from 'node:assert/strict';
+import Fl32_Web_Back_Dto_Handler_Info from '../../../../../src/Back/Dto/Handler/Info.mjs';
+import Fl32_Web_Back_Helper_Cast from '../../../../../src/Back/Helper/Cast.mjs';
+import Fl32_Web_Back_Enum_Stage from '../../../../../src/Back/Enum/Stage.mjs';
+
+describe('Fl32_Web_Back_Dto_Handler_Info', () => {
+    test('creates normalized handler registration dto', () => {
+        const factory = new Fl32_Web_Back_Dto_Handler_Info({
+            cast: new Fl32_Web_Back_Helper_Cast(),
+            STAGE: new Fl32_Web_Back_Enum_Stage(),
+        });
+
+        const dto = factory.create({
+            name: 'HandlerA',
+            stage: 'process',
+            before: 'HandlerB',
+            after: ['HandlerC'],
+        });
+
+        assert.strictEqual(dto.name, 'HandlerA');
+        assert.strictEqual(dto.stage, 'PROCESS');
+        assert.deepStrictEqual(dto.before, ['HandlerB']);
+        assert.deepStrictEqual(dto.after, ['HandlerC']);
+    });
+});

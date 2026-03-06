@@ -1,16 +1,13 @@
 # Type Maps in TeqFW
 
 Path: `ctx/docs/code/conventions/types-map.md`
-Version: `20260304`
+Template Version: `20260306`
 
 ## 1. Purpose
 
-A type map provides a static bridge between:
+A type map provides a static bridge between architectural namespace identifiers used by the dependency container and concrete JavaScript implementation modules.
 
-- architectural namespace identifiers used by the dependency container
-- concrete JavaScript implementation files
-
-Type maps exist solely to support:
+Type maps exist solely for static tooling and support:
 
 - IDE navigation
 - static analysis
@@ -19,11 +16,9 @@ Type maps exist solely to support:
 
 Type maps do not participate in runtime execution and do not influence dependency resolution.
 
-They exist only for static tooling.
+## 2. Namespace Domains
 
-## 2. Architectural context
-
-TeqFW architecture separates two domains.
+TeqFW architecture separates two addressing domains.
 
 Runtime domain:
 
@@ -41,17 +36,11 @@ Runtime code resolves dependencies using namespace identifiers through the DI co
 
 Static tooling operates on files and types.
 
-The type map bridges these domains without introducing runtime coupling.
+A type map bridges these domains without introducing runtime coupling.
 
-## 3. Definition
+## 3. Type Map Definition
 
-A type map is a deterministic mapping:
-
-```
-Namespace identifier → implementation class
-```
-
-Each mapping references the JavaScript source file that defines the implementation class.
+A type map is a deterministic mapping between architectural namespace identifiers and module types.
 
 Example:
 
@@ -59,19 +48,13 @@ Example:
 type Ns_Component = import("./src/Component.mjs").default;
 ```
 
-The namespace identifier represents the **instance type** of the class.
+Each mapping references the JavaScript module implementing the component.
 
-The constructor type can be obtained using the standard TypeScript expression:
+The type map does not define behavior or structure. Structural information is derived from the referenced implementation module.
 
-```
-typeof Ns_Component
-```
+## 4. Type Map File
 
-The type map itself does not define structure or behavior. All structural information is derived from the referenced implementation file.
-
-## 4. One package — one type map
-
-Every npm package that exposes namespace-addressable components MUST provide exactly one type map.
+Each npm package that exposes namespace-addressable components contains exactly one type map file.
 
 Convention:
 
@@ -79,7 +62,7 @@ Convention:
 types.d.ts
 ```
 
-Referenced in `package.json`:
+The file is referenced in `package.json`:
 
 ```json
 {
@@ -87,87 +70,41 @@ Referenced in `package.json`:
 }
 ```
 
-## 5. Public API vs internal bindings
+## 5. Global Type Registry
 
-Type maps contain two categories of declarations.
+All type aliases defined in the type map are declared in the global type namespace.
 
-### 5.1 Public namespace API
-
-Public namespace identifiers represent architectural entities intentionally exposed by the package.
-
-These identifiers are declared in the global type namespace.
+This is required because JSDoc annotations cannot reference module-scoped type exports.
 
 Example:
 
 ```ts
 declare global {
-  type Ns_Service = import("./src/Service.mjs").default;
+  type Ns_Component = import("./src/Component.mjs").default;
 }
 ```
 
-Public namespace identifiers:
+### Module Invariant
 
-- are globally visible
-- may be referenced by other packages
-- form the type-level API of the package
-- must remain stable across compatible versions
-
-Renaming or removing a public namespace identifier constitutes a breaking change.
-
-### 5.2 Internal bindings
-
-Internal bindings support IDE navigation inside the package implementation.
-
-They are declared as module-scoped exports.
-
-Example:
+The `types.d.ts` file is a module file and **must end with**:
 
 ```ts
-export type Ns_Component = import("./src/Component.mjs").default;
+export {};
 ```
 
-Internal bindings:
+This ensures that:
 
-- are not globally visible
-- are not part of the package API
-- may change freely between versions.
+- the declaration file is treated as a module by `tsserver`
+- global namespace augmentation remains stable
+- IDE type resolution functions correctly.
 
-## 6. Canonical mapping rules
+## 6. Namespace Mapping Rules
 
-### 6.1 Namespace identifier → instance type
+Namespace identifiers correspond deterministically to source modules.
 
-Each namespace identifier maps to the **instance type** of the implementation class.
+### 6.1 Namespace → File Path
 
-Canonical form:
-
-```ts
-type Ns_Component = import("./src/Component.mjs").default;
-```
-
-This matches the standard TypeScript interpretation of class types.
-
-### 6.2 Constructor type
-
-The constructor type is derived using the standard expression:
-
-```
-typeof Ns_Component
-```
-
-Example:
-
-```js
-/** @type {typeof Ns_Component} */
-const ComponentClass = ...
-```
-
-No additional aliases are required.
-
-## 7. Namespace → file path rule
-
-Namespace identifiers must correspond deterministically to source files.
-
-Rule:
+Namespace identifiers map to file paths using the rule:
 
 ```
 Namespace prefix removed
@@ -182,77 +119,133 @@ Ns_Module_Service
 src/Module/Service.mjs
 ```
 
-This rule allows agents to derive source paths automatically.
-
 The type map must not contradict this rule.
 
-## 8. Deterministic file structure
+### 6.2 Class Component Mapping
 
-The structure of `types.d.ts` must be deterministic.
+For class-based modules the namespace identifier maps to the instance type of the default export.
 
-The file contains two sections:
+```ts
+type Ns_Component = import("./src/Component.mjs").default;
+```
+
+Constructor type may be obtained using:
 
 ```
-INTERNAL TYPE BINDINGS
-PUBLIC GLOBAL API
+typeof Ns_Component
+```
+
+### 6.3 Enum Component Mapping
+
+Enum modules export constant value objects.
+
+The namespace identifier maps to the value type of the exported object.
+
+```ts
+type Ns_Enum = typeof import("./src/Enum/Name.mjs").default;
+```
+
+### 6.4 Named Export Aliases
+
+Named exports may be referenced using the convention:
+
+```
+Namespace$ExportName
 ```
 
 Example:
 
 ```ts
-/* ===== INTERNAL TYPE BINDINGS ===== */
+type Ns_Component$Config = import("./src/Component.mjs").Config;
+```
 
-export type Ns_Component = import("./src/Component.mjs").default;
+Properties:
 
-/* ===== PUBLIC GLOBAL API ===== */
+- `$` separates module namespace from export name
+- the alias exists only in the type namespace
+- it is not a CDC dependency identifier
 
+### 6.5 Nested Module Mapping
+
+If a concept is implemented as a separate module file it becomes a normal namespace component.
+
+Example file:
+
+```
+src/Dto/Resolver/Config/DTO.mjs
+```
+
+Namespace:
+
+```
+TeqFw_Di_Dto_Resolver_Config_DTO
+```
+
+Mapping:
+
+```ts
+type TeqFw_Di_Dto_Resolver_Config_DTO = import("./src/Dto/Resolver/Config/DTO.mjs").default;
+```
+
+Such identifiers belong to the runtime namespace and therefore must not contain `$`.
+
+## 7. Deterministic File Structure
+
+The structure of `types.d.ts` is deterministic.
+
+The file contains a single global declaration block.
+
+Example:
+
+```ts
 declare global {
-  type Ns_Service = import("./src/Service.mjs").default;
+  type Ns_Component = import("./src/Component.mjs").default;
+
+  type Ns_Component$Options = import("./src/Component.mjs").Options;
+
+  type Ns_Enum = typeof import("./src/Enum/Life.mjs").default;
 }
 
 export {};
 ```
 
-Entries inside each section must be sorted alphabetically by namespace identifier.
+Entries must be sorted alphabetically by type identifier.
 
-## 9. Allowed declaration forms
+## 8. Allowed Declaration Forms
 
 Only the following declaration forms are allowed.
 
-Instance type mapping
+Class component mapping
 
 ```
 type Ns_Component =
   import("./src/...").default;
 ```
 
-Global instance type mapping
+Enum value mapping
 
 ```
-declare global {
-  type Ns_Component =
-    import("./src/...").default;
-}
+type Ns_Enum =
+  typeof import("./src/...").default;
 ```
 
-No other type declarations are allowed.
+Named export alias
 
-In particular, type maps must not contain:
+```
+type Ns_Component$Export =
+  import("./src/...").Export;
+```
+
+Type maps must not contain:
 
 - interfaces
-- custom type definitions
+- structural type definitions
 - method signatures
-- structural declarations.
+- custom type declarations.
 
-## 10. Agent generation
+## 9. Generation Invariants
 
-The type map is a **generated artifact**.
-
-Agents must generate and maintain the file automatically.
-
-Manual edits may be overwritten.
-
-The type map must be generated from:
+The type map is a generated artifact derived from:
 
 ```
 namespace registry
@@ -260,30 +253,17 @@ namespace registry
 source file structure
 ```
 
-Generation algorithm:
+The generated file satisfies the following invariants:
 
-1. read namespace identifiers from the namespace registry
-2. derive source file paths using the namespace → path rule
-3. verify that the file exists
-4. generate instance type mapping
-5. classify mapping as public or internal
-6. sort entries alphabetically
-7. write deterministic file structure.
+- every namespace identifier has a corresponding type alias
+- referenced source files exist
+- namespace → path rule holds
+- no duplicate type identifiers exist
+- entries are sorted alphabetically
+- `$` never appears in CDC namespace identifiers
+- `types.d.ts` ends with `export {}`
 
-## 11. Agent validation rules
-
-Agents must validate the following invariants:
-
-1. every public namespace identifier appears in the type map
-2. referenced source files exist
-3. namespace → path rule is satisfied
-4. global declarations correspond only to public API identifiers
-5. no duplicate namespace identifiers exist
-6. entries are sorted deterministically.
-
-Violation of these rules indicates architectural inconsistency.
-
-## 12. IDE integration
+## 10. IDE Integration
 
 When a package declares:
 
@@ -293,47 +273,22 @@ When a package declares:
 
 VSCode automatically loads the type map and:
 
-1. resolves `import()` references
-2. derives type information from source files
-3. exposes public namespace identifiers globally.
+- resolves `import()` references
+- derives type information from implementation modules
+- exposes type aliases globally.
 
-No additional configuration is required.
+## 11. Summary
 
-## 13. Usage example
-
-Application code references namespace identifiers directly.
-
-```js
-/**
- * @param {Ns_Service} service
- */
-export default function run(service) {
-  service.execute();
-}
-```
-
-Constructor usage:
-
-```js
-/** @type {typeof Ns_Service} */
-const ServiceClass = ...
-```
-
-No imports are required.
-
-## 14. Summary
-
-Type maps bind architectural namespace identifiers to implementation files.
-
-They provide static analysis support while preserving runtime independence.
+Type maps bind architectural namespace identifiers to implementation modules while remaining independent from runtime dependency resolution.
 
 A type map:
 
-- maps namespace identifiers to instance types
-- derives constructor types via `typeof`
-- separates public API from internal bindings
-- follows deterministic namespace → path rules
-- is generated automatically by agents
-- can be validated mechanically.
+- maps namespace identifiers to module types
+- supports class components and enum modules
+- supports named export aliases using `Namespace$Export`
+- declares all types globally for JSDoc compatibility
+- follows deterministic namespace → file path rules
+- is generated automatically
+- ends with `export {}`
 
-This ensures that TeqFW namespace architecture remains consistent, analyzable, and agent-compatible.
+The structure is deterministic and can be validated mechanically.

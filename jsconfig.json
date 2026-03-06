@@ -2,13 +2,12 @@
   "compilerOptions": {
     "baseUrl": ".",
     "checkJs": true,
+    "forceConsistentCasingInFileNames": true,
     "module": "nodenext",
     "moduleResolution": "nodenext",
     "noEmit": true,
-    "target": "esnext",
-    "paths": {
-      "@teqfw/web-types": ["types.d.ts"]
-    }
+    "skipLibCheck": true,
+    "target": "ESNext"
   },
   "include": ["src", "test", "types.d.ts"]
 }

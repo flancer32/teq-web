@@ -1,0 +1,51 @@
+// @ts-check
+
+export const __deps__ = {
+    fs: 'node_fs',
+    path: 'node_path',
+};
+
+/**
+ * @typedef {object} Fl32_Web_Back_Handler_Static_A_FallbackConstructorParams
+ * @property {typeof import('node:fs')} fs
+ * @property {typeof import('node:path')} path
+ */
+
+export default class Fl32_Web_Back_Handler_Static_A_Fallback {
+    /* eslint-disable jsdoc/require-param-description,jsdoc/check-param-names */
+    /**
+     * @param {Fl32_Web_Back_Handler_Static_A_FallbackConstructorParams} params
+     */
+    constructor(
+        {
+            fs,
+            path,
+        }
+    ) {
+        /* eslint-enable jsdoc/check-param-names */
+
+        /**
+         * Apply default index fallback for directories.
+         *
+         * @param {string} fsPath
+         * @param {string[]} defaults
+         * @returns {Promise<string|null>} Path to existing file or null.
+         */
+        this.apply = async (fsPath, defaults) => {
+            let stat;
+            try { stat = await fs.promises.stat(fsPath); } catch { return null; }
+
+            if (stat.isDirectory()) {
+                for (const file of defaults) {
+                    const candidate = path.join(fsPath, file);
+                    try {
+                        const s = await fs.promises.stat(candidate);
+                        if (s.isFile()) return candidate;
+                    } catch { /* ignore */ }
+                }
+                return null;
+            }
+            return stat.isFile() ? fsPath : null;
+        };
+    }
+}

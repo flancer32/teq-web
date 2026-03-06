@@ -1,29 +1,21 @@
-# Architecture Context
+# Architecture Documentation (`./ctx/docs/architecture/`)
 
-Path: `ctx/docs/architecture/AGENTS.md`
+Path: `./ctx/docs/architecture/AGENTS.md`
 
 ## Purpose
 
-The `architecture/` level fixes **architectural form and invariants** of the project.
-It declares what structural rules are valid and binding for all lower documentation levels.
-
----
+The `ctx/docs/architecture/` directory contains declarative documentation of the system's architectural form. Documents at this level define structural units, responsibility boundaries, execution structure, and architectural constraints derived from the product level without introducing implementation rules.
 
 ## Level Map
 
-- `AGENTS.md` — this document.
+- `AGENTS.md` — this document, defining the boundaries and structure of the `architecture/` level.
+- `constraints.md` — immutable architectural constraints that protect the declared structural form from invalid transformations.
+- `overview.md` — architectural overview defining the system contours, coordination center, execution phases, and structural data entities.
 
----
+## Level Boundary
 
-## Boundaries
+This level defines architecture only. It may refine the product level into structural form, but it must not define runtime environment conditions, source-code conventions, repository layout, or agent procedures.
 
-This level:
+## Summary
 
-- defines architectural invariants and allowed forms;
-- acts as the highest authority on structure.
-
-This level does not:
-
-- describe runtime behavior;
-- define implementation techniques;
-- contain engineering or coding conventions.
+`ctx/docs/architecture/AGENTS.md` defines the scope and navigation of the architectural documentation level.
