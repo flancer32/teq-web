@@ -1,5 +1,11 @@
 # Changelog
 
+## [0.5.1] - 2026-03-11
+
+### Changed
+- Updated runtime and development dependencies to their latest available versions in `package.json` and lockfile.
+- Bumped package patch version to `0.5.1`.
+
 ## [0.4.0] - 2025-12-20
 
 ### Added

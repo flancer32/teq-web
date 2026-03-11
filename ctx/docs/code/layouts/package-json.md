@@ -61,7 +61,7 @@ The package identity is defined as:
 
 ```
 name: @flancer32/teq-web
-version: 0.5.0
+version: 0.5.1
 ```
 
 The `version` value may change as the package evolves and is maintained during the development process.
@@ -323,7 +323,7 @@ The following JSON fragment illustrates the canonical structure of the `package.
 ```json
 {
   "name": "@flancer32/teq-web",
-  "version": "0.5.0",
+  "version": "0.5.1",
   "description": "Server-side web request coordination infrastructure for TeqFW modular monolith applications.",
   "type": "module",
   "license": "Apache-2.0",
@@ -349,7 +349,7 @@ The following JSON fragment illustrates the canonical structure of the `package.
     "teqfw",
     "tequila-framework",
     "web",
-    "pipeline-engine",
+    "dispatcher",
     "request-pipeline",
     "dependency-injection",
     "modular-monolith",
@@ -373,12 +373,12 @@ The following JSON fragment illustrates the canonical structure of the `package.
   },
 
   "dependencies": {
-    "@teqfw/di": "^2.0.0"
+    "@teqfw/di": "^2.0.4"
   },
 
   "devDependencies": {
-    "@types/node": "^20",
-    "eslint": "^9.0.0"
+    "@types/node": "^25.4.0",
+    "eslint": "^10.0.3"
   },
 
   "scripts": {

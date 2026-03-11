@@ -1,6 +1,6 @@
 {
   "name": "@flancer32/teq-web",
-  "version": "0.5.0",
+  "version": "0.5.1",
   "description": "Server-side web request coordination infrastructure for TeqFW modular monolith applications.",
   "type": "module",
   "license": "Apache-2.0",
@@ -41,11 +41,11 @@
     ]
   },
   "dependencies": {
-    "@teqfw/di": "^2.0.2"
+    "@teqfw/di": "^2.0.4"
   },
   "devDependencies": {
-    "@types/node": "^25.3.3",
-    "eslint": "^10.0.2"
+    "@types/node": "^25.4.0",
+    "eslint": "^10.0.3"
   },
   "scripts": {
     "test:unit": "find test/unit -name '*.test.mjs' -print0 | xargs -0 node --test",
