@@ -4,9 +4,9 @@
  * Factory for TLS configuration DTO.
  * Produces validated DTOs for HTTPS server configuration.
  */
-export const __deps__ = {
+export const __deps__ = Object.freeze({
     cast: 'Fl32_Web_Back_Helper_Cast$',
-};
+});
 
 /**
  * @typedef {object} Fl32_Web_Back_Server_Config_TlsConstructorParams

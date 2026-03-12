@@ -1,9 +1,9 @@
 // @ts-check
 
-export const __deps__ = {
+export const __deps__ = Object.freeze({
     configFactory: 'Fl32_Web_Back_Handler_Static_A_Config$',
     logger: 'Fl32_Web_Back_Logger$',
-};
+});
 
 /**
  * @typedef {object} Fl32_Web_Back_Handler_Static_A_RegistryConstructorParams

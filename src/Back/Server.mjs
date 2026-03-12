@@ -4,14 +4,14 @@
  * Web server implementation supporting HTTP/1 and HTTP/2 protocols.
  * Handles incoming requests and delegates them to the Pipeline Engine.
  */
-export const __deps__ = {
+export const __deps__ = Object.freeze({
     http: 'node_http',
     http2: 'node_http2',
     DEF: 'Fl32_Web_Back_Defaults$',
     logger: 'Fl32_Web_Back_Logger$',
     pipelineEngine: 'Fl32_Web_Back_PipelineEngine$',
     SERVER_TYPE: 'Fl32_Web_Back_Enum_Server_Type$',
-};
+});
 
 /**
  * @typedef {object} Fl32_Web_Back_ServerConstructorParams

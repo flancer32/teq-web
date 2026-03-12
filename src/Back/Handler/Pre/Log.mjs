@@ -5,11 +5,11 @@
  *
  * @implements Fl32_Web_Back_Api_Handler
  */
-export const __deps__ = {
+export const __deps__ = Object.freeze({
     logger: 'Fl32_Web_Back_Logger$',
     dtoInfo: 'Fl32_Web_Back_Dto_Handler_Info$',
     STAGE: 'Fl32_Web_Back_Enum_Stage$',
-};
+});
 
 /**
  * @typedef {object} Fl32_Web_Back_Handler_Pre_LogConstructorParams

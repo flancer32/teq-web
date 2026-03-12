@@ -1,9 +1,9 @@
 // @ts-check
 
 /* eslint-disable jsdoc/require-param-description,jsdoc/check-param-names */
-export const __deps__ = {
+export const __deps__ = Object.freeze({
     http2: 'node_http2',
-};
+});
 
 /**
  * @typedef {object} Fl32_Web_Back_Helper_RespondConstructorParams

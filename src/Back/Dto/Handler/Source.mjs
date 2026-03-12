@@ -3,9 +3,9 @@
 /**
  * Factory for file source configuration DTO used by Static handler.
  */
-export const __deps__ = {
+export const __deps__ = Object.freeze({
     cast: 'Fl32_Web_Back_Helper_Cast$',
-};
+});
 
 /**
  * @typedef {object} Fl32_Web_Back_Dto_Handler_SourceConstructorParams

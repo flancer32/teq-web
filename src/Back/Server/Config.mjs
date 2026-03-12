@@ -4,11 +4,11 @@
  * Factory for server configuration DTO.
  * Supports HTTP, HTTPS and HTTP2 server types with TLS configuration.
  */
-export const __deps__ = {
+export const __deps__ = Object.freeze({
     cast: 'Fl32_Web_Back_Helper_Cast$',
     SERVER_TYPE: 'Fl32_Web_Back_Enum_Server_Type$',
     tlsFactory: 'Fl32_Web_Back_Server_Config_Tls$',
-};
+});
 
 /**
  * @typedef {object} Fl32_Web_Back_Server_ConfigConstructorParams

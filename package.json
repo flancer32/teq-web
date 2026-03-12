@@ -53,11 +53,11 @@
     "test": "npm run test:unit && npm run test:integration"
   },
   "files": [
+    "ai/",
     "src/",
-    "types.d.ts",
-    "README.md",
-    "LICENSE",
     "CHANGELOG.md",
+    "LICENSE",
+    "README.md",
     "types.d.ts"
   ]
 }

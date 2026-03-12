@@ -5,14 +5,14 @@
  *
  * @implements Fl32_Web_Back_Api_Handler
  */
-export const __deps__ = {
+export const __deps__ = Object.freeze({
     registry: 'Fl32_Web_Back_Handler_Static_A_Registry$',
     fileService: 'Fl32_Web_Back_Handler_Static_A_FileService$',
     respond: 'Fl32_Web_Back_Helper_Respond$',
     logger: 'Fl32_Web_Back_Logger$',
     dtoInfo: 'Fl32_Web_Back_Dto_Handler_Info$',
     STAGE: 'Fl32_Web_Back_Enum_Stage$',
-};
+});
 
 /**
  * @typedef {object} Fl32_Web_Back_Handler_StaticConstructorParams

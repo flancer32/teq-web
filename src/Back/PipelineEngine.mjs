@@ -5,12 +5,12 @@
  * It executes handlers in three deterministic stages:
  * `INIT -> PROCESS -> FINALIZE`.
  */
-export const __deps__ = {
+export const __deps__ = Object.freeze({
     logger: 'Fl32_Web_Back_Logger$',
     respond: 'Fl32_Web_Back_Helper_Respond$',
     helpOrder: 'Fl32_Web_Back_Helper_Order_Kahn$',
     STAGE: 'Fl32_Web_Back_Enum_Stage$',
-};
+});
 
 /**
  * @typedef {object} Fl32_Web_Back_PipelineEngineConstructorParams

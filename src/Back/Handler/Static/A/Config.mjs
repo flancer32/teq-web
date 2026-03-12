@@ -1,8 +1,8 @@
 // @ts-check
 
-export const __deps__ = {
+export const __deps__ = Object.freeze({
     path: 'node_path',
-};
+});
 
 /**
  * @typedef {object} Fl32_Web_Back_Handler_Static_A_ConfigConstructorParams

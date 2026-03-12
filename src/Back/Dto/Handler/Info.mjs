@@ -3,10 +3,10 @@
 /**
  * Factory for handler registration metadata.
  */
-export const __deps__ = {
+export const __deps__ = Object.freeze({
     cast: 'Fl32_Web_Back_Helper_Cast$',
     STAGE: 'Fl32_Web_Back_Enum_Stage$',
-};
+});
 
 /**
  * @typedef {object} Fl32_Web_Back_Dto_Handler_InfoConstructorParams

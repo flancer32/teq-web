@@ -1,6 +1,6 @@
 // @ts-check
 
-export const __deps__ = {
+export const __deps__ = Object.freeze({
     fs: 'node_fs',
     http2: 'node_http2',
     path: 'node_path',
@@ -8,7 +8,7 @@ export const __deps__ = {
     helpMime: 'Fl32_Web_Back_Helper_Mime$',
     resolver: 'Fl32_Web_Back_Handler_Static_A_Resolver$',
     fallback: 'Fl32_Web_Back_Handler_Static_A_Fallback$',
-};
+});
 
 /**
  * @typedef {object} Fl32_Web_Back_Handler_Static_A_FileServiceConstructorParams
