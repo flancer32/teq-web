@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.6.0 - 2026-03-13 - AI docs and request-context model updates
+
+* Added `ai/` documentation for agent-oriented project materials.
+* Introduced a non-resettable request-context attribute and aligned component type conventions.
+* Updated package version metadata to `0.6.0`.
+
 ## [0.5.0] - 2026-03-13
 
 ### Added
