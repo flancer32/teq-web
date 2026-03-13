@@ -223,6 +223,10 @@ These documents are distributed inside the package in:
 ./ai/
 ```
 
+For a quick integration reference, see:
+
+- `ai/examples/minimal-server.md`
+
 They describe:
 
 - runtime abstractions

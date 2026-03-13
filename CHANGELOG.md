@@ -1,11 +1,5 @@
 # Changelog
 
-## 0.6.0 - 2026-03-13 - AI docs and request-context model updates
-
-* Added `ai/` documentation for agent-oriented project materials.
-* Introduced a non-resettable request-context attribute and aligned component type conventions.
-* Updated package version metadata to `0.6.0`.
-
 ## [0.5.0] - 2026-03-13
 
 ### Added
@@ -14,6 +8,7 @@
 - Added component type conventions to the cognitive context.
 
 ### Changed
+- Updated `README.md` with package and agent-interface documentation refinements.
 - Migrated dependency injection to `@teqfw/di` v2 and updated package metadata accordingly.
 - Refined architecture and terminology around the dispatcher, request context, and transport boundary.
 - Reworked source files to codex-generated module layout and aligned exported namespace style with the `$` convention.
