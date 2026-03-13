@@ -18,7 +18,7 @@ export default class Fl32_Web_Back_Api_Handler {
 
     /**
      * Provides metadata for pipeline registration.
-     * @returns {Fl32_Web_Back_Dto_Handler_Info.Dto}
+     * @returns {Fl32_Web_Back_Dto_Handler_Info$Dto}
      */
     getRegistrationInfo() {
         throw new Error('Method not implemented');

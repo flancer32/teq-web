@@ -53,7 +53,7 @@ export default class Fl32_Web_Back_Server {
 
         /**
          * Starts the server with optional configuration.
-         * @param {Fl32_Web_Back_Server_Config.Dto} [cfg]
+         * @param {Fl32_Web_Back_Server_Config$Dto} [cfg]
          * @returns {Promise<void>}
          */
         this.start = async function (cfg) {

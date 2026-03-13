@@ -23,14 +23,14 @@ export default class Fl32_Web_Back_Handler_Static_A_Registry {
         }
     ) {
         /* eslint-enable jsdoc/check-param-names */
-        /** @type {Fl32_Web_Back_Dto_Handler_Source.Dto[]} */
+        /** @type {Fl32_Web_Back_Dto_Handler_Source$Dto[]} */
         let _configs = [];
 
         /**
          * Add configurations ensuring unique prefixes.
          * Existing entries are not modified.
          *
-         * @param {Fl32_Web_Back_Dto_Handler_Source.Dto[]} dtoList
+         * @param {Fl32_Web_Back_Dto_Handler_Source$Dto[]} dtoList
          */
         this.addConfigs = function (dtoList = []) {
             const list = dtoList.map(dto => configFactory.create(dto));

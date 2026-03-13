@@ -45,10 +45,7 @@ export default class Fl32_Web_Back_Dto_Handler_Info {
     }
 }
 
-/**
- * @memberOf Fl32_Web_Back_Dto_Handler_Info
- */
-class Dto {
+export class Dto {
     /**
      * Handlers to run before this one.
      * @type {string[]}

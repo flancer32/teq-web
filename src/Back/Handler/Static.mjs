@@ -49,7 +49,7 @@ export default class Fl32_Web_Back_Handler_Static {
         /**
          * Initialize registry with provided sources.
          *
-         * @param {{sources: Fl32_Web_Back_Dto_Handler_Source.Dto[]}} params
+         * @param {{sources: Fl32_Web_Back_Dto_Handler_Source$Dto[]}} params
          * @returns {Promise<void>}
          */
         this.init = async ({sources = []} = {}) => {
@@ -76,7 +76,7 @@ export default class Fl32_Web_Back_Handler_Static {
         };
 
         /**
-         * @returns {Fl32_Web_Back_Dto_Handler_Info.Dto}
+         * @returns {Fl32_Web_Back_Dto_Handler_Info$Dto}
          */
         this.getRegistrationInfo = () => _info;
     }

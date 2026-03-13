@@ -42,10 +42,7 @@ export default class Fl32_Web_Back_Server_Config_Tls {
     }
 }
 
-/**
- * @memberOf Fl32_Web_Back_Server_Config_Tls
- */
-class Dto {
+export class Dto {
     /**
      * Trusted CA certificates in PEM format.
      * @type {string|undefined}

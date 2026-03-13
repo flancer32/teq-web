@@ -36,7 +36,7 @@ export default class Fl32_Web_Back_Server_Config {
          * Ensures valid values for enums and numerical fields.
          * Validates TLS configuration when type is HTTPS.
          *
-         * @param {Fl32_Web_Back_Server_Config.Dto|object} [data] - Raw input data for the DTO.
+         * @param {Fl32_Web_Back_Server_Config$Dto|object} [data] - Raw input data for the DTO.
          * @returns {Dto} - A properly structured DTO instance.
          * @throws {Error} When HTTPS type is specified without TLS configuration.
          */
@@ -59,10 +59,7 @@ export default class Fl32_Web_Back_Server_Config {
     }
 }
 
-/**
- * @memberOf Fl32_Web_Back_Server_Config
- */
-class Dto {
+export class Dto {
     /**
      * Port to listening (3000).
      *
@@ -76,7 +73,7 @@ class Dto {
     type;
     /**
      * TLS configuration for HTTPS server.
-     * @type {Fl32_Web_Back_Server_Config_Tls.Dto|undefined}
+     * @type {Fl32_Web_Back_Server_Config_Tls$Dto|undefined}
      */
     tls;
 }

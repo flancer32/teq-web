@@ -42,10 +42,7 @@ export default class Fl32_Web_Back_Dto_Handler_Source {
     }
 }
 
-/**
- * @memberOf Fl32_Web_Back_Dto_Handler_Source
- */
-class Dto {
+export class Dto {
     /** @type {string} */
     root;
     /** @type {string} */

@@ -52,7 +52,7 @@ export default class Fl32_Web_Back_Handler_Pre_Log {
         /**
          * Return handler registration info.
          *
-         * @returns {Fl32_Web_Back_Dto_Handler_Info.Dto}
+         * @returns {Fl32_Web_Back_Dto_Handler_Info$Dto}
          */
         this.getRegistrationInfo = () => _info;
     }
