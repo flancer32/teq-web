@@ -23,5 +23,5 @@ The main consumer entry points are:
 
 - `Fl32_Web_Back_PipelineEngine$` for request lifecycle coordination;
 - `Fl32_Web_Back_Server$` for the built-in Node.js server;
-- `Fl32_Web_Back_Api_Handler` plus `Fl32_Web_Back_Dto_Handler_Info$` for custom handlers;
-- `Fl32_Web_Back_Handler_Static$` plus `Fl32_Web_Back_Dto_Handler_Source$` for static file serving.
+- `Fl32_Web_Back_Api_Handler` plus `Fl32_Web_Back_Dto_Info__Factory$` and `Fl32_Web_Back_Dto_Info` for custom handlers;
+- `Fl32_Web_Back_Handler_Static$` plus `Fl32_Web_Back_Dto_Source` values for static file serving.

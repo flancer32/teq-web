@@ -7,19 +7,19 @@ This example shows the preferred TeqFW-style usage path: external code resolves 
 // @ts-check
 
 export const __deps__ = {
-    dtoInfo: 'Fl32_Web_Back_Dto_Handler_Info$',
+    dtoInfoFactory: 'Fl32_Web_Back_Dto_Info__Factory$',
     STAGE: 'Fl32_Web_Back_Enum_Stage$',
 };
 
 export default class App_Web_Handler_Hello {
     /**
      * @param {{
-     *   dtoInfo: Fl32_Web_Back_Dto_Handler_Info,
+     *   dtoInfoFactory: Fl32_Web_Back_Dto_Info$Factory,
      *   STAGE: Fl32_Web_Back_Enum_Stage,
      * }} deps
      */
-    constructor({dtoInfo, STAGE}) {
-        const info = dtoInfo.create({
+    constructor({dtoInfoFactory, STAGE}) {
+        const info = dtoInfoFactory.create({
             name: 'App_Web_Handler_Hello',
             stage: STAGE.PROCESS,
         });

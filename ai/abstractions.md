@@ -31,7 +31,7 @@ Custom handlers implement `Fl32_Web_Back_Api_Handler`:
 - `getRegistrationInfo()` returns handler metadata;
 - `handle(context)` performs work for one request.
 
-Handler metadata is created with `Fl32_Web_Back_Dto_Handler_Info$` and contains:
+Handler metadata is created with `Fl32_Web_Back_Dto_Info__Factory$` and contains:
 
 - `name`: unique handler name;
 - `stage`: `INIT`, `PROCESS`, or `FINALIZE`;
@@ -63,7 +63,7 @@ Only `PROCESS` handlers may mark the request as completed.
 
 ## Built-in Static Handler
 
-`Fl32_Web_Back_Handler_Static$` is a PROCESS-stage handler for static file delivery. Before use, call `init({sources})` with source DTOs created by `Fl32_Web_Back_Dto_Handler_Source$`.
+`Fl32_Web_Back_Handler_Static$` is a PROCESS-stage handler for static file delivery. Before use, call `init({sources})` with source DTOs created by `Fl32_Web_Back_Dto_Source$Factory`.
 
 Each source describes:
 
