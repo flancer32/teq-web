@@ -1,10 +1,23 @@
 # Changelog
 
-## [0.5.1] - 2026-03-11
+## [0.5.0] - 2026-03-13
+
+### Added
+- Added `ai/` documentation for agent-oriented project materials.
+- Added a non-resettable request-context attribute.
+- Added component type conventions to the cognitive context.
 
 ### Changed
-- Updated runtime and development dependencies to their latest available versions in `package.json` and lockfile.
-- Bumped package patch version to `0.5.1`.
+- Migrated dependency injection to `@teqfw/di` v2 and updated package metadata accordingly.
+- Refined architecture and terminology around the dispatcher, request context, and transport boundary.
+- Reworked source files to codex-generated module layout and aligned exported namespace style with the `$` convention.
+- Verified modules in `src/` against updated TeqFW ES module conventions and aligned DTO component types with those rules.
+- Restructured and cleaned up `ctx/docs`, including TeqFW convention documents and removal of the obsolete composition level.
+- Moved the accept test into the integration test suite.
+- Refreshed runtime and development dependencies.
+
+### Removed
+- Removed legacy code, tests, and the shared `common.mjs` unit-test helper.
 
 ## [0.4.0] - 2025-12-20
 
