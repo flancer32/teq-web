@@ -1,152 +1,236 @@
 # @flancer32/teq-web
 
-**@flancer32/teq-web** is a modular request dispatcher and web server for Node.js applications.  
-It follows the principles of the [TeqFW](https://github.com/flancer32/teqfw) architecture but works independently and
-can be integrated into any Node.js project.  
-The plugin offers a flexible, pluggable HTTP/2-capable server with three-stage handler processing and dependency-driven
-execution order.
+Infrastructure web server and deterministic request pipeline for TeqFW packages.
 
----
+`@flancer32/teq-web` is an infrastructural component of the **Tequila Framework (TeqFW)** platform.
+
+The package provides a deterministic **request lifecycle pipeline** and a built-in **Node.js web server** that other TeqFW packages can use as the runtime environment for processing HTTP requests.
+
+Within the TeqFW ecosystem, this package plays a role similar to how **Express** or **Fastify** are used in typical Node.js applications: it acts as the **web runtime layer** used by higher-level packages.
+
+Unlike general-purpose web frameworks, this package focuses only on coordinating **request lifecycle execution through a deterministic handler pipeline**.
+
+The package requires the dependency container **@teqfw/di**.
+
+Platform website: <https://teqfw.com/>
 
 ## Overview
 
-This package provides:
+The package provides infrastructure for processing web requests inside a TeqFW application.
 
-- A **dispatcher** that processes HTTP requests in three well-defined stages: `pre`, `process`, `post`.
-- A **handler interface** for modular request handling across plugins or components.
-- A **built-in server** based on Node.js libraries (`http`, `http2`), supporting TLS via `http2.createSecureServer()`.
-- Support for **relative handler ordering** using `before` / `after` declarations and topological sorting.
-- Compatibility with **external servers** like Express/Fastify by using the dispatcher as middleware.
-- Minimal dependencies and full support for dependency injection via `@teqfw/di`.
+Core responsibilities:
 
----
+- deterministic **request lifecycle coordination**
+- ordered **handler execution pipeline**
+- **Node.js server integration** (`http`, `http2`, `https`)
+- **handler registration metadata**
+- **static file handler**
+- DTO factories and enums used by handler implementations
 
-## Architecture
+The package does **not** provide:
 
-The dispatcher runs HTTP requests through a consistent three-phase pipeline:
+- routing frameworks
+- controllers
+- application architecture
+- persistence
+- session management
+- business logic abstractions
 
-1. **Pre-processing (`pre`)** — All handlers are executed in a defined order (e.g., logging, authentication).
-2. **Processing (`process`)** — Handlers are checked sequentially until one returns `true` (request handled).
-3. **Post-processing (`post`)** — All handlers are executed unconditionally, even after errors.
+Its sole responsibility is coordinating the **lifecycle of a web request**.
 
-Each handler provides its registration metadata via the `getRegistrationInfo()` method. Execution order is resolved with
-a built-in implementation of Kahn's algorithm.
+## Role in the TeqFW Ecosystem
 
-Example handler definition:
+| Layer                | Responsibility                            |
+| -------------------- | ----------------------------------------- |
+| Application packages | business logic, handlers                  |
+| `@flancer32/teq-web` | web server and request lifecycle pipeline |
+| `@teqfw/di`          | runtime dependency linking                |
 
-```js
-const My_Handler = {
-    getRegistrationInfo: () => Object.freeze({
-        name: 'My_Handler',
-        stage: 'process', // can be 'pre', 'process', or 'post'
-        before: [],
-        after: [],
-    }),
+TeqFW applications are composed of multiple packages that declare dependencies through the DI container.
 
-    handle: async (req, res) => {
-        res.writeHead(200, {'Content-Type': 'text/plain'});
-        res.end('Hello from My_Handler!');
-        return true;
-    },
+`@flancer32/teq-web` provides the **web runtime layer** in which those packages handle incoming requests.
+
+## Request Lifecycle
+
+Each request is processed through a fixed three-stage pipeline:
+
+```text
+INIT → PROCESS → FINALIZE
+```
+
+Stage semantics:
+
+| Stage    | Purpose                                           |
+| -------- | ------------------------------------------------- |
+| INIT     | request preparation (logging, enrichment, guards) |
+| PROCESS  | request handling                                  |
+| FINALIZE | cleanup and post-processing                       |
+
+Processing stops when a `PROCESS` handler marks the request as completed.
+
+If no handler handles the request, the system produces **404 Not Found**.
+
+## Core Components
+
+### Pipeline Engine
+
+The **Pipeline Engine** is the single lifecycle coordination authority.
+
+Responsibilities:
+
+- handler registration
+- deterministic handler ordering
+- request lifecycle execution
+- request completion control
+- runtime error handling
+
+Handlers are ordered based on declarative metadata (`before` / `after` constraints).
+
+### Server
+
+The built-in server connects the Node.js transport layer to the request pipeline.
+
+Supported server types:
+
+- `http`
+- `http2`
+- `https`
+
+The server locks the handler pipeline before entering the execution phase.
+
+### Handlers
+
+Handlers are independent modules participating in request processing.
+
+Each handler provides registration metadata:
+
+- unique handler name
+- execution stage
+- relative ordering constraints
+
+Handlers do not coordinate with each other directly. Execution order is derived from metadata and is deterministic.
+
+## Example (TeqFW Style)
+
+```javascript
+// App/Web/Handler/Hello.mjs
+
+export const __deps__ = {
+  dtoInfoFactory: "Fl32_Web_Back_Dto_Info__Factory$",
+  STAGE: "Fl32_Web_Back_Enum_Stage$",
 };
 
-export default My_Handler;
-````
+export default class App_Web_Handler_Hello {
+  constructor({ dtoInfoFactory, STAGE }) {
+    const info = dtoInfoFactory.create({
+      name: "App_Web_Handler_Hello",
+      stage: STAGE.PROCESS,
+    });
 
----
+    this.getRegistrationInfo = () => info;
 
-## Usage
+    this.handle = async function (context) {
+      const { response } = context;
 
-This example shows how to create a minimal application that:
+      response.writeHead(200, { "Content-Type": "text/plain" });
+      response.end("ok");
 
-* Registers two handlers: a logger and a static file server
-* Starts a secure HTTPS server using built-in components
-
-The static handler reads from one or more **sources** described by the
-`Handler_Source` DTO. To expose selected files from `node_modules`, create a
-source with `root: 'node_modules'` and pass it to `Handler_Static` during
-initialization.
-
-```js
-import Container from '@teqfw/di';
-import {readFileSync} from 'node:fs';
-import {join, resolve} from 'node:path';
-import {fileURLToPath} from 'node:url';
-
-// Resolve working directory
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = resolve(__filename, '..');
-const webRoot = join(__dirname, 'web');
-const certs = join(__dirname, 'certs');
-
-// DI container setup
-const container = new Container();
-const resolver = container.getResolver();
-resolver.addNamespaceRoot('Fl32_Web_', './node_modules/@flancer32/teq-web/src');
-
-// Get and configure built-in handlers
-const logHandler = await container.get('Fl32_Web_Back_Handler_Pre_Log$');
-const staticHandler = await container.get('Fl32_Web_Back_Handler_Static$');
-const SourceCfg = await container.get('Fl32_Web_Back_Dto_Handler_Source$');
-const srcNpm = SourceCfg.create({
-    root: 'node_modules',
-    prefix: '/node_modules/',
-    allow: {
-        vue: ['dist/vue.global.prod.js'],
-        '@teqfw/di': ['src/Container.mjs'],
-    }
-});
-const srcWeb = SourceCfg.create({ root: webRoot, prefix: '/' });
-await staticHandler.init({sources: [srcNpm, srcWeb]});
-
-// Register handlers
-const dispatcher = await container.get('Fl32_Web_Back_Dispatcher$');
-dispatcher.addHandler(logHandler);
-dispatcher.addHandler(staticHandler);
-
-// Create and start the server
-const server = await container.get('Fl32_Web_Back_Server$');
-await server.start({
-    port: 3443,
-    type: 'https',
-    tls: {
-        key: readFileSync(join(certs, 'key.pem'), 'utf8'),
-        cert: readFileSync(join(certs, 'cert.pem'), 'utf8'),
-        ca: readFileSync(join(certs, 'ca.pem'), 'utf8'),
-    }
-});
+      context.complete();
+    };
+  }
+}
 ```
 
-This will start an HTTPS server on port `3443` with:
+```javascript
+// App/Web/Server/Start.mjs
 
-* `Fl32_Web_Back_Handler_Pre_Log` logging each request method and URL;
-* `Fl32_Web_Back_Handler_Static` serving files from `node_modules` and the `/web` folder.
+export const __deps__ = {
+  pipeline: "Fl32_Web_Back_PipelineEngine$",
+  server: "Fl32_Web_Back_Server$",
+  helloHandler: "App_Web_Handler_Hello$",
+};
 
----
+export default class App_Web_Server_Start {
+  constructor({ pipeline, server, helloHandler }) {
+    this.execute = async function () {
+      pipeline.addHandler(helloHandler);
 
-### Using with Express or Fastify
-
-The dispatcher can be connected to external web frameworks instead of the built-in server.
-
-```js
-// Express
-const app = Express();
-app.use(async (req, res) => {
-    await dispatcher.onEventRequest(req, res);
-});
-app.listen(3000);
-
-// Fastify
-const fastify = Fastify();
-fastify.all('*', async (request, reply) => {
-    const req = request.raw;
-    const res = reply.raw;
-    await dispatcher.onEventRequest(req, res);
-});
-await fastify.listen({port: 3000});
+      await server.start({
+        port: 3000,
+        type: "http",
+      });
+    };
+  }
+}
 ```
 
----
+Application entry point:
+
+```javascript
+const app = await container.get("App_Web_Server_Start$");
+await app.execute();
+```
+
+## Designed for Development with LLM Agents
+
+TeqFW is an architectural approach designed for software development in which **LLM agents participate directly in the development process**.
+
+Traditional software architectures assume that all code is written and maintained by humans.
+
+TeqFW assumes a different workflow:
+
+- humans design the **architecture and specifications**
+- LLM agents generate and maintain the **implementation**
+
+To support this workflow, TeqFW structures applications so they are easier for automated agents to analyze and modify.
+
+Key design principles include:
+
+- explicit dependency contracts
+- deterministic runtime linking
+- predictable module structure
+- namespace-based component addressing
+- minimal hidden coupling between modules
+
+This allows systems to be more reliably:
+
+- analyzed
+- generated
+- refactored
+- extended
+
+by both **human developers and AI agents**.
+
+## Agent-Driven Implementation
+
+TeqFW libraries are developed using **Agent-Driven Software Management (ADSM)**, a methodology created by **Alex Gusev**.
+
+The workflow is:
+
+1. A human architect defines the **product model and specifications**
+2. **LLM agents (Codex)** generate the implementation
+3. The human architect reviews and integrates the generated code
+
+This package is part of that experiment and demonstrates how **human-designed architecture can be implemented by AI agents**.
+
+## Agent Interface
+
+This package includes **agent interface documentation** intended for LLM agents that use the library as a dependency.
+
+These documents are distributed inside the package in:
+
+```text
+./ai/
+```
+
+They describe:
+
+- runtime abstractions
+- request lifecycle semantics
+- handler contracts
+- integration rules for TeqFW applications
+
+Human developers typically read the README and source code, while **LLM agents can rely on the documentation in `./ai/`.**
 
 ## Installation
 
@@ -154,11 +238,32 @@ await fastify.listen({port: 3000});
 npm install @flancer32/teq-web
 ```
 
-This plugin requires a configured `@teqfw/di` container and optionally integrates with TeqFW-based apps.
+The package requires a configured `@teqfw/di` container.
 
----
+## Tequila Framework
 
-## Status
+`@flancer32/teq-web` is part of the **Tequila Framework (TeqFW)** ecosystem.
 
-This package is under active development and already used in real-world applications. Documentation is built using the
-**3DP** method (Dialog-Driven Development Process) and evolves alongside actual use cases.
+More information about the platform:
+[https://teqfw.com/](https://teqfw.com/)
+
+TeqFW is an experimental platform exploring how software architecture changes when **AI agents become active participants in the development process**.
+
+Key architectural ideas include:
+
+- modular monolith architecture
+- runtime dependency linking
+- namespace-based component addressing
+- pure JavaScript without compilation
+- system structures optimized for collaboration with LLM agents
+
+## Author
+
+**Alex Gusev**
+
+Creator of:
+
+- **Tequila Framework (TeqFW)**
+- **ADSM (Agent-Driven Software Management)**
+
+This project explores how software architecture evolves when **LLM agents become active participants in the development process**.
