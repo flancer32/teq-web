@@ -1,48 +1,15 @@
 // @ts-check
 
-/**
- * Factory for TLS configuration DTO.
- * Produces validated DTOs for HTTPS server configuration.
- */
 export const __deps__ = Object.freeze({
     cast: 'Fl32_Web_Back_Helper_Cast$',
 });
 
 /**
- * @typedef {object} Fl32_Web_Back_Server_Config_TlsConstructorParams
+ * @typedef {object} Fl32_Web_Back_Server_Config_TlsFactoryParams
  * @property {Fl32_Web_Back_Helper_Cast} cast
  */
 
 export default class Fl32_Web_Back_Server_Config_Tls {
-    /* eslint-disable jsdoc/require-param-description,jsdoc/check-param-names */
-    /**
-     * @param {Fl32_Web_Back_Server_Config_TlsConstructorParams} params
-     */
-    constructor(
-        {
-            cast,
-        }
-    ) {
-        /* eslint-enable jsdoc/require-param-description,jsdoc/check-param-names */
-        /**
-         * Create a validated DTO for TLS configuration.
-         *
-         * @param {*} [data] - Optional raw object.
-         * @returns {Dto}
-         */
-        this.create = function (data) {
-            const res = Object.assign(new Dto(), data);
-            if (data) {
-                res.ca = cast.string(data?.ca);
-                res.cert = cast.string(data.cert);
-                res.key = cast.string(data.key);
-            }
-            return res;
-        };
-    }
-}
-
-export class Dto {
     /**
      * Trusted CA certificates in PEM format.
      * @type {string|undefined}
@@ -60,4 +27,31 @@ export class Dto {
      * @type {string}
      */
     key;
+}
+
+export class Factory {
+    /* eslint-disable jsdoc/require-param-description,jsdoc/check-param-names */
+    /**
+     * @param {Fl32_Web_Back_Server_Config_TlsFactoryParams} params
+     */
+    constructor(
+        {
+            cast,
+        }
+    ) {
+        /* eslint-enable jsdoc/require-param-description,jsdoc/check-param-names */
+        /**
+         * @param {*} [data]
+         * @returns {Fl32_Web_Back_Server_Config_Tls}
+         */
+        this.create = function (data) {
+            const res = new Fl32_Web_Back_Server_Config_Tls();
+            if (data) {
+                res.ca = cast.string(data?.ca);
+                res.cert = cast.string(data.cert);
+                res.key = cast.string(data.key);
+            }
+            return Object.freeze(res);
+        };
+    }
 }

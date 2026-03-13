@@ -28,8 +28,8 @@ async function main() {
 
     /** @type {Fl32_Web_Back_PipelineEngine} */
     const pipelineEngine = await container.get('Fl32_Web_Back_PipelineEngine$');
-    /** @type {Fl32_Web_Back_Dto_Handler_Source} */
-    const sourceDto = await container.get('Fl32_Web_Back_Dto_Handler_Source$');
+    /** @type {Fl32_Web_Back_Dto_Source$Factory} */
+    const sourceDtoFactory = await container.get('Fl32_Web_Back_Dto_Source__Factory$');
     /** @type {Fl32_Web_Back_Handler_Pre_Log} */
     const logHandler = await container.get('Fl32_Web_Back_Handler_Pre_Log$');
     /** @type {Fl32_Web_Back_Handler_Static} */
@@ -37,7 +37,7 @@ async function main() {
 
     await staticHandler.init({
         sources: [
-            sourceDto.create({
+            sourceDtoFactory.create({
                 root: WEB_ROOT,
                 prefix: '/',
                 allow: {

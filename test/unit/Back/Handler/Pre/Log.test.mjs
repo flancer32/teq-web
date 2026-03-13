@@ -1,14 +1,14 @@
 import {describe, test, beforeEach} from 'node:test';
 import assert from 'node:assert/strict';
 import Fl32_Web_Back_Handler_Pre_Log from '../../../../../src/Back/Handler/Pre/Log.mjs';
-import Fl32_Web_Back_Dto_Handler_Info from '../../../../../src/Back/Dto/Handler/Info.mjs';
+import {Factory as Fl32_Web_Back_Dto_Info_Factory} from '../../../../../src/Back/Dto/Info.mjs';
 import Fl32_Web_Back_Helper_Cast from '../../../../../src/Back/Helper/Cast.mjs';
 
 describe('Fl32_Web_Back_Handler_Pre_Log', () => {
     const log = [];
     const STAGE = Object.freeze({INIT: 'INIT', PROCESS: 'PROCESS', FINALIZE: 'FINALIZE'});
     const cast = new Fl32_Web_Back_Helper_Cast();
-    const dtoInfo = new Fl32_Web_Back_Dto_Handler_Info({cast, STAGE});
+    const dtoInfoFactory = new Fl32_Web_Back_Dto_Info_Factory({cast, STAGE});
     let logger;
 
     beforeEach(() => {
@@ -20,7 +20,7 @@ describe('Fl32_Web_Back_Handler_Pre_Log', () => {
 
     test('logs method and url', async () => {
         /** @type {Fl32_Web_Back_Handler_Pre_Log} */
-        const handler = new Fl32_Web_Back_Handler_Pre_Log({logger, dtoInfo, STAGE});
+        const handler = new Fl32_Web_Back_Handler_Pre_Log({logger, dtoInfoFactory, STAGE});
         await handler.handle({request: {method: 'GET', url: '/path'}});
         assert.deepStrictEqual(log, ['GET /path']);
     });

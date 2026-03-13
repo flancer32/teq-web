@@ -8,5 +8,6 @@ export default class Fl32_Web_Back_Enum_Stage {
         this.INIT = 'INIT';
         this.PROCESS = 'PROCESS';
         this.FINALIZE = 'FINALIZE';
+        Object.freeze(this);
     }
 }

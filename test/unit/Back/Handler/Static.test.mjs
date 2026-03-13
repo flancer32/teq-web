@@ -1,13 +1,13 @@
 import {beforeEach, describe, test} from 'node:test';
 import assert from 'node:assert/strict';
 import Fl32_Web_Back_Handler_Static from '../../../../src/Back/Handler/Static.mjs';
-import Fl32_Web_Back_Dto_Handler_Info from '../../../../src/Back/Dto/Handler/Info.mjs';
+import {Factory as Fl32_Web_Back_Dto_Info_Factory} from '../../../../src/Back/Dto/Info.mjs';
 import Fl32_Web_Back_Helper_Cast from '../../../../src/Back/Helper/Cast.mjs';
 import Fl32_Web_Back_Enum_Stage from '../../../../src/Back/Enum/Stage.mjs';
 
 describe('Fl32_Web_Back_Handler_Static', () => {
     const STAGE = new Fl32_Web_Back_Enum_Stage();
-    const dtoInfo = new Fl32_Web_Back_Dto_Handler_Info({cast: new Fl32_Web_Back_Helper_Cast(), STAGE});
+    const dtoInfoFactory = new Fl32_Web_Back_Dto_Info_Factory({cast: new Fl32_Web_Back_Helper_Cast(), STAGE});
     let registry;
     let fileService;
     let respond;
@@ -29,7 +29,7 @@ describe('Fl32_Web_Back_Handler_Static', () => {
             fileService,
             respond,
             logger: {warn: () => {}},
-            dtoInfo,
+            dtoInfoFactory,
             STAGE,
         });
     });

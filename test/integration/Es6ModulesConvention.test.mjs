@@ -3,8 +3,8 @@ import assert from 'node:assert/strict';
 import path from 'node:path';
 import Container from '@teqfw/di';
 
-import {__deps__ as dtoInfoDeps} from '../../src/Back/Dto/Handler/Info.mjs';
-import {__deps__ as dtoSourceDeps} from '../../src/Back/Dto/Handler/Source.mjs';
+import {__deps__ as dtoInfoDeps} from '../../src/Back/Dto/Info.mjs';
+import {__deps__ as dtoSourceDeps} from '../../src/Back/Dto/Source.mjs';
 import {__deps__ as staticHandlerDeps} from '../../src/Back/Handler/Static.mjs';
 import {__deps__ as preLogDeps} from '../../src/Back/Handler/Pre/Log.mjs';
 import {__deps__ as staticConfigDeps} from '../../src/Back/Handler/Static/A/Config.mjs';
@@ -44,8 +44,10 @@ const MANAGED_MODULE_IDS = [
     'Fl32_Web_Back_Helper_Mime$',
     'Fl32_Web_Back_Helper_Order_Kahn$',
     'Fl32_Web_Back_Helper_Respond$',
-    'Fl32_Web_Back_Dto_Handler_Info$',
-    'Fl32_Web_Back_Dto_Handler_Source$',
+    'Fl32_Web_Back_Dto_Info$',
+    'Fl32_Web_Back_Dto_Info__Factory$',
+    'Fl32_Web_Back_Dto_Source$',
+    'Fl32_Web_Back_Dto_Source__Factory$',
     'Fl32_Web_Back_Handler_Static_A_Config$',
     'Fl32_Web_Back_Handler_Static_A_Fallback$',
     'Fl32_Web_Back_Handler_Static_A_FileService$',
@@ -55,7 +57,9 @@ const MANAGED_MODULE_IDS = [
     'Fl32_Web_Back_Handler_Static$',
     'Fl32_Web_Back_PipelineEngine$',
     'Fl32_Web_Back_Server_Config_Tls$',
+    'Fl32_Web_Back_Server_Config_Tls__Factory$',
     'Fl32_Web_Back_Server_Config$',
+    'Fl32_Web_Back_Server_Config__Factory$',
     'Fl32_Web_Back_Server$',
 ];
 
@@ -90,9 +94,25 @@ describe('TeqFW ES6 module convention integration', () => {
 
         assert.equal(typeof logger.info, 'function');
         assert.equal(defaults.PORT, 3000);
+        assert.equal(Object.isFrozen(defaults), true);
         assert.equal(STAGE.PROCESS, 'PROCESS');
+        assert.equal(Object.isFrozen(STAGE), true);
         assert.equal(SERVER_TYPE.HTTPS, 'https');
+        assert.equal(Object.isFrozen(SERVER_TYPE), true);
         assert.deepEqual(cast.array(['a', 'b'], cast.string), ['a', 'b']);
+
+        const dtoInfoFactory = await container.get('Fl32_Web_Back_Dto_Info__Factory$');
+        const dtoInfo = dtoInfoFactory.create({name: 'h1', stage: 'process'});
+        assert.equal(Object.isFrozen(dtoInfo), true);
+
+        const sourceFactory = await container.get('Fl32_Web_Back_Dto_Source__Factory$');
+        const sourceDto = sourceFactory.create({root: '/tmp'});
+        assert.equal(Object.isFrozen(sourceDto), true);
+
+        const serverConfigFactory = await container.get('Fl32_Web_Back_Server_Config__Factory$');
+        const serverCfg = serverConfigFactory.create({port: '3001', type: 'http'});
+        assert.equal(Object.isFrozen(serverCfg), true);
+
         assert.deepEqual(
             kahn.sort([
                 {

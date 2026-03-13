@@ -7,14 +7,14 @@
  */
 export const __deps__ = Object.freeze({
     logger: 'Fl32_Web_Back_Logger$',
-    dtoInfo: 'Fl32_Web_Back_Dto_Handler_Info$',
+    dtoInfoFactory: 'Fl32_Web_Back_Dto_Info__Factory$',
     STAGE: 'Fl32_Web_Back_Enum_Stage$',
 });
 
 /**
  * @typedef {object} Fl32_Web_Back_Handler_Pre_LogConstructorParams
  * @property {Fl32_Web_Back_Logger} logger
- * @property {Fl32_Web_Back_Dto_Handler_Info} dtoInfo
+ * @property {Fl32_Web_Back_Dto_Info$Factory} dtoInfoFactory
  * @property {Fl32_Web_Back_Enum_Stage} STAGE
  */
 
@@ -26,16 +26,16 @@ export default class Fl32_Web_Back_Handler_Pre_Log {
     constructor(
         {
             logger,
-            dtoInfo,
+            dtoInfoFactory,
             STAGE,
         }
     ) {
         /* eslint-enable jsdoc/check-param-names */
         // VARS
-        const _info = dtoInfo.create();
-        _info.name = this.constructor.name;
-        _info.stage = STAGE.INIT;
-        Object.freeze(_info);
+        const _info = dtoInfoFactory.create({
+            name: this.constructor.name,
+            stage: STAGE.INIT,
+        });
 
         // MAIN
 
@@ -52,7 +52,7 @@ export default class Fl32_Web_Back_Handler_Pre_Log {
         /**
          * Return handler registration info.
          *
-         * @returns {Fl32_Web_Back_Dto_Handler_Info$Dto}
+         * @returns {Fl32_Web_Back_Dto_Info}
          */
         this.getRegistrationInfo = () => _info;
     }

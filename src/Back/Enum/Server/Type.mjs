@@ -8,5 +8,6 @@ export default class Fl32_Web_Back_Enum_Server_Type {
         this.HTTP2 = 'http2';
         this.HTTP = 'http';
         this.HTTPS = 'https';
+        Object.freeze(this);
     }
 }

@@ -1,48 +1,15 @@
 // @ts-check
 
-/**
- * Factory for file source configuration DTO used by Static handler.
- */
 export const __deps__ = Object.freeze({
     cast: 'Fl32_Web_Back_Helper_Cast$',
 });
 
 /**
- * @typedef {object} Fl32_Web_Back_Dto_Handler_SourceConstructorParams
+ * @typedef {object} Fl32_Web_Back_Dto_SourceFactoryParams
  * @property {Fl32_Web_Back_Helper_Cast} cast
  */
 
-export default class Fl32_Web_Back_Dto_Handler_Source {
-    /* eslint-disable jsdoc/require-param-description */
-    /**
-     * @param {Fl32_Web_Back_Dto_Handler_SourceConstructorParams} params
-     */
-    constructor(
-        {
-            cast,
-        }
-    ) {
-        /* eslint-enable jsdoc/require-param-description */
-        /**
-         * Create validated DTO for source configuration.
-         *
-         * @param {*} [data]
-         * @returns {Dto}
-         */
-        this.create = function (data) {
-            const res = new Dto();
-            if (data) {
-                res.root = cast.string(data.root);
-                res.prefix = cast.string(data.prefix);
-                res.allow = cast.stringArrayMap(data.allow);
-                res.defaults = cast.array(data.defaults, cast.string);
-            }
-            return res;
-        };
-    }
-}
-
-export class Dto {
+export default class Fl32_Web_Back_Dto_Source {
     /** @type {string} */
     root;
     /** @type {string} */
@@ -51,4 +18,32 @@ export class Dto {
     allow = {};
     /** @type {string[]} */
     defaults = [];
+}
+
+export class Factory {
+    /* eslint-disable jsdoc/require-param-description */
+    /**
+     * @param {Fl32_Web_Back_Dto_SourceFactoryParams} params
+     */
+    constructor(
+        {
+            cast,
+        }
+    ) {
+        /* eslint-enable jsdoc/require-param-description */
+        /**
+         * @param {*} [data]
+         * @returns {Fl32_Web_Back_Dto_Source}
+         */
+        this.create = function (data) {
+            const res = new Fl32_Web_Back_Dto_Source();
+            if (data) {
+                res.root = cast.string(data.root);
+                res.prefix = cast.string(data.prefix);
+                res.allow = cast.stringArrayMap(data.allow);
+                res.defaults = cast.array(data.defaults, cast.string);
+            }
+            return Object.freeze(res);
+        };
+    }
 }

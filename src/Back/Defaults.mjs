@@ -6,5 +6,6 @@
 export default class Fl32_Web_Back_Defaults {
     constructor() {
         this.PORT = 3000;
+        Object.freeze(this);
     }
 }

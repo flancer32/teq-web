@@ -6,5 +6,6 @@ describe('Fl32_Web_Back_Defaults', () => {
     test('contains default port', () => {
         const defaults = new Fl32_Web_Back_Defaults();
         assert.strictEqual(defaults.PORT, 3000);
+        assert.equal(Object.isFrozen(defaults), true);
     });
 });
