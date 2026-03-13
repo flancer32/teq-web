@@ -20,11 +20,8 @@ jobs:
       # Install dependencies using package-lock.json
       - run: npm ci
 
-      # Run unit tests
-      - run: npm run test:unit
-
-      # Run acceptance tests
-      - run: npm run test:accept
+      # Run all tests
+      - run: npm run test
 
   publish-npm:
     needs: build
