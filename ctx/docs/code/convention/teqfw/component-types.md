@@ -1,7 +1,7 @@
 # Component Types in TeqFW
 
 Path: `./ctx/docs/code/convention/teqfw/component-types.md`
-Template Version: `20260312`
+Template Version: `20260315`
 
 ## 1. Purpose
 
@@ -70,16 +70,20 @@ Characteristics:
 - contains no behavior
 - usually immutable
 - represents structured data or constant values
+- may reference other Data Components as part of its internal structure
 
-Data Components are used to transfer or store data processed by Handler Components.
+Data Components represent structured information used by Handler Components.
+
+Data Components **do not participate in dependency injection**.
 
 ## 4. Data Component Types
 
-Data Components are divided by lifecycle into two categories.
+Data Components are divided by lifecycle into three categories.
 
 ```
 Data Component
 ├─ Static Data Component
+├─ Runtime Data Component
 └─ Transient Data Component
 ```
 
@@ -122,7 +126,24 @@ export default class App_Defaults {
 
 Static Data Components provide shared codifiers and configuration values used across the application.
 
-### 4.2 Transient Data Component
+Static Data Components may be implemented either as frozen objects or frozen class instances.
+
+### 4.2 Runtime Data Component
+
+Runtime Data Components represent application configuration constructed during bootstrap.
+
+Characteristics:
+
+- single shared instance
+- mutable during bootstrap
+- immutable after initialization
+- must be frozen by the configuration component after initialization
+- injected by the container
+- may reference other Data Components
+
+Runtime Data Components typically represent package configuration or application configuration structures.
+
+### 4.3 Transient Data Component
 
 Transient Data Components represent structured runtime data.
 
@@ -181,7 +202,7 @@ Relationship:
 Factory → creates → Transient Data Component
 ```
 
-Factories centralize object creation logic and ensure that data components remain free of dependencies.
+Factories centralize object creation logic and ensure that data components remain free of behavior.
 
 ## 6. Factory and Data Component Pair
 
@@ -209,6 +230,7 @@ export const __deps__ = Object.freeze({
 export default class App_User {
   /** @type {string} */
   name;
+
   /** @type {App_Address} */
   address;
 }
@@ -297,7 +319,7 @@ new operator is allowed only in:
 
 ### Object Container
 
-The dependency container creates Handler Components and Static Data Components when resolving dependencies.
+The dependency container creates Handler Components, Static Data Components, and Runtime Data Components when resolving dependencies.
 
 ### Factories
 
@@ -319,12 +341,15 @@ This rule ensures deterministic object lifecycle management and enforces separat
 The dependency graph follows these rules:
 
 ```
-Data Components must not have dependencies.
-Factories may depend on other factories.
+Data Components do not declare dependencies and do not require dependency injection.
+
+Factories may depend on Data Components and other factories.
 Handler Components may depend on any components.
 ```
 
-This structure keeps dependency relationships predictable and simplifies reasoning about component composition.
+Data Components may structurally reference other Data Components as part of their internal data structures.
+
+Such references are not considered dependency injection.
 
 ## 10. Summary Model
 
@@ -341,6 +366,9 @@ Component
       │     ├─ Constants
       │     └─ Defaults
       │
+      ├─ Runtime Data Component
+      │     └─ Configuration
+      │
       └─ Transient Data Component
             └─ DTO
 ```
@@ -348,13 +376,15 @@ Component
 Operational flow:
 
 ```
-Static Data Components
-        ↓
+Static Data
+      ↓
+Runtime Configuration
+      ↓
 Handler Components
-        ↓
+      ↓
 Factories
-        ↓
-Transient Data Components
+      ↓
+Transient Data
 ```
 
-This model reflects the core architectural principle of TeqFW: separation of **behavior** and **data**, centralized object creation, and deterministic dependency resolution through the container.
+This model reflects the core architectural principle of TeqFW: separation of **behavior** and **data**, centralized object creation, deterministic dependency resolution through the container, and explicit lifecycle classification of data structures.

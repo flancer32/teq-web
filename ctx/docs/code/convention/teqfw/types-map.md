@@ -1,7 +1,7 @@
 # Type Maps in TeqFW
 
-Path: `ctx/docs/code/conventions/teqfw/types-map.md`
-Template Version: `20260312`
+Path: `ctx/docs/code/convention/teqfw/types-map.md`
+Template Version: `20260313`
 
 ## 1. Purpose
 
@@ -16,29 +16,121 @@ Type maps exist solely for static tooling and support:
 
 Type maps do not participate in runtime execution and do not influence dependency resolution.
 
-## 2. Namespace Domains
+## 2. Addressing Domains
 
-TeqFW architecture separates two addressing domains.
+TeqFW architecture operates across three independent addressing domains.
 
-Runtime domain:
+### Runtime namespace
 
-```
-namespace identifiers
-```
+Runtime namespace identifiers address components resolved by the dependency container.
 
-Static analysis domain:
+Example:
 
 ```
-files and types
+TeqFw_Di_Resolver
+TeqFw_Di_Service_Logger
+TeqFw_Di_Enum_Life
 ```
 
-Runtime code resolves dependencies using namespace identifiers through the DI container.
+Properties:
 
-Static tooling operates on files and types.
+- identifies components
+- used by dependency injection
+- used only at runtime
+- must not contain `$`
 
-A type map bridges these domains without introducing runtime coupling.
+### Module address space
 
-## 3. Type Map Definition
+Module addresses identify ES modules in the filesystem.
+
+Example:
+
+```
+./src/Resolver.mjs
+./src/Service/Logger.mjs
+./src/Enum/Life.mjs
+```
+
+Properties:
+
+- represents file system paths
+- used by the JavaScript module loader
+- independent from runtime namespace identifiers
+
+### Type namespace
+
+Type identifiers exist only for static analysis.
+
+Example:
+
+```
+TeqFw_Di_Resolver
+TeqFw_Di_Resolver$Config
+TeqFw_Di_Enum_Life
+```
+
+Properties:
+
+- used only by IDE tooling and tsserver
+- may reference named exports
+- may contain `$`
+- must not be interpreted as CDC dependency identifiers
+
+## 3. Namespace Separation
+
+Two independent identifier systems exist.
+
+Runtime namespace identifiers represent components used by the dependency container.
+
+Type namespace identifiers represent type aliases used for static analysis.
+
+Although the identifiers may appear similar, these namespaces serve different purposes and must not be conflated.
+
+Only runtime namespace identifiers participate in dependency resolution.
+
+## 4. Symbolic Component Addressing
+
+TeqFW uses symbolic addressing for runtime components.
+
+Runtime namespace identifiers do not represent module names or file paths.
+They represent abstract component identities resolved by the dependency container.
+
+Example:
+
+```
+TeqFw_Di_Service_Logger
+```
+
+This identifier does not directly reference a file.
+Instead it identifies a component that the container resolves using deterministic namespace mapping rules.
+
+Resolution process:
+
+```
+symbolic component identifier
+        ↓
+namespace → path transformation
+        ↓
+module file
+        ↓
+component instance
+```
+
+This separation ensures that:
+
+- component identifiers remain stable even if file structure changes
+- dependency identifiers remain architectural concepts
+- runtime resolution remains independent from module loader semantics
+
+TeqFW therefore distinguishes three independent layers:
+
+- symbolic component addressing (runtime namespace)
+- module addressing (filesystem paths)
+- type addressing (static analysis)
+
+Only symbolic identifiers participate in dependency resolution.
+
+## 5. Type Map Definition
 
 A type map is a deterministic mapping between architectural namespace identifiers and module types.
 
@@ -52,9 +144,9 @@ Each mapping references the JavaScript module implementing the component.
 
 The type map does not define behavior or structure. Structural information is derived from the referenced implementation module.
 
-## 4. Type Map File
+## 6. Type Map File
 
-Each npm package that exposes namespace-addressable components contains exactly one type map file.
+Each npm package exposing namespace-addressable components contains exactly one type map file.
 
 Convention:
 
@@ -62,15 +154,15 @@ Convention:
 types.d.ts
 ```
 
-The file is referenced in `package.json`:
+The file must be referenced in `package.json`.
 
-```json
+```
 {
   "types": "types.d.ts"
 }
 ```
 
-## 5. Global Type Registry
+## 7. Global Type Registry
 
 All type aliases defined in the type map are declared in the global type namespace.
 
@@ -84,25 +176,25 @@ declare global {
 }
 ```
 
-### Module Invariant
+### Module invariant
 
-The `types.d.ts` file is a module file and **must end with**:
+The `types.d.ts` file must end with:
 
 ```ts
 export {};
 ```
 
-This ensures that:
+This ensures:
 
-- the declaration file is treated as a module by `tsserver`
+- the declaration file is treated as a module
 - global namespace augmentation remains stable
-- IDE type resolution functions correctly.
+- IDE type resolution functions correctly
 
-## 6. Namespace Mapping Rules
+## 8. Namespace Mapping Rules
 
 Namespace identifiers correspond deterministically to source modules.
 
-### 6.1 Namespace → File Path
+### 8.1 Namespace → File Path
 
 Namespace identifiers map to file paths using the rule:
 
@@ -121,7 +213,7 @@ src/Module/Service.mjs
 
 The type map must not contradict this rule.
 
-### 6.2 Class Component Mapping
+### 8.2 Class Component Mapping
 
 For class-based modules the namespace identifier maps to the instance type of the default export.
 
@@ -135,7 +227,7 @@ Constructor type may be obtained using:
 typeof Ns_Component
 ```
 
-### 6.3 Enum Component Mapping
+### 8.3 Enum Component Mapping
 
 Enum modules export constant value objects.
 
@@ -145,7 +237,7 @@ The namespace identifier maps to the value type of the exported object.
 type Ns_Enum = typeof import("./src/Enum/Name.mjs").default;
 ```
 
-### 6.4 Named Export Aliases
+### 8.4 Named Export Aliases
 
 Named exports may be referenced using the convention:
 
@@ -165,7 +257,7 @@ Properties:
 - the alias exists only in the type namespace
 - it is not a CDC dependency identifier
 
-### 6.5 Nested Module Mapping
+### 8.5 Nested Module Mapping
 
 If a concept is implemented as a separate module file it becomes a normal namespace component.
 
@@ -189,9 +281,9 @@ type TeqFw_Di_Dto_Resolver_Config_DTO = import("./src/Dto/Resolver/Config/DTO.mj
 
 Such identifiers belong to the runtime namespace and therefore must not contain `$`.
 
-## 7. Deterministic File Structure
+## 9. Deterministic File Structure
 
-The structure of `types.d.ts` is deterministic.
+The `types.d.ts` file has a deterministic structure.
 
 The file contains a single global declaration block.
 
@@ -211,7 +303,7 @@ export {};
 
 Entries must be sorted alphabetically by type identifier.
 
-## 8. Allowed Declaration Forms
+## 10. Allowed Declaration Forms
 
 Only the following declaration forms are allowed.
 
@@ -241,11 +333,13 @@ Type maps must not contain:
 - interfaces
 - structural type definitions
 - method signatures
-- custom type declarations.
+- custom type declarations
 
-## 9. Generation Invariants
+## 11. Generation Rules
 
-The type map is a generated artifact derived from:
+The type map is a generated artifact.
+
+Agents generate the file from:
 
 ```
 namespace registry
@@ -253,7 +347,22 @@ namespace registry
 source file structure
 ```
 
-The generated file satisfies the following invariants:
+Generation algorithm:
+
+1. read namespace identifiers from the namespace registry
+2. derive source file paths using the namespace → path rule
+3. verify that source files exist
+4. detect module structure
+5. generate the appropriate type mapping
+6. generate aliases for named exports when required
+7. sort entries alphabetically
+8. produce deterministic file structure
+
+Manual edits may be overwritten by generators.
+
+## 12. Generation Invariants
+
+The generated file must satisfy the following invariants:
 
 - every namespace identifier has a corresponding type alias
 - referenced source files exist
@@ -261,9 +370,9 @@ The generated file satisfies the following invariants:
 - no duplicate type identifiers exist
 - entries are sorted alphabetically
 - `$` never appears in CDC namespace identifiers
-- `types.d.ts` ends with `export {}`
+- the file ends with `export {}`
 
-## 10. IDE Integration
+## 13. IDE Integration
 
 When a package declares:
 
@@ -275,9 +384,9 @@ VSCode automatically loads the type map and:
 
 - resolves `import()` references
 - derives type information from implementation modules
-- exposes type aliases globally.
+- exposes type aliases globally
 
-## 11. Summary
+## 14. Summary
 
 Type maps bind architectural namespace identifiers to implementation modules while remaining independent from runtime dependency resolution.
 
@@ -288,6 +397,7 @@ A type map:
 - supports named export aliases using `Namespace$Export`
 - declares all types globally for JSDoc compatibility
 - follows deterministic namespace → file path rules
+- maintains strict separation between runtime and type namespaces
 - is generated automatically
 - ends with `export {}`
 
