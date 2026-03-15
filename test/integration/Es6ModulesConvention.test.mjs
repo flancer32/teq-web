@@ -5,6 +5,7 @@ import Container from '@teqfw/di';
 
 import {__deps__ as dtoInfoDeps} from '../../src/Back/Dto/Info.mjs';
 import {__deps__ as dtoSourceDeps} from '../../src/Back/Dto/Source.mjs';
+import {__deps__ as runtimeConfigDeps} from '../../src/Back/Config/Runtime.mjs';
 import {__deps__ as staticHandlerDeps} from '../../src/Back/Handler/Static.mjs';
 import {__deps__ as preLogDeps} from '../../src/Back/Handler/Pre/Log.mjs';
 import {__deps__ as staticConfigDeps} from '../../src/Back/Handler/Static/A/Config.mjs';
@@ -22,6 +23,7 @@ const SRC = path.resolve(import.meta.dirname, '../../src');
 const DEP_DESCRIPTORS = [
     dtoInfoDeps,
     dtoSourceDeps,
+    runtimeConfigDeps,
     staticHandlerDeps,
     preLogDeps,
     staticConfigDeps,
@@ -37,7 +39,6 @@ const DEP_DESCRIPTORS = [
 ];
 const MANAGED_MODULE_IDS = [
     'Fl32_Web_Back_Logger$',
-    'Fl32_Web_Back_Defaults$',
     'Fl32_Web_Back_Enum_Stage$',
     'Fl32_Web_Back_Enum_Server_Type$',
     'Fl32_Web_Back_Helper_Cast$',
@@ -60,7 +61,6 @@ const MANAGED_MODULE_IDS = [
     'Fl32_Web_Back_Server_Config_Tls__Factory$',
     'Fl32_Web_Back_Server_Config$',
     'Fl32_Web_Back_Server_Config__Factory$',
-    'Fl32_Web_Back_Server$',
 ];
 
 function createContainer() {
@@ -86,15 +86,19 @@ describe('TeqFW ES6 module convention integration', () => {
         }
 
         const logger = await container.get('Fl32_Web_Back_Logger$');
-        const defaults = await container.get('Fl32_Web_Back_Defaults$');
+        const runtimeConfigFactory = await container.get('Fl32_Web_Back_Config_Runtime__Factory$');
+        runtimeConfigFactory.freeze();
+        const runtimeConfig = await container.get('Fl32_Web_Back_Config_Runtime$');
+        const server = await container.get('Fl32_Web_Back_Server$');
         const STAGE = await container.get('Fl32_Web_Back_Enum_Stage$');
         const SERVER_TYPE = await container.get('Fl32_Web_Back_Enum_Server_Type$');
         const cast = await container.get('Fl32_Web_Back_Helper_Cast$');
         const kahn = await container.get('Fl32_Web_Back_Helper_Order_Kahn$');
 
         assert.equal(typeof logger.info, 'function');
-        assert.equal(defaults.PORT, 3000);
-        assert.equal(Object.isFrozen(defaults), true);
+        assert.equal(typeof server.start, 'function');
+        assert.equal(runtimeConfig.port, 3000);
+        assert.equal(runtimeConfig.type, 'http');
         assert.equal(STAGE.PROCESS, 'PROCESS');
         assert.equal(Object.isFrozen(STAGE), true);
         assert.equal(SERVER_TYPE.HTTPS, 'https');

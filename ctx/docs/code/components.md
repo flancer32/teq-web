@@ -20,10 +20,10 @@ This document is descriptive of the current implementation shape and does not re
 ### Transport and Server
 
 - `Fl32_Web_Back_Server` — web server component that starts and stops a Node.js HTTP/HTTP2/HTTPS server instance and forwards inbound requests into the coordination subsystem; `src/Back/Server.mjs`.
+- `Fl32_Web_Back_Config_Runtime` — backend runtime configuration component and factory that accumulates startup server settings and freezes them before use; `src/Back/Config/Runtime.mjs`.
 - `Fl32_Web_Back_Server_Config` — server configuration DTO factory for `port`, `type`, and TLS configuration; `src/Back/Server/Config.mjs`.
 - `Fl32_Web_Back_Server_Config_Tls` — TLS configuration DTO factory for secure server mode; `src/Back/Server/Config/Tls.mjs`.
 - `Fl32_Web_Back_Enum_Server_Type` — server transport mode enumeration (`http`, `http2`, `https`); `src/Back/Enum/Server/Type.mjs`.
-- `Fl32_Web_Back_Defaults` — hardcoded defaults used by the server component; `src/Back/Defaults.mjs`.
 
 ### Coordination
 

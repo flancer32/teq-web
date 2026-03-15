@@ -7,7 +7,7 @@
 export const __deps__ = Object.freeze({
     http: 'node_http',
     http2: 'node_http2',
-    DEF: 'Fl32_Web_Back_Defaults$',
+    config: 'Fl32_Web_Back_Config_Runtime$',
     logger: 'Fl32_Web_Back_Logger$',
     pipelineEngine: 'Fl32_Web_Back_PipelineEngine$',
     SERVER_TYPE: 'Fl32_Web_Back_Enum_Server_Type$',
@@ -17,7 +17,7 @@ export const __deps__ = Object.freeze({
  * @typedef {object} Fl32_Web_Back_ServerConstructorParams
  * @property {typeof import('node:http')} http
  * @property {typeof import('node:http2')} http2
- * @property {import('./Defaults.mjs').default} DEF
+ * @property {Fl32_Web_Back_Config_Runtime} config
  * @property {Fl32_Web_Back_Logger} logger
  * @property {Fl32_Web_Back_PipelineEngine} pipelineEngine
  * @property {Fl32_Web_Back_Enum_Server_Type} SERVER_TYPE
@@ -32,7 +32,7 @@ export default class Fl32_Web_Back_Server {
         {
             http,
             http2,
-            DEF,
+            config,
             logger,
             pipelineEngine,
             SERVER_TYPE,
@@ -59,8 +59,9 @@ export default class Fl32_Web_Back_Server {
         this.start = async function (cfg) {
             pipelineEngine.lockHandlers();
             // create server
-            const port = cfg?.port ?? DEF.PORT;
-            const type = cfg?.type ?? SERVER_TYPE.HTTP;
+            const port = cfg?.port ?? config.port;
+            const type = cfg?.type ?? config.type;
+            const tls = cfg?.tls ?? config.tls;
 
             if (type === SERVER_TYPE.HTTP2) {
                 _instance = createServerH2();
@@ -69,11 +70,11 @@ export default class Fl32_Web_Back_Server {
                 _instance = createServer({});
                 logger.info(`Starting server in HTTP/1 mode on port ${port}...`);
             } else if (type === SERVER_TYPE.HTTPS) {
-                if (!cfg.tls?.key || !cfg.tls?.cert) {
+                if (!tls?.key || !tls?.cert) {
                     logger.error('HTTPS server requires TLS key and certificate');
                     throw new Error('TLS key and certificate are required for HTTPS server');
                 }
-                _instance = createSecureServer(cfg.tls);
+                _instance = createSecureServer(tls);
                 logger.info(`Starting server in HTTPS (HTTP/2 + TLS) mode on port ${port}...`);
             } else {
                 logger.error(`Unsupported server type: ${type}`);

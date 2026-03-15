@@ -62,6 +62,8 @@ describe('Fl32_Web_Back_Server integration', () => {
         const container = new Container();
         container.addNamespaceRoot('Fl32_Web_', SRC, '.mjs');
         container.enableTestMode();
+        const runtimeFactory = await container.get('Fl32_Web_Back_Config_Runtime__Factory$');
+        runtimeFactory.freeze();
         const log = [];
         const mockHttpServer = createMockServer('http', log);
         const mockHttp = {createServer: () => mockHttpServer};
@@ -73,7 +75,7 @@ describe('Fl32_Web_Back_Server integration', () => {
         const server = new Fl32_Web_Back_Server({
             http: mockHttp,
             http2: mockHttp2,
-            DEF: await container.get('Fl32_Web_Back_Defaults$'),
+            config: await container.get('Fl32_Web_Back_Config_Runtime$'),
             logger: {info: () => {}, warn: () => {}, error: () => {}, exception: () => {}},
             pipelineEngine: await container.get('Fl32_Web_Back_PipelineEngine$'),
             SERVER_TYPE: await container.get('Fl32_Web_Back_Enum_Server_Type$'),
@@ -94,6 +96,8 @@ describe('Fl32_Web_Back_Server integration', () => {
         const container = new Container();
         container.addNamespaceRoot('Fl32_Web_', SRC, '.mjs');
         container.enableTestMode();
+        const runtimeFactory = await container.get('Fl32_Web_Back_Config_Runtime__Factory$');
+        runtimeFactory.freeze();
         const STAGE = await container.get('Fl32_Web_Back_Enum_Stage$');
         const pipelineEngine = await container.get('Fl32_Web_Back_PipelineEngine$');
         pipelineEngine.addHandler({
@@ -109,7 +113,7 @@ describe('Fl32_Web_Back_Server integration', () => {
                 createServer: () => createMockServer('http2', []),
                 createSecureServer: () => createMockServer('https', []),
             },
-            DEF: await container.get('Fl32_Web_Back_Defaults$'),
+            config: await container.get('Fl32_Web_Back_Config_Runtime$'),
             logger: {info: () => {}, warn: () => {}, error: () => {}, exception: () => {}},
             pipelineEngine,
             SERVER_TYPE: await container.get('Fl32_Web_Back_Enum_Server_Type$'),

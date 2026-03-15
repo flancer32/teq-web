@@ -1,6 +1,7 @@
 declare global {
   type Fl32_Web_Back_Api_Handler = import("./src/Back/Api/Handler.mjs").default;
-  type Fl32_Web_Back_Defaults = import("./src/Back/Defaults.mjs").default;
+  type Fl32_Web_Back_Config_Runtime = import("./src/Back/Config/Runtime.mjs").Data;
+  type Fl32_Web_Back_Config_Runtime$Factory = import("./src/Back/Config/Runtime.mjs").Factory;
   type Fl32_Web_Back_Dto_Info = import("./src/Back/Dto/Info.mjs").default;
   type Fl32_Web_Back_Dto_Info$Factory = import("./src/Back/Dto/Info.mjs").Factory;
   type Fl32_Web_Back_Dto_Source = import("./src/Back/Dto/Source.mjs").default;

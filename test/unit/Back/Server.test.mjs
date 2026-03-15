@@ -1,7 +1,6 @@
 import {describe, test, beforeEach} from 'node:test';
 import assert from 'node:assert/strict';
 import Fl32_Web_Back_Server from '../../../src/Back/Server.mjs';
-import Fl32_Web_Back_Defaults from '../../../src/Back/Defaults.mjs';
 import Fl32_Web_Back_Enum_Server_Type from '../../../src/Back/Enum/Server/Type.mjs';
 
 describe('Fl32_Web_Back_Server (mocked)', () => {
@@ -48,7 +47,7 @@ describe('Fl32_Web_Back_Server (mocked)', () => {
         server = new Fl32_Web_Back_Server({
             http: mockHttp,
             http2: mockHttp2,
-            DEF: new Fl32_Web_Back_Defaults(),
+            config: Object.freeze({port: 3000, type: 'http'}),
             logger,
             pipelineEngine,
             SERVER_TYPE: new Fl32_Web_Back_Enum_Server_Type(),

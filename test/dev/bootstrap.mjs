@@ -34,6 +34,8 @@ async function main() {
     const logHandler = await container.get('Fl32_Web_Back_Handler_Pre_Log$');
     /** @type {Fl32_Web_Back_Handler_Static} */
     const staticHandler = await container.get('Fl32_Web_Back_Handler_Static$');
+    /** @type {Fl32_Web_Back_Config_Runtime$Factory} */
+    const runtimeConfigFactory = await container.get('Fl32_Web_Back_Config_Runtime__Factory$');
 
     await staticHandler.init({
         sources: [
@@ -50,17 +52,19 @@ async function main() {
     pipelineEngine.addHandler(logHandler);
     pipelineEngine.addHandler(staticHandler);
 
-    /** @type {Fl32_Web_Back_Defaults} */
-    const defaults = await container.get('Fl32_Web_Back_Defaults$');
     /** @type {Fl32_Web_Back_Logger} */
     const logger = await container.get('Fl32_Web_Back_Logger$');
     /** @type {Fl32_Web_Back_Enum_Server_Type} */
     const SERVER_TYPE = await container.get('Fl32_Web_Back_Enum_Server_Type$');
+    runtimeConfigFactory.configure({port: PORT});
+    runtimeConfigFactory.freeze();
+    /** @type {Fl32_Web_Back_Config_Runtime} */
+    const config = await container.get('Fl32_Web_Back_Config_Runtime$');
 
     const server = new Fl32_Web_Back_Server({
         http: await import('node:http'),
         http2: await import('node:http2'),
-        DEF: defaults,
+        config,
         logger,
         pipelineEngine,
         SERVER_TYPE,
