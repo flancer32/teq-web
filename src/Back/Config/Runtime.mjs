@@ -1,11 +1,9 @@
 // @ts-check
 
-import { Factory as RuntimeTlsFactory } from './Runtime/Tls.mjs';
-
 export const __deps__ = Object.freeze({
     cast: 'Fl32_Web_Back_Helper_Cast$',
     SERVER_TYPE: 'Fl32_Web_Back_Enum_Server_Type$',
-    tlsData: 'Fl32_Web_Back_Config_Runtime_Tls$',
+    tlsFactory: 'Fl32_Web_Back_Config_Runtime_Tls__Factory$',
 });
 
 /**
@@ -69,12 +67,11 @@ export class Factory {
      * @param {object} params
      * @param {Fl32_Web_Back_Helper_Cast} params.cast
      * @param {Fl32_Web_Back_Enum_Server_Type} params.SERVER_TYPE
-     * @param {Fl32_Web_Back_Config_Runtime_Tls} params.tlsData
      * @param {Fl32_Web_Back_Config_Runtime_Tls$Factory} params.tlsFactory
      */
-    constructor({ cast, SERVER_TYPE, tlsData, tlsFactory = new RuntimeTlsFactory({ cast }) }) {
+    constructor({ cast, SERVER_TYPE, tlsFactory }) {
         /**
-         * @param {{server?: {port?: *, type?: *, tls?: *}}} [params]
+         * @param {Fl32_Web_Back_Config_Runtime_Params} [params]
          * @returns {Fl32_Web_Back_Config_Runtime}
          */
         this.configure = function (params = {}) {
@@ -100,8 +97,8 @@ export class Factory {
             if (cfg.server === undefined) cfg.server = new Server();
             if (cfg.server.port === undefined) cfg.server.port = 3000;
             if (cfg.server.type === undefined) cfg.server.type = SERVER_TYPE.HTTP;
-            tlsFactory.freeze();
-            if (cfg.server.tls === undefined) cfg.server.tls = tlsData;
+            const tls = tlsFactory.freeze();
+            if (cfg.server.tls === undefined) cfg.server.tls = tls;
             if (cfg.server.type === SERVER_TYPE.HTTPS && cfg.server.tls === undefined) {
                 throw new Error('TLS configuration is required for HTTPS server type');
             }

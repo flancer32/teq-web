@@ -10,21 +10,17 @@ export const __deps__ = Object.freeze({
     fallback: 'Fl32_Web_Back_Handler_Static_A_Fallback$',
 });
 
-/**
- * @typedef {object} Fl32_Web_Back_Handler_Static_A_FileServiceConstructorParams
- * @property {typeof import('node:fs')} fs
- * @property {typeof import('node:http2')} http2
- * @property {typeof import('node:path')} path
- * @property {Fl32_Web_Back_Logger} logger
- * @property {Fl32_Web_Back_Helper_Mime} helpMime
- * @property {Fl32_Web_Back_Handler_Static_A_Resolver} resolver
- * @property {Fl32_Web_Back_Handler_Static_A_Fallback} fallback
- */
-
 export default class Fl32_Web_Back_Handler_Static_A_FileService {
     /* eslint-disable jsdoc/require-param-description,jsdoc/check-param-names */
     /**
-     * @param {Fl32_Web_Back_Handler_Static_A_FileServiceConstructorParams} params
+     * @param {object} params
+     * @param {Fl32_Web_Node_Fs} params.fs
+     * @param {Fl32_Web_Node_Http2} params.http2
+     * @param {Fl32_Web_Node_Path} params.path
+     * @param {Fl32_Web_Back_Logger} params.logger
+     * @param {Fl32_Web_Back_Helper_Mime} params.helpMime
+     * @param {Fl32_Web_Back_Handler_Static_A_Resolver} params.resolver
+     * @param {Fl32_Web_Back_Handler_Static_A_Fallback} params.fallback
      */
     constructor(
         {
@@ -43,10 +39,10 @@ export default class Fl32_Web_Back_Handler_Static_A_FileService {
         /**
          * Serve a file for given config and relative path.
          *
-         * @param {*} config
+         * @param {Fl32_Web_Back_Handler_Static_A_Config_Value} config
          * @param {string} rel
-         * @param {*} req
-         * @param {*} res
+         * @param {Fl32_Web_Node_Http_IncomingMessage|Fl32_Web_Node_Http2_ServerRequest} req
+         * @param {Fl32_Web_Back_Response_Target} res
          * @returns {Promise<boolean>} true if served
          */
         this.serve = async (config, rel, req, res) => {

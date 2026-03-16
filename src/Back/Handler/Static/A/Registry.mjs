@@ -5,16 +5,12 @@ export const __deps__ = Object.freeze({
     logger: 'Fl32_Web_Back_Logger$',
 });
 
-/**
- * @typedef {object} Fl32_Web_Back_Handler_Static_A_RegistryConstructorParams
- * @property {Fl32_Web_Back_Handler_Static_A_Config} configFactory
- * @property {Fl32_Web_Back_Logger} logger
- */
-
 export default class Fl32_Web_Back_Handler_Static_A_Registry {
     /* eslint-disable jsdoc/require-param-description,jsdoc/check-param-names */
     /**
-     * @param {Fl32_Web_Back_Handler_Static_A_RegistryConstructorParams} params
+     * @param {object} params
+     * @param {Fl32_Web_Back_Handler_Static_A_Config} params.configFactory
+     * @param {Fl32_Web_Back_Logger} params.logger
      */
     constructor(
         {
@@ -49,7 +45,7 @@ export default class Fl32_Web_Back_Handler_Static_A_Registry {
          * Find configuration by matching URL prefix.
          *
          * @param {string} url
-         * @returns {{config: *, rel: string}|null}
+         * @returns {Fl32_Web_Back_Handler_Static_A_Match|null}
          */
         this.find = function (url) {
             for (const cfg of _configs) {

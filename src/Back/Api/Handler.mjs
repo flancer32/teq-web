@@ -9,7 +9,7 @@ export default class Fl32_Web_Back_Api_Handler {
     /* eslint-disable no-unused-vars */
     /**
      * Handles one request context in a pipeline stage.
-     * @param {Fl32_Web_Back_PipelineEngine_RequestContext} context
+     * @param {Fl32_Web_Back_Dto_RequestContext} context
      * @returns {Promise<void>}
      */
     async handle(context) {

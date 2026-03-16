@@ -6,39 +6,28 @@
  * `INIT -> PROCESS -> FINALIZE`.
  */
 export const __deps__ = Object.freeze({
+    dtoRequestContextFactory: 'Fl32_Web_Back_Dto_RequestContext__Factory$',
     logger: 'Fl32_Web_Back_Logger$',
     respond: 'Fl32_Web_Back_Helper_Respond$',
     helpOrder: 'Fl32_Web_Back_Helper_Order_Kahn$',
     STAGE: 'Fl32_Web_Back_Enum_Stage$',
 });
 
-/**
- * @typedef {object} Fl32_Web_Back_PipelineEngineConstructorParams
- * @property {Fl32_Web_Back_Logger} logger
- * @property {Fl32_Web_Back_Helper_Respond} respond
- * @property {Fl32_Web_Back_Helper_Order_Kahn} helpOrder
- * @property {Fl32_Web_Back_Enum_Stage} STAGE
- */
-
-/**
- * @typedef {object} Fl32_Web_Back_PipelineEngine_RequestContext
- * @property {module:http.IncomingMessage|module:http2.Http2ServerRequest} request
- * @property {module:http.ServerResponse|module:http2.Http2ServerResponse} response
- * @property {Record<string, unknown>} data
- * @property {boolean} completed
- * @property {() => void} complete
- * @property {() => boolean} isCompleted
- */
-
 const KEY_STAGE = Symbol('stage');
 
 export default class Fl32_Web_Back_PipelineEngine {
     /* eslint-disable jsdoc/require-param-description,jsdoc/check-param-names */
     /**
-     * @param {Fl32_Web_Back_PipelineEngineConstructorParams} params
+     * @param {object} params
+     * @param {Fl32_Web_Back_Dto_RequestContext$Factory} params.dtoRequestContextFactory
+     * @param {Fl32_Web_Back_Logger} params.logger
+     * @param {Fl32_Web_Back_Helper_Respond} params.respond
+     * @param {Fl32_Web_Back_Helper_Order_Kahn} params.helpOrder
+     * @param {Fl32_Web_Back_Enum_Stage} params.STAGE
      */
     constructor(
         {
+            dtoRequestContextFactory,
             logger,
             respond,
             helpOrder,
@@ -57,24 +46,23 @@ export default class Fl32_Web_Back_PipelineEngine {
         let isLocked = false;
 
         /**
-         * @param {module:http.IncomingMessage|module:http2.Http2ServerRequest} request
-         * @param {module:http.ServerResponse|module:http2.Http2ServerResponse} response
-         * @returns {Fl32_Web_Back_PipelineEngine_RequestContext}
+         * @param {Fl32_Web_Node_Http_IncomingMessage|Fl32_Web_Node_Http2_ServerRequest} request
+         * @param {Fl32_Web_Back_Response_Target} response
+         * @returns {Fl32_Web_Back_Dto_RequestContext}
          */
         function createRequestContext(request, response) {
             let completed = false;
-            /** @type {Fl32_Web_Back_PipelineEngine_RequestContext & {[KEY_STAGE]: string|null}} */
-            const context = {
-                request,
-                response,
-                data: {},
-                completed: false,
-                complete: () => {
-                    context.completed = true;
-                },
-                isCompleted: () => completed,
-                [KEY_STAGE]: null,
+            /** @type {Fl32_Web_Back_Dto_RequestContext & {[KEY_STAGE]: string|null}} */
+            const context = dtoRequestContextFactory.create();
+            context.request = request;
+            context.response = response;
+            context.data = {};
+            context.completed = false;
+            context.complete = () => {
+                context.completed = true;
             };
+            context.isCompleted = () => completed;
+            context[KEY_STAGE] = null;
 
             Object.defineProperty(context, 'completed', {
                 configurable: false,
@@ -104,7 +92,7 @@ export default class Fl32_Web_Back_PipelineEngine {
         /**
          * @param {Fl32_Web_Back_Api_Handler} handler
          * @param {string} stage
-         * @param {Fl32_Web_Back_PipelineEngine_RequestContext & {[KEY_STAGE]: string|null}} context
+         * @param {Fl32_Web_Back_Dto_RequestContext & {[KEY_STAGE]: string|null}} context
          * @returns {Promise<void>}
          */
         async function runHandler(handler, stage, context) {
@@ -166,15 +154,15 @@ export default class Fl32_Web_Back_PipelineEngine {
         this.registerHandler = (handler) => this.addHandler(handler);
 
         /**
-         * @param {module:http.IncomingMessage|module:http2.Http2ServerRequest} req
-         * @param {module:http.ServerResponse|module:http2.Http2ServerResponse} res
+         * @param {Fl32_Web_Node_Http_IncomingMessage|Fl32_Web_Node_Http2_ServerRequest} req
+         * @param {Fl32_Web_Back_Response_Target} res
          * @returns {Promise<void>}
          */
         this.onEventRequest = async function (req, res) {
             if (!isLocked) {
                 this.orderHandlers();
             }
-            /** @type {Fl32_Web_Back_PipelineEngine_RequestContext & {[KEY_STAGE]: string|null}} */
+            /** @type {Fl32_Web_Back_Dto_RequestContext & {[KEY_STAGE]: string|null}} */
             const context = createRequestContext(req, res);
 
             try {
@@ -219,8 +207,8 @@ export default class Fl32_Web_Back_PipelineEngine {
         };
 
         /**
-         * @param {module:http.IncomingMessage|module:http2.Http2ServerRequest} req
-         * @param {module:http.ServerResponse|module:http2.Http2ServerResponse} res
+         * @param {Fl32_Web_Node_Http_IncomingMessage|Fl32_Web_Node_Http2_ServerRequest} req
+         * @param {Fl32_Web_Back_Response_Target} res
          * @returns {Promise<void>}
          */
         this.handleRequest = async (req, res) => this.onEventRequest(req, res);

@@ -8,21 +8,17 @@ export const __deps__ = Object.freeze({
     path: 'node_path',
 });
 
-/**
- * @typedef {object} Fl32_Web_Back_Handler_Static_A_ResolverConstructorParams
- * @property {typeof import('node:path')} path
- */
-
 export default class Fl32_Web_Back_Handler_Static_A_Resolver {
     /**
-     * @param {Fl32_Web_Back_Handler_Static_A_ResolverConstructorParams} params
+     * @param {object} params
+     * @param {Fl32_Web_Node_Path} params.path
      */
     constructor({path}) {
         /**
          * Resolve a filesystem path for given config and relative URL part.
          * Applies allow rules and prevents path traversal.
          *
-         * @param {{root: string, prefix: string, allow?: Record<string,string[]>}} config
+         * @param {Fl32_Web_Back_Handler_Static_A_Config_Value} config
          * @param {string} rel
          * @returns {string|null}
          * @throws {Error} On traversal or absolute rel paths.

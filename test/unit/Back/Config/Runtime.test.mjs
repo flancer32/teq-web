@@ -18,13 +18,12 @@ describe('Fl32_Web_Back_Config_Runtime', () => {
         const {default: RuntimeConfig, Factory} = await loadRuntimeModule();
         const {default: Cast} = await import('../../../../src/Back/Helper/Cast.mjs');
         const {default: ServerType} = await import('../../../../src/Back/Enum/Server/Type.mjs');
-        const {default: RuntimeTls, Factory: TlsFactory} = await loadRuntimeTlsModule();
+        const {Factory: TlsFactory} = await loadRuntimeTlsModule();
 
         const runtime = new RuntimeConfig();
         const factory = new Factory({
             cast: new Cast(),
             SERVER_TYPE: new ServerType(),
-            tlsData: new RuntimeTls(),
             tlsFactory: new TlsFactory({cast: new Cast()}),
         });
 
@@ -49,13 +48,12 @@ describe('Fl32_Web_Back_Config_Runtime', () => {
         const {default: RuntimeConfig, Factory} = await loadRuntimeModule();
         const {default: Cast} = await import('../../../../src/Back/Helper/Cast.mjs');
         const {default: ServerType} = await import('../../../../src/Back/Enum/Server/Type.mjs');
-        const {default: RuntimeTls, Factory: TlsFactory} = await loadRuntimeTlsModule();
+        const {Factory: TlsFactory} = await loadRuntimeTlsModule();
 
         const runtime = new RuntimeConfig();
         const factory = new Factory({
             cast: new Cast(),
             SERVER_TYPE: new ServerType(),
-            tlsData: new RuntimeTls(),
             tlsFactory: new TlsFactory({cast: new Cast()}),
         });
 
@@ -69,12 +67,11 @@ describe('Fl32_Web_Back_Config_Runtime', () => {
         const {Factory} = await loadRuntimeModule();
         const {default: Cast} = await import('../../../../src/Back/Helper/Cast.mjs');
         const {default: ServerType} = await import('../../../../src/Back/Enum/Server/Type.mjs');
-        const {default: RuntimeTls, Factory: TlsFactory} = await loadRuntimeTlsModule();
+        const {Factory: TlsFactory} = await loadRuntimeTlsModule();
 
         const factory = new Factory({
             cast: new Cast(),
             SERVER_TYPE: new ServerType(),
-            tlsData: new RuntimeTls(),
             tlsFactory: new TlsFactory({cast: new Cast()}),
         });
 
@@ -86,14 +83,13 @@ describe('Fl32_Web_Back_Config_Runtime', () => {
         const {default: RuntimeConfig, Factory} = await loadRuntimeModule();
         const {default: Cast} = await import('../../../../src/Back/Helper/Cast.mjs');
         const {default: ServerType} = await import('../../../../src/Back/Enum/Server/Type.mjs');
-        const {default: RuntimeTls, Factory: TlsFactory} = await loadRuntimeTlsModule();
+        const {Factory: TlsFactory} = await loadRuntimeTlsModule();
 
         const runtime = new RuntimeConfig();
         const cast = new Cast();
         const factory = new Factory({
             cast,
             SERVER_TYPE: new ServerType(),
-            tlsData: new RuntimeTls(),
             tlsFactory: new TlsFactory({cast}),
         });
 

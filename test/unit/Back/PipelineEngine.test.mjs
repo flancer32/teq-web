@@ -1,6 +1,7 @@
 import {beforeEach, describe, test} from 'node:test';
 import assert from 'node:assert/strict';
 import Fl32_Web_Back_PipelineEngine from '../../../src/Back/PipelineEngine.mjs';
+import {Factory as Fl32_Web_Back_Dto_RequestContext_Factory} from '../../../src/Back/Dto/RequestContext.mjs';
 import Fl32_Web_Back_Enum_Stage from '../../../src/Back/Enum/Stage.mjs';
 
 /**
@@ -34,6 +35,7 @@ describe('Fl32_Web_Back_PipelineEngine', () => {
     let respond;
     let logger;
     let helpOrder;
+    let dtoRequestContextFactory;
 
     beforeEach(() => {
         log = [];
@@ -55,6 +57,7 @@ describe('Fl32_Web_Back_PipelineEngine', () => {
             exception: (error) => exceptions.push(String(error.message ?? error)),
         };
         helpOrder = {sort: (items) => items};
+        dtoRequestContextFactory = new Fl32_Web_Back_Dto_RequestContext_Factory();
     });
 
     /**
@@ -70,7 +73,9 @@ describe('Fl32_Web_Back_PipelineEngine', () => {
     }
 
     test('executes INIT, PROCESS and FINALIZE in order', async () => {
-        const engine = new Fl32_Web_Back_PipelineEngine({logger, respond, helpOrder, STAGE});
+        const engine = new Fl32_Web_Back_PipelineEngine({
+            dtoRequestContextFactory, logger, respond, helpOrder, STAGE
+        });
         engine.addHandler(mkHandler('init', STAGE.INIT, async () => { log.push('init'); }));
         engine.addHandler(mkHandler('processA', STAGE.PROCESS, async (context) => {
             log.push('processA');
@@ -86,7 +91,9 @@ describe('Fl32_Web_Back_PipelineEngine', () => {
     });
 
     test('returns 404 when no PROCESS handler completes context', async () => {
-        const engine = new Fl32_Web_Back_PipelineEngine({logger, respond, helpOrder, STAGE});
+        const engine = new Fl32_Web_Back_PipelineEngine({
+            dtoRequestContextFactory, logger, respond, helpOrder, STAGE
+        });
         engine.addHandler(mkHandler('process', STAGE.PROCESS, async () => { log.push('process'); }));
         engine.orderHandlers();
 
@@ -98,7 +105,9 @@ describe('Fl32_Web_Back_PipelineEngine', () => {
     });
 
     test('returns 500 and still runs FINALIZE on process error', async () => {
-        const engine = new Fl32_Web_Back_PipelineEngine({logger, respond, helpOrder, STAGE});
+        const engine = new Fl32_Web_Back_PipelineEngine({
+            dtoRequestContextFactory, logger, respond, helpOrder, STAGE
+        });
         engine.addHandler(mkHandler('process', STAGE.PROCESS, async () => {
             throw new Error('boom');
         }));
@@ -114,7 +123,9 @@ describe('Fl32_Web_Back_PipelineEngine', () => {
     });
 
     test('isolates INIT handler errors and continues processing', async () => {
-        const engine = new Fl32_Web_Back_PipelineEngine({logger, respond, helpOrder, STAGE});
+        const engine = new Fl32_Web_Back_PipelineEngine({
+            dtoRequestContextFactory, logger, respond, helpOrder, STAGE
+        });
         engine.addHandler(mkHandler('init', STAGE.INIT, async (context) => {
             context.complete();
         }));
@@ -133,7 +144,9 @@ describe('Fl32_Web_Back_PipelineEngine', () => {
     });
 
     test('locks registration after ordering', () => {
-        const engine = new Fl32_Web_Back_PipelineEngine({logger, respond, helpOrder, STAGE});
+        const engine = new Fl32_Web_Back_PipelineEngine({
+            dtoRequestContextFactory, logger, respond, helpOrder, STAGE
+        });
         engine.addHandler(mkHandler('process', STAGE.PROCESS, async () => {}));
         engine.orderHandlers();
 

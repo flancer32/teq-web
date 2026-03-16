@@ -4,11 +4,6 @@ export const __deps__ = Object.freeze({
     cast: 'Fl32_Web_Back_Helper_Cast$',
 });
 
-/**
- * @typedef {object} Fl32_Web_Back_Dto_SourceFactoryParams
- * @property {Fl32_Web_Back_Helper_Cast} cast
- */
-
 export default class Fl32_Web_Back_Dto_Source {
     /** @type {string} */
     root;
@@ -23,7 +18,8 @@ export default class Fl32_Web_Back_Dto_Source {
 export class Factory {
     /* eslint-disable jsdoc/require-param-description */
     /**
-     * @param {Fl32_Web_Back_Dto_SourceFactoryParams} params
+     * @param {object} params
+     * @param {Fl32_Web_Back_Helper_Cast} params.cast
      */
     constructor(
         {

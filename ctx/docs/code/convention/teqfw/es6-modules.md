@@ -133,6 +133,8 @@ If the short form is used, the container internally normalizes it to the full fo
 
 DI-compatible modules SHOULD encapsulate dependencies using constructor closures.
 
+Component behavior MUST be implemented using constructor closures. Prototype methods and class methods other than constructor MUST NOT be used.
+
 Methods SHOULD be defined inside the constructor and assigned directly to the instance.
 
 Constructor parameters SHOULD be used directly in closures and SHOULD NOT be copied into instance properties.

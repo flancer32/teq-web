@@ -13,20 +13,16 @@ export const __deps__ = Object.freeze({
     SERVER_TYPE: 'Fl32_Web_Back_Enum_Server_Type$',
 });
 
-/**
- * @typedef {object} Fl32_Web_Back_ServerConstructorParams
- * @property {typeof import('node:http')} http
- * @property {typeof import('node:http2')} http2
- * @property {Fl32_Web_Back_Config_Runtime} config
- * @property {Fl32_Web_Back_Logger} logger
- * @property {Fl32_Web_Back_PipelineEngine} pipelineEngine
- * @property {Fl32_Web_Back_Enum_Server_Type} SERVER_TYPE
- */
-
 export default class Fl32_Web_Back_Server {
     /* eslint-disable jsdoc/require-param-description,jsdoc/check-param-names */
     /**
-     * @param {Fl32_Web_Back_ServerConstructorParams} deps
+     * @param {object} deps
+     * @param {Fl32_Web_Node_Http} deps.http
+     * @param {Fl32_Web_Node_Http2} deps.http2
+     * @param {Fl32_Web_Back_Config_Runtime} deps.config
+     * @param {Fl32_Web_Back_Logger} deps.logger
+     * @param {Fl32_Web_Back_PipelineEngine} deps.pipelineEngine
+     * @param {Fl32_Web_Back_Enum_Server_Type} deps.SERVER_TYPE
      */
     constructor(
         {
@@ -42,12 +38,12 @@ export default class Fl32_Web_Back_Server {
         // VARS
         const { createServer } = http;
         const { createServer: createServerH2, createSecureServer } = http2;
-        /** @type {module:http.Server} */
+        /** @type {Fl32_Web_Node_Http_Server} */
         let _instance;
 
         // MAIN
         /**
-         * @returns {module:http.Server}
+         * @returns {Fl32_Web_Node_Http_Server}
          */
         this.getInstance = () => _instance;
 

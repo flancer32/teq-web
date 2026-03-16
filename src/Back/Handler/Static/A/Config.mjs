@@ -4,16 +4,12 @@ export const __deps__ = Object.freeze({
     path: 'node_path',
 });
 
-/**
- * @typedef {object} Fl32_Web_Back_Handler_Static_A_ConfigConstructorParams
- * @property {typeof import('node:path')} path
- */
-
 export default class Fl32_Web_Back_Handler_Static_A_Config {
     static DEFAULT_FILES = ['index.html', 'index.htm', 'index.txt'];
     /* eslint-disable jsdoc/require-param-description,jsdoc/check-param-names */
     /**
-     * @param {Fl32_Web_Back_Handler_Static_A_ConfigConstructorParams} params
+     * @param {object} params
+     * @param {Fl32_Web_Node_Path} params.path
      */
     constructor(
         {
@@ -26,7 +22,7 @@ export default class Fl32_Web_Back_Handler_Static_A_Config {
          * Normalize DTO fields into configuration object.
          *
          * @param {Fl32_Web_Back_Dto_Source} dto
-         * @returns {{root:string,prefix:string,allow?:Record<string,string[]>,defaults:string[]}}
+         * @returns {Fl32_Web_Back_Handler_Static_A_Config_Value}
          * @throws {Error} When required fields are missing or invalid.
          */
         this.create = (dto) => {

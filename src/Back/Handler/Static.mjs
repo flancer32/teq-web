@@ -14,20 +14,16 @@ export const __deps__ = Object.freeze({
     STAGE: 'Fl32_Web_Back_Enum_Stage$',
 });
 
-/**
- * @typedef {object} Fl32_Web_Back_Handler_StaticConstructorParams
- * @property {Fl32_Web_Back_Handler_Static_A_Registry} registry
- * @property {Fl32_Web_Back_Handler_Static_A_FileService} fileService
- * @property {Fl32_Web_Back_Helper_Respond} respond
- * @property {Fl32_Web_Back_Logger} logger
- * @property {Fl32_Web_Back_Dto_Info$Factory} dtoInfoFactory
- * @property {Fl32_Web_Back_Enum_Stage} STAGE
- */
-
 export default class Fl32_Web_Back_Handler_Static {
     /* eslint-disable jsdoc/require-param-description,jsdoc/check-param-names */
     /**
-     * @param {Fl32_Web_Back_Handler_StaticConstructorParams} params
+     * @param {object} params
+     * @param {Fl32_Web_Back_Handler_Static_A_Registry} params.registry
+     * @param {Fl32_Web_Back_Handler_Static_A_FileService} params.fileService
+     * @param {Fl32_Web_Back_Helper_Respond} params.respond
+     * @param {Fl32_Web_Back_Logger} params.logger
+     * @param {Fl32_Web_Back_Dto_Info$Factory} params.dtoInfoFactory
+     * @param {Fl32_Web_Back_Enum_Stage} params.STAGE
      */
     constructor(
         {
@@ -59,7 +55,7 @@ export default class Fl32_Web_Back_Handler_Static {
         /**
          * Attempt to handle incoming request.
          *
-         * @param {Fl32_Web_Back_PipelineEngine_RequestContext} context
+         * @param {Fl32_Web_Back_Dto_RequestContext} context
          * @returns {Promise<void>}
          */
         this.handle = async (context) => {

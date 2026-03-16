@@ -5,16 +5,12 @@ export const __deps__ = Object.freeze({
     path: 'node_path',
 });
 
-/**
- * @typedef {object} Fl32_Web_Back_Handler_Static_A_FallbackConstructorParams
- * @property {typeof import('node:fs')} fs
- * @property {typeof import('node:path')} path
- */
-
 export default class Fl32_Web_Back_Handler_Static_A_Fallback {
     /* eslint-disable jsdoc/require-param-description,jsdoc/check-param-names */
     /**
-     * @param {Fl32_Web_Back_Handler_Static_A_FallbackConstructorParams} params
+     * @param {object} params
+     * @param {Fl32_Web_Node_Fs} params.fs
+     * @param {Fl32_Web_Node_Path} params.path
      */
     constructor(
         {

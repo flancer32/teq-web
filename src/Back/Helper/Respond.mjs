@@ -5,14 +5,10 @@ export const __deps__ = Object.freeze({
     http2: 'node_http2',
 });
 
-/**
- * @typedef {object} Fl32_Web_Back_Helper_RespondConstructorParams
- * @property {typeof import('node:http2')} http2
- */
-
 export default class Fl32_Web_Back_Helper_Respond {
     /**
-     * @param {Fl32_Web_Back_Helper_RespondConstructorParams} params
+     * @param {object} params
+     * @param {Fl32_Web_Node_Http2} params.http2
      */
     constructor(
         {
@@ -47,9 +43,9 @@ export default class Fl32_Web_Back_Helper_Respond {
          * Sends an HTTP response with a given status code.
          *
          * @param {object} params
-         * @param {module:http.ServerResponse|module:http2.Http2ServerResponse} params.res - HTTP response object.
-         * @param {{[key: string]: string}} [params.headers={}] - Custom headers.
-         * @param {string|object} [params.body=''] - Response body.
+         * @param {Fl32_Web_Back_Response_Target} params.res - HTTP response object.
+         * @param {Fl32_Web_Back_Response_Headers} [params.headers={}] - Custom headers.
+         * @param {Fl32_Web_Back_Response_Body} [params.body=''] - Response body.
          * @param {number} status - HTTP status code.
          * @returns {boolean} - `true` if response was sent, `false` if headers were already sent.
          */
@@ -156,7 +152,7 @@ export default class Fl32_Web_Back_Helper_Respond {
 
         /**
          * Checks if the response is writable and not yet sent.
-         * @param {module:http.ServerResponse|module:http2.Http2ServerResponse} res
+         * @param {Fl32_Web_Back_Response_Target} res
          * @returns {boolean}
          */
         this.isWritable = function (res) {

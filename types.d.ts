@@ -5,8 +5,12 @@ declare global {
   type Fl32_Web_Back_Config_Runtime_Server = import("./src/Back/Config/Runtime.mjs").Server;
   type Fl32_Web_Back_Config_Runtime_Tls = import("./src/Back/Config/Runtime/Tls.mjs").Data;
   type Fl32_Web_Back_Config_Runtime_Tls$Factory = import("./src/Back/Config/Runtime/Tls.mjs").Factory;
+  type Fl32_Web_Back_Config_Runtime_Params = {server?: {port?: unknown, type?: unknown, tls?: unknown}};
+  type Fl32_Web_Back_Config_Runtime_Tls_Params = {ca?: unknown, cert?: unknown, key?: unknown};
   type Fl32_Web_Back_Dto_Info = import("./src/Back/Dto/Info.mjs").default;
   type Fl32_Web_Back_Dto_Info$Factory = import("./src/Back/Dto/Info.mjs").Factory;
+  type Fl32_Web_Back_Dto_RequestContext = import("./src/Back/Dto/RequestContext.mjs").default;
+  type Fl32_Web_Back_Dto_RequestContext$Factory = import("./src/Back/Dto/RequestContext.mjs").Factory;
   type Fl32_Web_Back_Dto_Source = import("./src/Back/Dto/Source.mjs").default;
   type Fl32_Web_Back_Dto_Source$Factory = import("./src/Back/Dto/Source.mjs").Factory;
   type Fl32_Web_Back_Enum_Server_Type = import("./src/Back/Enum/Server/Type.mjs").default;
@@ -14,8 +18,10 @@ declare global {
   type Fl32_Web_Back_Handler_Pre_Log = import("./src/Back/Handler/Pre/Log.mjs").default;
   type Fl32_Web_Back_Handler_Static = import("./src/Back/Handler/Static.mjs").default;
   type Fl32_Web_Back_Handler_Static_A_Config = import("./src/Back/Handler/Static/A/Config.mjs").default;
+  type Fl32_Web_Back_Handler_Static_A_Config_Value = {root: string, prefix: string, allow?: Record<string, string[]>, defaults: string[]};
   type Fl32_Web_Back_Handler_Static_A_Fallback = import("./src/Back/Handler/Static/A/Fallback.mjs").default;
   type Fl32_Web_Back_Handler_Static_A_FileService = import("./src/Back/Handler/Static/A/FileService.mjs").default;
+  type Fl32_Web_Back_Handler_Static_A_Match = {config: Fl32_Web_Back_Handler_Static_A_Config_Value, rel: string};
   type Fl32_Web_Back_Handler_Static_A_Registry = import("./src/Back/Handler/Static/A/Registry.mjs").default;
   type Fl32_Web_Back_Handler_Static_A_Resolver = import("./src/Back/Handler/Static/A/Resolver.mjs").default;
   type Fl32_Web_Back_Helper_Cast = import("./src/Back/Helper/Cast.mjs").default;
@@ -24,7 +30,19 @@ declare global {
   type Fl32_Web_Back_Helper_Respond = import("./src/Back/Helper/Respond.mjs").default;
   type Fl32_Web_Back_Logger = import("./src/Back/Logger.mjs").default;
   type Fl32_Web_Back_PipelineEngine = import("./src/Back/PipelineEngine.mjs").default;
+  type Fl32_Web_Back_Response_Body = string | object;
+  type Fl32_Web_Back_Response_Headers = {[key: string]: string};
+  type Fl32_Web_Back_Response_Target = Fl32_Web_Node_Http_ServerResponse | Fl32_Web_Node_Http2_ServerResponse;
   type Fl32_Web_Back_Server = import("./src/Back/Server.mjs").default;
+  type Fl32_Web_Node_Fs = typeof import("node:fs");
+  type Fl32_Web_Node_Http = typeof import("node:http");
+  type Fl32_Web_Node_Http_Server = import("node:http").Server;
+  type Fl32_Web_Node_Http_IncomingMessage = import("node:http").IncomingMessage;
+  type Fl32_Web_Node_Http_ServerResponse = import("node:http").ServerResponse;
+  type Fl32_Web_Node_Http2 = typeof import("node:http2");
+  type Fl32_Web_Node_Http2_ServerRequest = import("node:http2").Http2ServerRequest;
+  type Fl32_Web_Node_Http2_ServerResponse = import("node:http2").Http2ServerResponse;
+  type Fl32_Web_Node_Path = typeof import("node:path");
 }
 
 export {};

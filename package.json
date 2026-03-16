@@ -41,7 +41,7 @@
     ]
   },
   "dependencies": {
-    "@teqfw/di": "^2.0.4"
+    "@teqfw/di": "^2.1.0"
   },
   "devDependencies": {
     "@types/node": "^25.4.0",

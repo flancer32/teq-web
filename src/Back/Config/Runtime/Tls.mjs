@@ -59,7 +59,7 @@ export class Factory {
      */
     constructor({cast}) {
         /**
-         * @param {{ca?: *, cert?: *, key?: *}} [params]
+         * @param {Fl32_Web_Back_Config_Runtime_Tls_Params} [params]
          * @returns {Fl32_Web_Back_Config_Runtime_Tls}
          */
         this.configure = function (params = {}) {

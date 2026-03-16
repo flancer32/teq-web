@@ -11,17 +11,13 @@ export const __deps__ = Object.freeze({
     STAGE: 'Fl32_Web_Back_Enum_Stage$',
 });
 
-/**
- * @typedef {object} Fl32_Web_Back_Handler_Pre_LogConstructorParams
- * @property {Fl32_Web_Back_Logger} logger
- * @property {Fl32_Web_Back_Dto_Info$Factory} dtoInfoFactory
- * @property {Fl32_Web_Back_Enum_Stage} STAGE
- */
-
 export default class Fl32_Web_Back_Handler_Pre_Log {
     /* eslint-disable jsdoc/require-param-description,jsdoc/check-param-names */
     /**
-     * @param {Fl32_Web_Back_Handler_Pre_LogConstructorParams} params
+     * @param {object} params
+     * @param {Fl32_Web_Back_Logger} params.logger
+     * @param {Fl32_Web_Back_Dto_Info$Factory} params.dtoInfoFactory
+     * @param {Fl32_Web_Back_Enum_Stage} params.STAGE
      */
     constructor(
         {
@@ -42,7 +38,7 @@ export default class Fl32_Web_Back_Handler_Pre_Log {
         /**
          * Log request method and URL.
          *
-         * @param {Fl32_Web_Back_PipelineEngine_RequestContext} context
+         * @param {Fl32_Web_Back_Dto_RequestContext} context
          * @returns {Promise<void>}
          */
         this.handle = async function (context) {

@@ -5,12 +5,6 @@ export const __deps__ = Object.freeze({
     STAGE: 'Fl32_Web_Back_Enum_Stage$',
 });
 
-/**
- * @typedef {object} Fl32_Web_Back_Dto_InfoFactoryParams
- * @property {Fl32_Web_Back_Helper_Cast} cast
- * @property {Fl32_Web_Back_Enum_Stage} STAGE
- */
-
 export default class Fl32_Web_Back_Dto_Info {
     /**
      * Handlers to run before this one.
@@ -41,7 +35,9 @@ export default class Fl32_Web_Back_Dto_Info {
 export class Factory {
     /* eslint-disable jsdoc/require-param-description,jsdoc/check-param-names */
     /**
-     * @param {Fl32_Web_Back_Dto_InfoFactoryParams} params
+     * @param {object} params
+     * @param {Fl32_Web_Back_Helper_Cast} params.cast
+     * @param {Fl32_Web_Back_Enum_Stage} params.STAGE
      */
     constructor(
         {
