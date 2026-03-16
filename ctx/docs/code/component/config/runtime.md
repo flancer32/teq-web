@@ -1,23 +1,27 @@
 # Runtime Configuration Component
 
 Path: `ctx/docs/code/component/config/runtime.md`
-Template Version: `20260315`
+Template Version: `20260316`
 
 ## Purpose
 
-This document defines the architectural contract for runtime configuration components in TeqFW packages. The contract specifies the structure, lifecycle, and ES module pattern used to represent runtime configuration objects managed by the DI container.
+This document defines the architectural contract for runtime configuration components in TeqFW packages. The contract specifies the module structure, lifecycle, and runtime behavior of configuration objects managed by the DI container.
+
+Runtime configuration components expose immutable configuration values supplied during application startup.
 
 ## Runtime Configuration Concept
 
-Runtime configuration represents values that are supplied during application startup and remain immutable during application execution. Runtime configuration objects belong to individual packages and form a hierarchical structure that mirrors the dependency graph of the application.
+Runtime configuration represents values that are supplied during application startup and remain immutable for the entire lifetime of the application.
 
-Runtime configuration is a Runtime Data Component.
+Runtime configuration objects belong to individual packages and form a hierarchical structure that mirrors the dependency graph of the application.
 
-Runtime configuration must be initialized before any component reads its values. After initialization completes the configuration object becomes immutable for the entire lifetime of the application.
+Runtime configuration is a **Runtime Data Component**.
 
-Runtime configuration must be frozen after initialization by the configuration component.
+Runtime configuration must be initialized before any component reads its values. After initialization completes the configuration object becomes immutable.
 
-Component type definitions are described in ctx/docs/code/convention/teqfw/component-types.md.
+Component type definitions are described in:
+
+`ctx/docs/code/convention/teqfw/component-types.md`
 
 ## Runtime Configuration Component
 
@@ -27,9 +31,11 @@ Each package exposing runtime configuration publishes a runtime configuration co
 Ns_Pkg_Config_Runtime
 ```
 
-The runtime component is resolved through the DI container and provides read-only access to configuration values.
+The runtime configuration component is resolved through the DI container.
 
-The runtime component instance is a proxy object guarding access to the underlying configuration data structure.
+The component instance exposes a **protected proxy object** that provides read-only access to the configuration data.
+
+Direct access to the configuration data structure is not allowed.
 
 ## Module Structure
 
@@ -38,21 +44,42 @@ A runtime configuration module publishes three exports:
 ```
 Data
 Factory
-default export
+Wrapper (default export)
 ```
 
-The responsibilities are defined as follows.
+Responsibilities of the exports are defined as follows.
 
-Data
-Defines the configuration data structure and JSDoc property types.
+### Data
 
-Factory
+Defines the runtime configuration data structure and its JSDoc property types.
+
+The Data structure represents the internal configuration state owned by the module.
+
+### Factory
+
 Controls initialization and finalization of the configuration hierarchy.
 
-Default export
-Represents the runtime component resolved by the DI container and returns the protected proxy object.
+Factories propagate configuration parameters through dependency factories.
 
-The module itself owns the singleton configuration state through variables defined in module scope.
+### Wrapper
+
+Default export of the module.
+
+Wrapper is the runtime configuration component instantiated by the DI container.
+
+The wrapper exposes a protected proxy object that provides access to configuration values.
+
+## Module State Ownership
+
+The runtime configuration module owns its configuration state through variables defined in module scope.
+
+The module maintains:
+
+- configuration data instance
+- initialization state
+- proxy wrapper protecting configuration access
+
+The module therefore acts as the authoritative owner of the configuration object.
 
 ## Dependency Declaration
 
@@ -69,11 +96,13 @@ export const __deps__ = Object.freeze({
 });
 ```
 
-The factory receives both the runtime configuration object and the factory of its dependency.
+The factory receives both the runtime configuration data of its dependency and the dependency factory responsible for initializing that configuration.
 
 ## Initialization Semantics
 
-Runtime configuration supports cumulative initialization. Multiple packages may contribute configuration values while the configuration hierarchy is being built.
+Runtime configuration supports cumulative initialization.
+
+Multiple packages may contribute configuration values while the configuration hierarchy is being built.
 
 Initialization follows the rule:
 
@@ -81,23 +110,27 @@ Initialization follows the rule:
 first write wins
 ```
 
-A configuration property must only be assigned if it has not yet received a value.
+A configuration property must be assigned only if it has not yet received a value.
 
-Configuration initialization proceeds in two phases:
+Configuration initialization proceeds in two phases.
 
 1. configure phase
 2. freeze phase
 
-During the configure phase packages propagate configuration parameters through dependency factories. During the freeze phase configuration objects become immutable.
+During the configure phase configuration parameters propagate through dependency factories.
+
+During the freeze phase configuration objects become immutable.
 
 ## Immutability Rules
 
 Runtime configuration enforces strict immutability through a proxy wrapper.
 
-The proxy enforces the following rules:
+The proxy enforces the following rules.
 
 Reading configuration before finalization is not allowed.
+
 Writing configuration properties is not allowed.
+
 Adding or deleting properties is not allowed.
 
 After the freeze phase the configuration object becomes permanently immutable.
@@ -106,11 +139,11 @@ After the freeze phase the configuration object becomes permanently immutable.
 
 Runtime configuration factories implement two lifecycle operations.
 
-configure(params)
+### configure(params)
 
 Receives configuration parameters from the application and propagates configuration to dependency factories.
 
-freeze()
+### freeze()
 
 Finalizes the configuration object and recursively finalizes dependency factories.
 
@@ -127,7 +160,7 @@ type Ns_Pkg_Config_Runtime = import("./src/Config/Runtime.mjs").Data;
 type Ns_Pkg_Config_Runtime$Factory = import("./src/Config/Runtime.mjs").Factory;
 ```
 
-This approach ensures that IDE tooling and tsserver can resolve runtime configuration types without requiring TypeScript in the implementation.
+This approach allows IDE tooling and tsserver to resolve runtime configuration types without requiring TypeScript in the implementation.
 
 ## Canonical Runtime Configuration Module
 
@@ -183,9 +216,10 @@ const proxy = new Proxy(cfg, {
 });
 
 /**
- * Runtime configuration component.
+ * Runtime configuration wrapper component.
+ * Instantiated by the DI container.
  */
-export default class Ns_Pkg_Config_Runtime {
+export default class Wrapper {
   constructor() {
     return proxy;
   }
@@ -228,4 +262,6 @@ export class Factory {
 
 ## Summary
 
-Runtime configuration components in TeqFW follow a deterministic pattern where configuration state is owned by the module, exposed through a proxy runtime component, initialized through factories, and finalized once during application startup. This structure ensures deterministic configuration behavior, strict immutability, and compatibility with the TeqFW dependency injection and type map architecture.
+Runtime configuration components in TeqFW follow a deterministic architecture where configuration state is owned by the module, initialized through factories, exposed through a wrapper component, and protected by a proxy guard.
+
+This architecture guarantees deterministic configuration behavior, strict immutability, and full compatibility with the TeqFW dependency injection and type map system.

@@ -56,7 +56,7 @@ async function main() {
     const logger = await container.get('Fl32_Web_Back_Logger$');
     /** @type {Fl32_Web_Back_Enum_Server_Type} */
     const SERVER_TYPE = await container.get('Fl32_Web_Back_Enum_Server_Type$');
-    runtimeConfigFactory.configure({port: PORT});
+    runtimeConfigFactory.configure({server: {port: PORT}});
     runtimeConfigFactory.freeze();
     /** @type {Fl32_Web_Back_Config_Runtime} */
     const config = await container.get('Fl32_Web_Back_Config_Runtime$');

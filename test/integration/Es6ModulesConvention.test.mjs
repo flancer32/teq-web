@@ -6,6 +6,7 @@ import Container from '@teqfw/di';
 import {__deps__ as dtoInfoDeps} from '../../src/Back/Dto/Info.mjs';
 import {__deps__ as dtoSourceDeps} from '../../src/Back/Dto/Source.mjs';
 import {__deps__ as runtimeConfigDeps} from '../../src/Back/Config/Runtime.mjs';
+import {__deps__ as runtimeTlsDeps} from '../../src/Back/Config/Runtime/Tls.mjs';
 import {__deps__ as staticHandlerDeps} from '../../src/Back/Handler/Static.mjs';
 import {__deps__ as preLogDeps} from '../../src/Back/Handler/Pre/Log.mjs';
 import {__deps__ as staticConfigDeps} from '../../src/Back/Handler/Static/A/Config.mjs';
@@ -16,14 +17,13 @@ import {__deps__ as staticResolverDeps} from '../../src/Back/Handler/Static/A/Re
 import {__deps__ as respondDeps} from '../../src/Back/Helper/Respond.mjs';
 import {__deps__ as pipelineEngineDeps} from '../../src/Back/PipelineEngine.mjs';
 import {__deps__ as serverDeps} from '../../src/Back/Server.mjs';
-import {__deps__ as serverConfigDeps} from '../../src/Back/Server/Config.mjs';
-import {__deps__ as serverConfigTlsDeps} from '../../src/Back/Server/Config/Tls.mjs';
 
 const SRC = path.resolve(import.meta.dirname, '../../src');
 const DEP_DESCRIPTORS = [
     dtoInfoDeps,
     dtoSourceDeps,
     runtimeConfigDeps,
+    runtimeTlsDeps,
     staticHandlerDeps,
     preLogDeps,
     staticConfigDeps,
@@ -34,8 +34,6 @@ const DEP_DESCRIPTORS = [
     respondDeps,
     pipelineEngineDeps,
     serverDeps,
-    serverConfigDeps,
-    serverConfigTlsDeps,
 ];
 const MANAGED_MODULE_IDS = [
     'Fl32_Web_Back_Logger$',
@@ -49,6 +47,8 @@ const MANAGED_MODULE_IDS = [
     'Fl32_Web_Back_Dto_Info__Factory$',
     'Fl32_Web_Back_Dto_Source$',
     'Fl32_Web_Back_Dto_Source__Factory$',
+    'Fl32_Web_Back_Config_Runtime_Tls__Factory$',
+    'Fl32_Web_Back_Config_Runtime__Factory$',
     'Fl32_Web_Back_Handler_Static_A_Config$',
     'Fl32_Web_Back_Handler_Static_A_Fallback$',
     'Fl32_Web_Back_Handler_Static_A_FileService$',
@@ -57,10 +57,6 @@ const MANAGED_MODULE_IDS = [
     'Fl32_Web_Back_Handler_Pre_Log$',
     'Fl32_Web_Back_Handler_Static$',
     'Fl32_Web_Back_PipelineEngine$',
-    'Fl32_Web_Back_Server_Config_Tls$',
-    'Fl32_Web_Back_Server_Config_Tls__Factory$',
-    'Fl32_Web_Back_Server_Config$',
-    'Fl32_Web_Back_Server_Config__Factory$',
 ];
 
 function createContainer() {
@@ -87,6 +83,7 @@ describe('TeqFW ES6 module convention integration', () => {
 
         const logger = await container.get('Fl32_Web_Back_Logger$');
         const runtimeConfigFactory = await container.get('Fl32_Web_Back_Config_Runtime__Factory$');
+        const runtimeFromFactory = runtimeConfigFactory.configure({server: {port: '3001', type: 'http'}});
         runtimeConfigFactory.freeze();
         const runtimeConfig = await container.get('Fl32_Web_Back_Config_Runtime$');
         const server = await container.get('Fl32_Web_Back_Server$');
@@ -97,8 +94,10 @@ describe('TeqFW ES6 module convention integration', () => {
 
         assert.equal(typeof logger.info, 'function');
         assert.equal(typeof server.start, 'function');
-        assert.equal(runtimeConfig.port, 3000);
-        assert.equal(runtimeConfig.type, 'http');
+        assert.equal(runtimeFromFactory, runtimeConfig);
+        assert.equal(runtimeConfig.server.port, 3001);
+        assert.equal(runtimeConfig.server.type, 'http');
+        assert.equal(typeof runtimeConfig.server.tls, 'object');
         assert.equal(STAGE.PROCESS, 'PROCESS');
         assert.equal(Object.isFrozen(STAGE), true);
         assert.equal(SERVER_TYPE.HTTPS, 'https');
@@ -113,9 +112,7 @@ describe('TeqFW ES6 module convention integration', () => {
         const sourceDto = sourceFactory.create({root: '/tmp'});
         assert.equal(Object.isFrozen(sourceDto), true);
 
-        const serverConfigFactory = await container.get('Fl32_Web_Back_Server_Config__Factory$');
-        const serverCfg = serverConfigFactory.create({port: '3001', type: 'http'});
-        assert.equal(Object.isFrozen(serverCfg), true);
+        assert.equal(Object.isFrozen(runtimeConfigFactory.freeze()), true);
 
         assert.deepEqual(
             kahn.sort([

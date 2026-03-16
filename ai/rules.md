@@ -38,4 +38,6 @@
 
 - The package is designed for `@teqfw/di`.
 - Consumer code should resolve package modules through the `Fl32_Web_` namespace mapped to the package `src/` path.
+- Startup configuration for the built-in server should be supplied through `Fl32_Web_Back_Config_Runtime__Factory$` using the hierarchical configuration shape `{server: {...}}`.
+- TLS startup configuration belongs to the dedicated runtime component `Fl32_Web_Back_Config_Runtime_Tls$`, even though consumers read it through `config.server.tls`.
 - Treat helper internals under deep implementation paths as non-essential unless the task specifically requires them. Preferred consumer entry points are the Pipeline Engine, Server, handler API, DTO factories, enums, and built-in handlers.

@@ -2,6 +2,9 @@ declare global {
   type Fl32_Web_Back_Api_Handler = import("./src/Back/Api/Handler.mjs").default;
   type Fl32_Web_Back_Config_Runtime = import("./src/Back/Config/Runtime.mjs").Data;
   type Fl32_Web_Back_Config_Runtime$Factory = import("./src/Back/Config/Runtime.mjs").Factory;
+  type Fl32_Web_Back_Config_Runtime_Server = import("./src/Back/Config/Runtime.mjs").Server;
+  type Fl32_Web_Back_Config_Runtime_Tls = import("./src/Back/Config/Runtime/Tls.mjs").Data;
+  type Fl32_Web_Back_Config_Runtime_Tls$Factory = import("./src/Back/Config/Runtime/Tls.mjs").Factory;
   type Fl32_Web_Back_Dto_Info = import("./src/Back/Dto/Info.mjs").default;
   type Fl32_Web_Back_Dto_Info$Factory = import("./src/Back/Dto/Info.mjs").Factory;
   type Fl32_Web_Back_Dto_Source = import("./src/Back/Dto/Source.mjs").default;
@@ -22,10 +25,6 @@ declare global {
   type Fl32_Web_Back_Logger = import("./src/Back/Logger.mjs").default;
   type Fl32_Web_Back_PipelineEngine = import("./src/Back/PipelineEngine.mjs").default;
   type Fl32_Web_Back_Server = import("./src/Back/Server.mjs").default;
-  type Fl32_Web_Back_Server_Config = import("./src/Back/Server/Config.mjs").default;
-  type Fl32_Web_Back_Server_Config$Factory = import("./src/Back/Server/Config.mjs").Factory;
-  type Fl32_Web_Back_Server_Config_Tls = import("./src/Back/Server/Config/Tls.mjs").default;
-  type Fl32_Web_Back_Server_Config_Tls$Factory = import("./src/Back/Server/Config/Tls.mjs").Factory;
 }
 
 export {};
