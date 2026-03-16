@@ -1,5 +1,15 @@
 # Changelog
 
+## [0.6.0] - 2026-03-16 - Runtime configuration hardening
+
+### Added
+- Added JSDoc coverage for request-context DTO usage and runtime configuration components.
+
+### Changed
+- Refined runtime configuration composition for server and TLS settings.
+- Hardened runtime configuration objects to remain immutable after initialization.
+- Updated package version metadata to `0.6.0`.
+
 ## [0.5.0] - 2026-03-13
 
 ### Added

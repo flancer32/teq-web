@@ -40,4 +40,5 @@
 - Consumer code should resolve package modules through the `Fl32_Web_` namespace mapped to the package `src/` path.
 - Startup configuration for the built-in server should be supplied through `Fl32_Web_Back_Config_Runtime__Factory$` using the hierarchical configuration shape `{server: {...}}`.
 - TLS startup configuration belongs to the dedicated runtime component `Fl32_Web_Back_Config_Runtime_Tls$`, even though consumers read it through `config.server.tls`.
+- Configure runtime values during startup only; once the runtime configuration is frozen for use, consumers must treat `Fl32_Web_Back_Config_Runtime$` and `Fl32_Web_Back_Config_Runtime_Tls$` as immutable read-only state.
 - Treat helper internals under deep implementation paths as non-essential unless the task specifically requires them. Preferred consumer entry points are the Pipeline Engine, Server, handler API, DTO factories, enums, and built-in handlers.
