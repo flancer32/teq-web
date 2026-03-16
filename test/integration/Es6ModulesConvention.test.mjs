@@ -112,7 +112,10 @@ describe('TeqFW ES6 module convention integration', () => {
         const sourceDto = sourceFactory.create({root: '/tmp'});
         assert.equal(Object.isFrozen(sourceDto), true);
 
-        assert.equal(Object.isFrozen(runtimeConfigFactory.freeze()), true);
+        const frozenRuntime = runtimeConfigFactory.freeze();
+        assert.throws(() => {
+            frozenRuntime.server = {};
+        }, /Runtime configuration is immutable\./);
 
         assert.deepEqual(
             kahn.sort([
