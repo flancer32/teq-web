@@ -36,7 +36,7 @@ describe('Fl32_Web_Back_Config_Runtime', () => {
         assert.equal(runtime.server.port, 8080);
         assert.equal(runtime.server.type, 'http2');
         assert.equal(Object.isFrozen(runtime.server), true);
-        assert.equal(Object.isFrozen(runtime), true);
+        assert.throws(() => Object.freeze(runtime), /cannot be frozen/);
         assert.throws(() => {
             runtime.server = undefined;
         }, /immutable/);
@@ -61,6 +61,7 @@ describe('Fl32_Web_Back_Config_Runtime', () => {
 
         assert.equal(runtime.server.port, 3000);
         assert.equal(runtime.server.type, 'http');
+        assert.throws(() => Object.freeze(runtime), /cannot be frozen/);
     });
 
     test('requires tls for https mode', async () => {
@@ -99,6 +100,7 @@ describe('Fl32_Web_Back_Config_Runtime', () => {
         assert.equal(runtime.server.tls.key, 'key');
         assert.equal(runtime.server.tls.cert, 'cert');
         assert.equal(runtime.server.tls.ca, 'ca');
-        assert.equal(Object.isFrozen(runtime.server.tls), true);
+        assert.throws(() => Object.freeze(runtime.server.tls), /cannot be frozen/);
+        assert.throws(() => Object.freeze(runtime), /cannot be frozen/);
     });
 });

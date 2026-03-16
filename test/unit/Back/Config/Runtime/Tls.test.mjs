@@ -24,7 +24,7 @@ describe('Fl32_Web_Back_Config_Runtime_Tls', () => {
         assert.equal(tls.key, 'key-1');
         assert.equal(tls.cert, 'cert-1');
         assert.equal(tls.ca, 'ca-1');
-        assert.equal(Object.isFrozen(tls), true);
+        assert.throws(() => Object.freeze(tls), /cannot be frozen/);
         assert.throws(() => {
             tls.key = 'next';
         }, /immutable/);

@@ -37,6 +37,8 @@ The component instance exposes a **protected proxy object** that provides read-o
 
 Direct access to the configuration data structure is not allowed.
 
+The proxy wrapper is **not built on top of the configuration object itself**. Instead the proxy uses an independent facade target and delegates read access to the internal configuration state. This separation guarantees that external structural operations on the wrapper cannot affect the configuration data.
+
 ## Module Structure
 
 A runtime configuration module publishes three exports:
@@ -68,6 +70,8 @@ Default export of the module.
 Wrapper is the runtime configuration component instantiated by the DI container.
 
 The wrapper exposes a protected proxy object that provides access to configuration values.
+
+The wrapper proxy uses an internal facade target rather than the configuration object itself.
 
 ## Module State Ownership
 
@@ -133,7 +137,9 @@ Writing configuration properties is not allowed.
 
 Adding or deleting properties is not allowed.
 
-After the freeze phase the configuration object becomes permanently immutable.
+External attempts to structurally modify or freeze the wrapper object are rejected.
+
+After the freeze phase the internal configuration object becomes permanently immutable.
 
 ## Factory Lifecycle
 
@@ -195,23 +201,32 @@ export class Data {
 /** @type {Ns_Pkg_Config_Runtime} */
 const cfg = new Data();
 
+/** @type {object} */
+const facade = {};
+
 /** @type {boolean} */
 let frozen = false;
 
 /** @type {Ns_Pkg_Config_Runtime} */
-const proxy = new Proxy(cfg, {
-  get(target, prop) {
-    if (!frozen) throw new Error("Runtime configuration is not initialized.");
-    return target[prop];
+const proxy = new Proxy(facade, {
+  get(_target, prop) {
+    const isServiceProp = prop === "then" || typeof prop === "symbol";
+    if (!frozen && !isServiceProp) {
+      throw new Error("Runtime configuration is not initialized.");
+    }
+    return cfg[prop];
   },
   set() {
     throw new Error("Runtime configuration is immutable.");
   },
   defineProperty() {
-    throw new Error("Runtime configuration is immutable.");
+    throw new Error("Runtime configuration wrapper is immutable.");
   },
   deleteProperty() {
-    throw new Error("Runtime configuration is immutable.");
+    throw new Error("Runtime configuration wrapper is immutable.");
+  },
+  preventExtensions() {
+    throw new Error("Runtime configuration wrapper cannot be frozen.");
   },
 });
 
@@ -240,9 +255,13 @@ export class Factory {
     this.configure = function (params = {}) {
       if (frozen) throw new Error("Runtime configuration is frozen.");
 
-      if (cfg.port === undefined && params.PORT !== undefined) cfg.port = Number(params.PORT);
+      if (cfg.port === undefined && params.PORT !== undefined) {
+        cfg.port = Number(params.PORT);
+      }
 
-      if (cfg.host === undefined && params.HOST !== undefined) cfg.host = String(params.HOST);
+      if (cfg.host === undefined && params.HOST !== undefined) {
+        cfg.host = String(params.HOST);
+      }
 
       depFactory.configure(params);
     };
@@ -264,4 +283,6 @@ export class Factory {
 
 Runtime configuration components in TeqFW follow a deterministic architecture where configuration state is owned by the module, initialized through factories, exposed through a wrapper component, and protected by a proxy guard.
 
-This architecture guarantees deterministic configuration behavior, strict immutability, and full compatibility with the TeqFW dependency injection and type map system.
+The wrapper proxy is intentionally separated from the internal configuration object. This guarantees that external structural operations on the wrapper cannot affect the internal configuration state.
+
+Configuration finalization is controlled exclusively by the runtime configuration factory. This ensures deterministic initialization order and strict immutability of runtime configuration values.

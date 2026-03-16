@@ -30,29 +30,26 @@ export class Server {
 const cfg = new Data();
 let frozen = false;
 
+const facade = {};
+
 /** @type {Fl32_Web_Back_Config_Runtime} */
-const proxy = new Proxy(cfg, {
-    get(target, prop) {
+const proxy = new Proxy(facade, {
+    get(_target, prop) {
         const isServiceProp = (prop === 'then') || (typeof prop === 'symbol');
         if (!frozen && !isServiceProp) throw new Error('Runtime configuration is not initialized.');
-        return target[prop];
+        return cfg[prop];
     },
     set() {
         throw new Error('Runtime configuration is immutable.');
     },
-    defineProperty(target, prop, descriptor) {
-        const current = Object.getOwnPropertyDescriptor(target, prop);
-        const isFreezeStep = current
-            && (descriptor?.configurable === false)
-            && (!('writable' in descriptor) || descriptor.writable === false)
-            && (!('value' in descriptor) || descriptor.value === current.value);
-        if (isFreezeStep) {
-            return Reflect.defineProperty(target, prop, descriptor);
-        }
+    defineProperty() {
         throw new Error('Runtime configuration is immutable.');
     },
     deleteProperty() {
         throw new Error('Runtime configuration is immutable.');
+    },
+    preventExtensions() {
+        throw new Error('Runtime configuration wrapper cannot be frozen.');
     },
 });
 
