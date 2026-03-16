@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.7.0] - 2026-03-16 - Runtime composition and agent interface alignment
+
+### Changed
+- Refined runtime configuration composition for server and TLS branches and preserved immutable runtime state semantics.
+- Updated and verified the `ai/` consumer interface documentation against the current package behavior and usage rules.
+- Updated package version metadata to `0.7.0`.
+
 ## [0.6.0] - 2026-03-16 - Runtime configuration hardening
 
 ### Added
