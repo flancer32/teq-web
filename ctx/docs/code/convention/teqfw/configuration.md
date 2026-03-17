@@ -7,6 +7,11 @@ Template Version: `20260315`
 
 This document defines architectural conventions for configuration in TeqFW applications. The goal is to ensure deterministic configuration behavior in modular monoliths composed of independently developed packages.
 
+Detailed implementation conventions are defined in:
+
+- `ctx/docs/code/convention/teqfw/configuration/static.md` for static configuration components.
+- `ctx/docs/code/convention/teqfw/configuration/runtime.md` for runtime configuration components.
+
 ## Configuration Model
 
 Configuration in TeqFW is organized as a hierarchical system of configuration objects belonging to individual packages. Each package defines its own configuration structure and does not depend on the configuration structure of the application that uses it.
@@ -23,7 +28,7 @@ TeqFW distinguishes two independent configuration types.
 
 Static configuration represents constant values defined by packages. Static configuration does not depend on runtime environment parameters and does not change during application execution.
 
-Static configuration fragments may be declared by multiple packages and are assembled during application initialization.
+Static configuration objects are defined by packages and composed through dependency injection without a runtime initialization phase.
 
 ### Runtime Configuration
 

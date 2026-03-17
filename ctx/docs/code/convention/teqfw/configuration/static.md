@@ -1,11 +1,11 @@
-# Static Configuration Component
+# Static Configuration Convention
 
-Path: `ctx/docs/code/component/config/static.md`
+Path: `ctx/docs/code/convention/teqfw/configuration/static.md`
 Template Version: `20260315`
 
 ## Purpose
 
-This document defines the architectural contract for static configuration components in TeqFW packages. The contract specifies the structure and ES module pattern used to represent immutable package configuration objects resolved by the DI container.
+This document defines the static configuration convention for TeqFW packages. The contract specifies the structure and ES module pattern used to represent immutable package configuration objects resolved by the DI container.
 
 Static configuration represents constant values defined by the package itself. These values do not depend on runtime environment parameters and remain immutable for the lifetime of the application.
 

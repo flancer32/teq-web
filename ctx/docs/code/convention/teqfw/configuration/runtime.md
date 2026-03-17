@@ -1,15 +1,15 @@
-# Runtime Configuration Component
+# Runtime Configuration Convention
 
-Path: `ctx/docs/code/component/config/runtime.md`
+Path: `ctx/docs/code/convention/teqfw/configuration/runtime.md`
 Template Version: `20260317`
 
 ## Purpose
 
-This document defines the platform-level contract for runtime configuration components in TeqFW.
+This document defines the runtime configuration convention for TeqFW packages.
 
 Runtime configuration in TeqFW is not a generic configuration pattern. It is a DI-integrated mechanism designed for deterministic composition of application state in a modular monolith.
 
-The specification defines structure, lifecycle, and composition rules required for compatibility with the TeqFW DI container and agent-driven development.
+The specification defines structure, lifecycle, and composition rules for runtime configuration components required for compatibility with the TeqFW DI container and agent-driven development.
 
 ## Runtime Configuration in TeqFW
 
