@@ -74,6 +74,6 @@ Consumer notes:
 - The composition root configures namespace roots once and resolves one application entry service.
 - Application modules do not construct collaborators directly and do not call `new` for DI-managed handlers or infrastructure services.
 - `server.start()` locks handler registration for the runtime lifetime of that server instance.
-- Built-in server defaults may also be supplied through `Fl32_Web_Back_Config_Runtime__Factory$` as `{server: {port, type, tls}}`, where `tls` is owned by the runtime component `Fl32_Web_Back_Config_Runtime_Tls$`.
+- Built-in server defaults may also be supplied through `Fl32_Web_Back_Config_Runtime__Factory$` as `{port, type, tls}`, where `tls` is owned by the runtime component `Fl32_Web_Back_Config_Runtime_Tls$`.
 - If your application already has its own transport layer, inject `Fl32_Web_Back_PipelineEngine$` and call `pipeline.onEventRequest(req, res)` from that adapter instead of using `Fl32_Web_Back_Server$`.
 - A correct PROCESS handler ends the response and then marks the context completed.

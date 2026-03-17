@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.8.0] - 2026-03-17 - Flat runtime configuration and server startup alignment
+
+### Changed
+- Flattened runtime startup configuration to top-level fields `port`, `type`, and `tls` (without nested `server` branch).
+- Aligned server startup and runtime components with the updated flat runtime configuration contract.
+- Updated and verified the `ai/` consumer interface documentation to reflect current runtime usage patterns.
+- Updated package version metadata to `0.8.0`.
+
 ## [0.7.0] - 2026-03-16 - Runtime composition and agent interface alignment
 
 ### Changed
