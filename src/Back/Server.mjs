@@ -49,15 +49,15 @@ export default class Fl32_Web_Back_Server {
 
         /**
          * Starts the server with optional configuration.
-         * @param {Fl32_Web_Back_Config_Runtime_Server} [cfg]
+         * @param {Fl32_Web_Back_Config_Runtime} [cfg]
          * @returns {Promise<void>}
          */
         this.start = async function (cfg) {
             pipelineEngine.lockHandlers();
             // create server
-            const port = cfg?.port ?? config.server.port;
-            const type = cfg?.type ?? config.server.type;
-            const tls = cfg?.tls ?? config.server.tls;
+            const port = cfg?.port ?? config.port;
+            const type = cfg?.type ?? config.type;
+            const tls = cfg?.tls ?? config.tls;
 
             if (type === SERVER_TYPE.HTTP2) {
                 _instance = createServerH2();

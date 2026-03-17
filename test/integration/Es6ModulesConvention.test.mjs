@@ -83,7 +83,7 @@ describe('TeqFW ES6 module convention integration', () => {
 
         const logger = await container.get('Fl32_Web_Back_Logger$');
         const runtimeConfigFactory = await container.get('Fl32_Web_Back_Config_Runtime__Factory$');
-        const runtimeFromFactory = runtimeConfigFactory.configure({server: {port: '3001', type: 'http'}});
+        const runtimeFromFactory = runtimeConfigFactory.configure({port: '3001', type: 'http'});
         runtimeConfigFactory.freeze();
         const runtimeConfig = await container.get('Fl32_Web_Back_Config_Runtime$');
         const server = await container.get('Fl32_Web_Back_Server$');
@@ -94,10 +94,10 @@ describe('TeqFW ES6 module convention integration', () => {
 
         assert.equal(typeof logger.info, 'function');
         assert.equal(typeof server.start, 'function');
-        assert.equal(runtimeFromFactory, runtimeConfig);
-        assert.equal(runtimeConfig.server.port, 3001);
-        assert.equal(runtimeConfig.server.type, 'http');
-        assert.equal(typeof runtimeConfig.server.tls, 'object');
+        assert.equal(runtimeFromFactory, undefined);
+        assert.equal(runtimeConfig.port, 3001);
+        assert.equal(runtimeConfig.type, 'http');
+        assert.equal(typeof runtimeConfig.tls, 'object');
         assert.equal(STAGE.PROCESS, 'PROCESS');
         assert.equal(Object.isFrozen(STAGE), true);
         assert.equal(SERVER_TYPE.HTTPS, 'https');
@@ -112,9 +112,9 @@ describe('TeqFW ES6 module convention integration', () => {
         const sourceDto = sourceFactory.create({root: '/tmp'});
         assert.equal(Object.isFrozen(sourceDto), true);
 
-        const frozenRuntime = runtimeConfigFactory.freeze();
+        runtimeConfigFactory.freeze();
         assert.throws(() => {
-            frozenRuntime.server = {};
+            runtimeConfig.port = 3002;
         }, /Runtime configuration is immutable\./);
 
         assert.deepEqual(

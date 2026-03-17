@@ -10,14 +10,6 @@ export const __deps__ = Object.freeze({
  * Backend runtime configuration.
  */
 export class Data {
-    /** @type {Fl32_Web_Back_Config_Runtime_Server|undefined} */
-    server;
-}
-
-/**
- * Built-in server runtime configuration subtree.
- */
-export class Server {
     /** @type {number|undefined} */
     port;
     /** @type {string|undefined} */
@@ -68,44 +60,38 @@ export class Factory {
      */
     constructor({ cast, SERVER_TYPE, tlsFactory }) {
         /**
-         * @param {Fl32_Web_Back_Config_Runtime_Params} [params]
-         * @returns {Fl32_Web_Back_Config_Runtime}
+         * @param {Fl32_Web_Back_Config_Runtime} [params]
          */
         this.configure = function (params = {}) {
             if (frozen) throw new Error('Runtime configuration is frozen.');
-            if (cfg.server === undefined) cfg.server = new Server();
-            if (cfg.server.port === undefined && params.server?.port !== undefined) {
-                cfg.server.port = cast.int(params.server.port);
+            if (cfg.port === undefined && params.port !== undefined) {
+                cfg.port = cast.int(params.port);
             }
-            if (cfg.server.type === undefined && params.server?.type !== undefined) {
-                cfg.server.type = cast.enum(params.server.type, SERVER_TYPE, { lower: true });
+            if (cfg.type === undefined && params.type !== undefined) {
+                cfg.type = cast.enum(params.type, SERVER_TYPE, { lower: true });
             }
-            if (params.server?.tls !== undefined) {
-                tlsFactory.configure(params.server.tls);
+            if (params.tls !== undefined) {
+                tlsFactory.configure(params.tls);
             }
-            return proxy;
         };
 
         /**
-         * @returns {Fl32_Web_Back_Config_Runtime}
+         * @returns {void}
          */
         this.freeze = function () {
-            if (frozen) return proxy;
-            if (cfg.server === undefined) cfg.server = new Server();
-            if (cfg.server.port === undefined) cfg.server.port = 3000;
-            if (cfg.server.type === undefined) cfg.server.type = SERVER_TYPE.HTTP;
+            if (frozen) return;
+            if (cfg.port === undefined) cfg.port = 3000;
+            if (cfg.type === undefined) cfg.type = SERVER_TYPE.HTTP;
             const tls = tlsFactory.freeze();
-            if (cfg.server.tls === undefined) cfg.server.tls = tls;
-            if (cfg.server.type === SERVER_TYPE.HTTPS && cfg.server.tls === undefined) {
+            if (cfg.tls === undefined) cfg.tls = tls;
+            if (cfg.type === SERVER_TYPE.HTTPS && cfg.tls === undefined) {
                 throw new Error('TLS configuration is required for HTTPS server type');
             }
-            if (cfg.server.type === SERVER_TYPE.HTTPS && (!cfg.server.tls.key || !cfg.server.tls.cert)) {
+            if (cfg.type === SERVER_TYPE.HTTPS && (!cfg.tls.key || !cfg.tls.cert)) {
                 throw new Error('TLS configuration is required for HTTPS server type');
             }
-            Object.freeze(cfg.server);
             Object.freeze(cfg);
             frozen = true;
-            return proxy;
         };
     }
 }

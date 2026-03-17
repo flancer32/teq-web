@@ -57,7 +57,6 @@ export class Factory {
     constructor({cast}) {
         /**
          * @param {Fl32_Web_Back_Config_Runtime_Tls_Params} [params]
-         * @returns {Fl32_Web_Back_Config_Runtime_Tls}
          */
         this.configure = function (params = {}) {
             if (frozen) throw new Error('Runtime configuration is frozen.');
@@ -70,7 +69,6 @@ export class Factory {
             if (cfg.key === undefined && params.key !== undefined) {
                 cfg.key = cast.string(params.key);
             }
-            return proxy;
         };
 
         /**

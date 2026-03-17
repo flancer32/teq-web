@@ -14,7 +14,7 @@ async function loadRuntimeTlsModule() {
 }
 
 describe('Fl32_Web_Back_Config_Runtime', () => {
-    test('uses hierarchical server values after freeze and keeps first write wins', async () => {
+    test('uses flat runtime values after freeze and keeps first write wins', async () => {
         const {default: RuntimeConfig, Factory} = await loadRuntimeModule();
         const {default: Cast} = await import('../../../../src/Back/Helper/Cast.mjs');
         const {default: ServerType} = await import('../../../../src/Back/Enum/Server/Type.mjs');
@@ -27,21 +27,20 @@ describe('Fl32_Web_Back_Config_Runtime', () => {
             tlsFactory: new TlsFactory({cast: new Cast()}),
         });
 
-        assert.throws(() => runtime.server, /not initialized/);
+        assert.throws(() => runtime.port, /not initialized/);
 
-        factory.configure({server: {port: '8080', type: 'http2'}});
-        factory.configure({server: {port: '9090', type: 'https'}});
+        factory.configure({port: '8080', type: 'http2'});
+        factory.configure({port: '9090', type: 'https'});
         factory.freeze();
 
-        assert.equal(runtime.server.port, 8080);
-        assert.equal(runtime.server.type, 'http2');
-        assert.equal(Object.isFrozen(runtime.server), true);
+        assert.equal(runtime.port, 8080);
+        assert.equal(runtime.type, 'http2');
         assert.throws(() => Object.freeze(runtime), /cannot be frozen/);
         assert.throws(() => {
-            runtime.server = undefined;
+            runtime.port = 9090;
         }, /immutable/);
-        assert.throws(() => factory.configure({server: {port: 1}}), /frozen/);
-        assert.equal(factory.freeze(), runtime);
+        assert.throws(() => factory.configure({port: 1}), /frozen/);
+        assert.equal(factory.freeze(), undefined);
     });
 
     test('applies defaults on freeze', async () => {
@@ -59,8 +58,8 @@ describe('Fl32_Web_Back_Config_Runtime', () => {
 
         factory.freeze();
 
-        assert.equal(runtime.server.port, 3000);
-        assert.equal(runtime.server.type, 'http');
+        assert.equal(runtime.port, 3000);
+        assert.equal(runtime.type, 'http');
         assert.throws(() => Object.freeze(runtime), /cannot be frozen/);
     });
 
@@ -76,7 +75,7 @@ describe('Fl32_Web_Back_Config_Runtime', () => {
             tlsFactory: new TlsFactory({cast: new Cast()}),
         });
 
-        factory.configure({server: {type: 'https'}});
+        factory.configure({type: 'https'});
         assert.throws(() => factory.freeze(), /TLS configuration is required/);
     });
 
@@ -94,13 +93,13 @@ describe('Fl32_Web_Back_Config_Runtime', () => {
             tlsFactory: new TlsFactory({cast}),
         });
 
-        factory.configure({server: {type: 'https', tls: {key: 'key', cert: 'cert', ca: 'ca'}}});
+        factory.configure({type: 'https', tls: {key: 'key', cert: 'cert', ca: 'ca'}});
         factory.freeze();
 
-        assert.equal(runtime.server.tls.key, 'key');
-        assert.equal(runtime.server.tls.cert, 'cert');
-        assert.equal(runtime.server.tls.ca, 'ca');
-        assert.throws(() => Object.freeze(runtime.server.tls), /cannot be frozen/);
+        assert.equal(runtime.tls.key, 'key');
+        assert.equal(runtime.tls.cert, 'cert');
+        assert.equal(runtime.tls.ca, 'ca');
+        assert.throws(() => Object.freeze(runtime.tls), /cannot be frozen/);
         assert.throws(() => Object.freeze(runtime), /cannot be frozen/);
     });
 });
