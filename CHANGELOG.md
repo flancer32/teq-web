@@ -1,5 +1,10 @@
 # Changelog
 
+## [0.9.0] - 2026-03-25 - Release preparation for minor version bump
+
+### Changed
+- Updated package version metadata to `0.9.0`.
+
 ## [0.8.0] - 2026-03-17 - Flat runtime configuration and server startup alignment
 
 ### Changed
