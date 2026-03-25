@@ -2,7 +2,7 @@
 
 /* eslint-disable jsdoc/require-param-description,jsdoc/check-param-names */
 export const __deps__ = Object.freeze({
-    http2: 'node_http2',
+    http2: 'node:http2',
 });
 
 export default class Fl32_Web_Back_Helper_Respond {

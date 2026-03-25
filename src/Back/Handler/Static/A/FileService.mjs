@@ -1,9 +1,9 @@
 // @ts-check
 
 export const __deps__ = Object.freeze({
-    fs: 'node_fs',
-    http2: 'node_http2',
-    path: 'node_path',
+    fs: 'node:fs',
+    http2: 'node:http2',
+    path: 'node:path',
     logger: 'Fl32_Web_Back_Logger$',
     helpMime: 'Fl32_Web_Back_Helper_Mime$',
     resolver: 'Fl32_Web_Back_Handler_Static_A_Resolver$',

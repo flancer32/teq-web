@@ -5,8 +5,8 @@
  * Handles incoming requests and delegates them to the Pipeline Engine.
  */
 export const __deps__ = Object.freeze({
-    http: 'node_http',
-    http2: 'node_http2',
+    http: 'node:http',
+    http2: 'node:http2',
     config: 'Fl32_Web_Back_Config_Runtime$',
     logger: 'Fl32_Web_Back_Logger$',
     pipelineEngine: 'Fl32_Web_Back_PipelineEngine$',

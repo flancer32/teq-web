@@ -1,8 +1,8 @@
 // @ts-check
 
 export const __deps__ = Object.freeze({
-    fs: 'node_fs',
-    path: 'node_path',
+    fs: 'node:fs',
+    path: 'node:path',
 });
 
 export default class Fl32_Web_Back_Handler_Static_A_Fallback {

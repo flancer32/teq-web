@@ -5,7 +5,7 @@
  * a relative URL to an absolute filesystem path under a given root.
  */
 export const __deps__ = Object.freeze({
-    path: 'node_path',
+    path: 'node:path',
 });
 
 export default class Fl32_Web_Back_Handler_Static_A_Resolver {

@@ -1,7 +1,7 @@
 // @ts-check
 
 export const __deps__ = Object.freeze({
-    path: 'node_path',
+    path: 'node:path',
 });
 
 export default class Fl32_Web_Back_Handler_Static_A_Config {
