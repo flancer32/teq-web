@@ -1,8 +1,7 @@
-// @ts-check
-
 /**
  * Simple logger implementation that delegates to the native console.
  */
+// @ts-check
 export default class Fl32_Web_Back_Logger {
     constructor() {
         /**

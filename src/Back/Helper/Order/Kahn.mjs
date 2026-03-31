@@ -1,8 +1,7 @@
-// @ts-check
-
 /**
  * Sorts named handlers by relative `before` / `after` constraints using Kahn's algorithm.
  */
+// @ts-check
 export default class Fl32_Web_Back_Helper_Order_Kahn {
     constructor() {
         /**

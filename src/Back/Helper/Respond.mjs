@@ -1,20 +1,13 @@
+/**
+ * HTTP response helper.
+ */
 // @ts-check
-
-/* eslint-disable jsdoc/require-param-description,jsdoc/check-param-names */
-export const __deps__ = Object.freeze({
-    http2: 'node:http2',
-});
-
 export default class Fl32_Web_Back_Helper_Respond {
     /**
-     * @param {object} params
-     * @param {Fl32_Web_Node_Http2} params.http2
+     * @param {object} deps
+     * @param {Fl32_Web_Node_Http2} deps.http2
      */
-    constructor(
-        {
-            http2,
-        }
-    ) {
+    constructor({http2}) {
         // VARS
         const {constants: H2} = http2;
         const {
@@ -160,3 +153,12 @@ export default class Fl32_Web_Back_Helper_Respond {
         };
     }
 }
+
+/**
+ * Dependencies for the response helper.
+ */
+export const __deps__ = Object.freeze({
+    default: {
+        http2: 'node:http2',
+    },
+});

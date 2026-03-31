@@ -1,17 +1,9 @@
-// @ts-check
-
 /**
  * Pipeline Engine is the single request-lifecycle coordination component.
  * It executes handlers in three deterministic stages:
  * `INIT -> PROCESS -> FINALIZE`.
  */
-export const __deps__ = Object.freeze({
-    dtoRequestContextFactory: 'Fl32_Web_Back_Dto_RequestContext__Factory$',
-    logger: 'Fl32_Web_Back_Logger$',
-    respond: 'Fl32_Web_Back_Helper_Respond$',
-    helpOrder: 'Fl32_Web_Back_Helper_Order_Kahn$',
-    STAGE: 'Fl32_Web_Back_Enum_Stage$',
-});
+// @ts-check
 
 const KEY_STAGE = Symbol('stage');
 
@@ -25,15 +17,7 @@ export default class Fl32_Web_Back_PipelineEngine {
      * @param {Fl32_Web_Back_Helper_Order_Kahn} params.helpOrder
      * @param {Fl32_Web_Back_Enum_Stage} params.STAGE
      */
-    constructor(
-        {
-            dtoRequestContextFactory,
-            logger,
-            respond,
-            helpOrder,
-            STAGE,
-        }
-    ) {
+    constructor({dtoRequestContextFactory, logger, respond, helpOrder, STAGE}) {
         /* eslint-enable jsdoc/require-param-description,jsdoc/check-param-names */
         /** @type {Map<string, Fl32_Web_Back_Api_Handler>} */
         const handlers = new Map();
@@ -214,3 +198,13 @@ export default class Fl32_Web_Back_PipelineEngine {
         this.handleRequest = async (req, res) => this.onEventRequest(req, res);
     }
 }
+
+export const __deps__ = Object.freeze({
+    default: {
+        dtoRequestContextFactory: 'Fl32_Web_Back_Dto_RequestContext__Factory$',
+        logger: 'Fl32_Web_Back_Logger$',
+        respond: 'Fl32_Web_Back_Helper_Respond$',
+        helpOrder: 'Fl32_Web_Back_Helper_Order_Kahn$',
+        STAGE: 'Fl32_Web_Back_Enum_Stage$',
+    },
+});

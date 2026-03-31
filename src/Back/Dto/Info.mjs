@@ -1,10 +1,7 @@
+/**
+ * DTO describing handler registration and ordering metadata.
+ */
 // @ts-check
-
-export const __deps__ = Object.freeze({
-    cast: 'Fl32_Web_Back_Helper_Cast$',
-    STAGE: 'Fl32_Web_Back_Enum_Stage$',
-});
-
 export default class Fl32_Web_Back_Dto_Info {
     /**
      * Handlers to run before this one.
@@ -33,19 +30,13 @@ export default class Fl32_Web_Back_Dto_Info {
 }
 
 export class Factory {
-    /* eslint-disable jsdoc/require-param-description,jsdoc/check-param-names */
     /**
-     * @param {object} params
-     * @param {Fl32_Web_Back_Helper_Cast} params.cast
-     * @param {Fl32_Web_Back_Enum_Stage} params.STAGE
+     * @param {object} deps
+     * @param {Fl32_Web_Back_Helper_Cast} deps.cast
+     * @param {Fl32_Web_Back_Enum_Stage} deps.STAGE
      */
-    constructor(
-        {
-            cast,
-            STAGE,
-        }
-    ) {
-        /* eslint-enable jsdoc/check-param-names */
+    constructor({cast, STAGE}) {
+
         /**
          * @param {*} [data]
          * @returns {Fl32_Web_Back_Dto_Info}
@@ -60,3 +51,14 @@ export class Factory {
         };
     }
 }
+
+/**
+ * DTO dependencies.
+ */
+export const __deps__ = Object.freeze({
+    default: {},
+    Factory: {
+        cast: 'Fl32_Web_Back_Helper_Cast$',
+        STAGE: 'Fl32_Web_Back_Enum_Stage$',
+    },
+});

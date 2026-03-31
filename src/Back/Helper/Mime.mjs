@@ -1,9 +1,8 @@
-// @ts-check
-
 /**
  * MIME type helper with built-in mapping for common file extensions.
  * Can be replaced or extended by the application via the DI container.
  */
+// @ts-check
 export default class Fl32_Web_Back_Helper_Mime {
     constructor() {
         /**

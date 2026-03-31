@@ -1,14 +1,8 @@
+/**
+ * Runtime configuration wrapper and factory wiring.
+ */
 // @ts-check
 
-export const __deps__ = Object.freeze({
-    cast: 'Fl32_Web_Back_Helper_Cast$',
-    SERVER_TYPE: 'Fl32_Web_Back_Enum_Server_Type$',
-    tlsFactory: 'Fl32_Web_Back_Config_Runtime_Tls__Factory$',
-});
-
-/**
- * Backend runtime configuration.
- */
 export class Data {
     /** @type {number|undefined} */
     port;
@@ -53,12 +47,12 @@ export default class Wrapper {
 
 export class Factory {
     /**
-     * @param {object} params
-     * @param {Fl32_Web_Back_Helper_Cast} params.cast
-     * @param {Fl32_Web_Back_Enum_Server_Type} params.SERVER_TYPE
-     * @param {Fl32_Web_Back_Config_Runtime_Tls$Factory} params.tlsFactory
+     * @param {object} deps
+     * @param {Fl32_Web_Back_Helper_Cast} deps.cast
+     * @param {Fl32_Web_Back_Enum_Server_Type} deps.SERVER_TYPE
+     * @param {Fl32_Web_Back_Config_Runtime_Tls$Factory} deps.tlsFactory
      */
-    constructor({ cast, SERVER_TYPE, tlsFactory }) {
+    constructor({cast, SERVER_TYPE, tlsFactory}) {
         /**
          * @param {Fl32_Web_Back_Config_Runtime} [params]
          */
@@ -95,3 +89,18 @@ export class Factory {
         };
     }
 }
+
+/**
+ * Backend runtime configuration container.
+ *
+ * `default export` is the runtime wrapper.
+ * `Factory` is the DI-managed component described by `__deps__`.
+ */
+export const __deps__ = Object.freeze({
+    default: {},
+    Factory: {
+        cast: 'Fl32_Web_Back_Helper_Cast$',
+        SERVER_TYPE: 'Fl32_Web_Back_Enum_Server_Type$',
+        tlsFactory: 'Fl32_Web_Back_Config_Runtime_Tls__Factory$',
+    },
+});

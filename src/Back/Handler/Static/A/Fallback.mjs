@@ -1,24 +1,14 @@
+/**
+ * Static asset fallback helper.
+ */
 // @ts-check
-
-export const __deps__ = Object.freeze({
-    fs: 'node:fs',
-    path: 'node:path',
-});
-
 export default class Fl32_Web_Back_Handler_Static_A_Fallback {
-    /* eslint-disable jsdoc/require-param-description,jsdoc/check-param-names */
     /**
-     * @param {object} params
-     * @param {Fl32_Web_Node_Fs} params.fs
-     * @param {Fl32_Web_Node_Path} params.path
+     * @param {object} deps
+     * @param {Fl32_Web_Node_Fs} deps.fs
+     * @param {Fl32_Web_Node_Path} deps.path
      */
-    constructor(
-        {
-            fs,
-            path,
-        }
-    ) {
-        /* eslint-enable jsdoc/check-param-names */
+    constructor({fs, path}) {
 
         /**
          * Apply default index fallback for directories.
@@ -45,3 +35,13 @@ export default class Fl32_Web_Back_Handler_Static_A_Fallback {
         };
     }
 }
+
+/**
+ * Dependencies for the static fallback helper.
+ */
+export const __deps__ = Object.freeze({
+    default: {
+        fs: 'node:fs',
+        path: 'node:path',
+    },
+});

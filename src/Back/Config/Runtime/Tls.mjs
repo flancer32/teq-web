@@ -1,12 +1,8 @@
+/**
+ * TLS runtime configuration wrapper and factory wiring.
+ */
 // @ts-check
 
-export const __deps__ = Object.freeze({
-    cast: 'Fl32_Web_Back_Helper_Cast$',
-});
-
-/**
- * TLS runtime configuration.
- */
 export class Data {
     /** @type {string|undefined} */
     ca;
@@ -51,8 +47,8 @@ export default class Wrapper {
 
 export class Factory {
     /**
-     * @param {object} params
-     * @param {Fl32_Web_Back_Helper_Cast} params.cast
+     * @param {object} deps
+     * @param {Fl32_Web_Back_Helper_Cast} deps.cast
      */
     constructor({cast}) {
         /**
@@ -82,3 +78,16 @@ export class Factory {
         };
     }
 }
+
+/**
+ * TLS runtime configuration container.
+ *
+ * `default export` is the runtime wrapper.
+ * `Factory` is the DI-managed component described by `__deps__`.
+ */
+export const __deps__ = Object.freeze({
+    default: {},
+    Factory: {
+        cast: 'Fl32_Web_Back_Helper_Cast$',
+    },
+});

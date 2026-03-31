@@ -1,24 +1,14 @@
+/**
+ * Static configuration registry.
+ */
 // @ts-check
-
-export const __deps__ = Object.freeze({
-    configFactory: 'Fl32_Web_Back_Handler_Static_A_Config$',
-    logger: 'Fl32_Web_Back_Logger$',
-});
-
 export default class Fl32_Web_Back_Handler_Static_A_Registry {
-    /* eslint-disable jsdoc/require-param-description,jsdoc/check-param-names */
     /**
-     * @param {object} params
-     * @param {Fl32_Web_Back_Handler_Static_A_Config} params.configFactory
-     * @param {Fl32_Web_Back_Logger} params.logger
+     * @param {object} deps
+     * @param {Fl32_Web_Back_Handler_Static_A_Config} deps.configFactory
+     * @param {Fl32_Web_Back_Logger} deps.logger
      */
-    constructor(
-        {
-            configFactory,
-            logger,
-        }
-    ) {
-        /* eslint-enable jsdoc/check-param-names */
+    constructor({configFactory, logger}) {
         /** @type {Fl32_Web_Back_Dto_Source[]} */
         let _configs = [];
 
@@ -40,7 +30,6 @@ export default class Fl32_Web_Back_Handler_Static_A_Registry {
             _configs.sort((a, b) => b.prefix.length - a.prefix.length);
         };
 
-
         /**
          * Find configuration by matching URL prefix.
          *
@@ -58,3 +47,13 @@ export default class Fl32_Web_Back_Handler_Static_A_Registry {
         };
     }
 }
+
+/**
+ * Dependencies for the static registry helper.
+ */
+export const __deps__ = Object.freeze({
+    default: {
+        configFactory: 'Fl32_Web_Back_Handler_Static_A_Config$',
+        logger: 'Fl32_Web_Back_Logger$',
+    },
+});

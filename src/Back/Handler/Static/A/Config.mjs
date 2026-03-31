@@ -1,22 +1,14 @@
+/**
+ * Static asset config factory.
+ */
 // @ts-check
-
-export const __deps__ = Object.freeze({
-    path: 'node:path',
-});
-
 export default class Fl32_Web_Back_Handler_Static_A_Config {
     static DEFAULT_FILES = ['index.html', 'index.htm', 'index.txt'];
-    /* eslint-disable jsdoc/require-param-description,jsdoc/check-param-names */
     /**
-     * @param {object} params
-     * @param {Fl32_Web_Node_Path} params.path
+     * @param {object} deps
+     * @param {Fl32_Web_Node_Path} deps.path
      */
-    constructor(
-        {
-            path,
-        }
-    ) {
-        /* eslint-enable jsdoc/check-param-names */
+    constructor({path}) {
 
         /**
          * Normalize DTO fields into configuration object.
@@ -63,3 +55,12 @@ export default class Fl32_Web_Back_Handler_Static_A_Config {
         };
     }
 }
+
+/**
+ * Dependencies for the static config factory.
+ */
+export const __deps__ = Object.freeze({
+    default: {
+        path: 'node:path',
+    },
+});

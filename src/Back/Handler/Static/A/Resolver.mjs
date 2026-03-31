@@ -1,17 +1,11 @@
-// @ts-check
-
 /**
- * Enforces allow‐list rules and security checks when resolving
- * a relative URL to an absolute filesystem path under a given root.
+ * Static path resolver.
  */
-export const __deps__ = Object.freeze({
-    path: 'node:path',
-});
-
+// @ts-check
 export default class Fl32_Web_Back_Handler_Static_A_Resolver {
     /**
-     * @param {object} params
-     * @param {Fl32_Web_Node_Path} params.path
+     * @param {object} deps
+     * @param {Fl32_Web_Node_Path} deps.path
      */
     constructor({path}) {
         /**
@@ -88,3 +82,12 @@ export default class Fl32_Web_Back_Handler_Static_A_Resolver {
         };
     }
 }
+
+/**
+ * Dependencies for the static resolver helper.
+ */
+export const __deps__ = Object.freeze({
+    default: {
+        path: 'node:path',
+    },
+});

@@ -1,8 +1,7 @@
-// @ts-check
-
 /**
  * Enum-like DTO for web request processing stages.
  */
+// @ts-check
 export default class Fl32_Web_Back_Enum_Stage {
     constructor() {
         this.INIT = 'INIT';

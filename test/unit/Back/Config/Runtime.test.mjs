@@ -20,11 +20,16 @@ describe('Fl32_Web_Back_Config_Runtime', () => {
         const {default: ServerType} = await import('../../../../src/Back/Enum/Server/Type.mjs');
         const {Factory: TlsFactory} = await loadRuntimeTlsModule();
 
-        const runtime = new RuntimeConfig();
-        const factory = new Factory({
-            cast: new Cast(),
+        const cast = new Cast();
+        const runtime = new RuntimeConfig({
+            cast,
             SERVER_TYPE: new ServerType(),
-            tlsFactory: new TlsFactory({cast: new Cast()}),
+            tlsFactory: new TlsFactory({cast}),
+        });
+        const factory = new Factory({
+            cast,
+            SERVER_TYPE: new ServerType(),
+            tlsFactory: new TlsFactory({cast}),
         });
 
         assert.throws(() => runtime.port, /not initialized/);
@@ -49,11 +54,16 @@ describe('Fl32_Web_Back_Config_Runtime', () => {
         const {default: ServerType} = await import('../../../../src/Back/Enum/Server/Type.mjs');
         const {Factory: TlsFactory} = await loadRuntimeTlsModule();
 
-        const runtime = new RuntimeConfig();
-        const factory = new Factory({
-            cast: new Cast(),
+        const cast = new Cast();
+        const runtime = new RuntimeConfig({
+            cast,
             SERVER_TYPE: new ServerType(),
-            tlsFactory: new TlsFactory({cast: new Cast()}),
+            tlsFactory: new TlsFactory({cast}),
+        });
+        const factory = new Factory({
+            cast,
+            SERVER_TYPE: new ServerType(),
+            tlsFactory: new TlsFactory({cast}),
         });
 
         factory.freeze();
@@ -69,10 +79,11 @@ describe('Fl32_Web_Back_Config_Runtime', () => {
         const {default: ServerType} = await import('../../../../src/Back/Enum/Server/Type.mjs');
         const {Factory: TlsFactory} = await loadRuntimeTlsModule();
 
+        const cast = new Cast();
         const factory = new Factory({
-            cast: new Cast(),
+            cast,
             SERVER_TYPE: new ServerType(),
-            tlsFactory: new TlsFactory({cast: new Cast()}),
+            tlsFactory: new TlsFactory({cast}),
         });
 
         factory.configure({type: 'https'});
@@ -85,8 +96,12 @@ describe('Fl32_Web_Back_Config_Runtime', () => {
         const {default: ServerType} = await import('../../../../src/Back/Enum/Server/Type.mjs');
         const {Factory: TlsFactory} = await loadRuntimeTlsModule();
 
-        const runtime = new RuntimeConfig();
         const cast = new Cast();
+        const runtime = new RuntimeConfig({
+            cast,
+            SERVER_TYPE: new ServerType(),
+            tlsFactory: new TlsFactory({cast}),
+        });
         const factory = new Factory({
             cast,
             SERVER_TYPE: new ServerType(),

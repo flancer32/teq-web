@@ -1,32 +1,17 @@
-// @ts-check
-
 /**
  * Logs basic request information at the beginning of the request lifecycle.
  *
  * @implements Fl32_Web_Back_Api_Handler
  */
-export const __deps__ = Object.freeze({
-    logger: 'Fl32_Web_Back_Logger$',
-    dtoInfoFactory: 'Fl32_Web_Back_Dto_Info__Factory$',
-    STAGE: 'Fl32_Web_Back_Enum_Stage$',
-});
-
+// @ts-check
 export default class Fl32_Web_Back_Handler_Pre_Log {
-    /* eslint-disable jsdoc/require-param-description,jsdoc/check-param-names */
     /**
-     * @param {object} params
-     * @param {Fl32_Web_Back_Logger} params.logger
-     * @param {Fl32_Web_Back_Dto_Info$Factory} params.dtoInfoFactory
-     * @param {Fl32_Web_Back_Enum_Stage} params.STAGE
+     * @param {object} deps
+     * @param {Fl32_Web_Back_Logger} deps.logger
+     * @param {Fl32_Web_Back_Dto_Info$Factory} deps.dtoInfoFactory
+     * @param {Fl32_Web_Back_Enum_Stage} deps.STAGE
      */
-    constructor(
-        {
-            logger,
-            dtoInfoFactory,
-            STAGE,
-        }
-    ) {
-        /* eslint-enable jsdoc/check-param-names */
+    constructor({logger, dtoInfoFactory, STAGE}) {
         // VARS
         const _info = dtoInfoFactory.create({
             name: this.constructor.name,
@@ -53,3 +38,14 @@ export default class Fl32_Web_Back_Handler_Pre_Log {
         this.getRegistrationInfo = () => _info;
     }
 }
+
+/**
+ * Dependencies for the log handler.
+ */
+export const __deps__ = Object.freeze({
+    default: {
+        logger: 'Fl32_Web_Back_Logger$',
+        dtoInfoFactory: 'Fl32_Web_Back_Dto_Info__Factory$',
+        STAGE: 'Fl32_Web_Back_Enum_Stage$',
+    },
+});

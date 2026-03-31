@@ -1,39 +1,19 @@
+/**
+ * Static file service.
+ */
 // @ts-check
-
-export const __deps__ = Object.freeze({
-    fs: 'node:fs',
-    http2: 'node:http2',
-    path: 'node:path',
-    logger: 'Fl32_Web_Back_Logger$',
-    helpMime: 'Fl32_Web_Back_Helper_Mime$',
-    resolver: 'Fl32_Web_Back_Handler_Static_A_Resolver$',
-    fallback: 'Fl32_Web_Back_Handler_Static_A_Fallback$',
-});
-
 export default class Fl32_Web_Back_Handler_Static_A_FileService {
-    /* eslint-disable jsdoc/require-param-description,jsdoc/check-param-names */
     /**
-     * @param {object} params
-     * @param {Fl32_Web_Node_Fs} params.fs
-     * @param {Fl32_Web_Node_Http2} params.http2
-     * @param {Fl32_Web_Node_Path} params.path
-     * @param {Fl32_Web_Back_Logger} params.logger
-     * @param {Fl32_Web_Back_Helper_Mime} params.helpMime
-     * @param {Fl32_Web_Back_Handler_Static_A_Resolver} params.resolver
-     * @param {Fl32_Web_Back_Handler_Static_A_Fallback} params.fallback
+     * @param {object} deps
+     * @param {Fl32_Web_Node_Fs} deps.fs
+     * @param {Fl32_Web_Node_Http2} deps.http2
+     * @param {Fl32_Web_Node_Path} deps.path
+     * @param {Fl32_Web_Back_Logger} deps.logger
+     * @param {Fl32_Web_Back_Helper_Mime} deps.helpMime
+     * @param {Fl32_Web_Back_Handler_Static_A_Resolver} deps.resolver
+     * @param {Fl32_Web_Back_Handler_Static_A_Fallback} deps.fallback
      */
-    constructor(
-        {
-            fs,
-            http2,
-            path,
-            logger,
-            helpMime,
-            resolver,
-            fallback,
-        }
-    ) {
-        /* eslint-enable jsdoc/check-param-names */
+    constructor({fs, http2, path, logger, helpMime, resolver, fallback}) {
         const {constants: H2} = http2;
 
         /**
@@ -80,3 +60,18 @@ export default class Fl32_Web_Back_Handler_Static_A_FileService {
         };
     }
 }
+
+/**
+ * Dependencies for the static file service.
+ */
+export const __deps__ = Object.freeze({
+    default: {
+        fs: 'node:fs',
+        http2: 'node:http2',
+        path: 'node:path',
+        logger: 'Fl32_Web_Back_Logger$',
+        helpMime: 'Fl32_Web_Back_Helper_Mime$',
+        resolver: 'Fl32_Web_Back_Handler_Static_A_Resolver$',
+        fallback: 'Fl32_Web_Back_Handler_Static_A_Fallback$',
+    },
+});
