@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.10.0] - 2026-03-31 - Validator conformance and release preparation
+
+### Changed
+- Updated handler interfaces and runtime DTOs to conform to validator requirements.
+- Removed the ESLint development dependency after aligning the codebase with the current validation approach.
+- Updated package version metadata to `0.10.0`.
+
 ## [0.9.0] - 2026-03-25 - Release preparation for minor version bump
 
 ### Changed
