@@ -170,12 +170,6 @@ No additional runtime dependencies are currently required.
 
 Development dependencies include tools used during development but not required during runtime.
 
-The project currently uses:
-
-```
-eslint
-```
-
 ### Node.js Type Definitions
 
 Because the project targets the Node.js runtime and uses Node built-in modules, the development environment must include Node.js type definitions.
@@ -190,8 +184,7 @@ Example:
 
 ```
 "devDependencies": {
-  "@types/node": "^20",
-  "eslint": "^9.0.0"
+  "@types/node": "^20"
 }
 ```
 
@@ -377,8 +370,7 @@ The following JSON fragment illustrates the canonical structure of the `package.
   },
 
   "devDependencies": {
-    "@types/node": "^25.4.0",
-    "eslint": "^10.0.3"
+    "@types/node": "^25.4.0"
   },
 
   "scripts": {
