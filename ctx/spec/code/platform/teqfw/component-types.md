@@ -1,7 +1,7 @@
 # Component Types in TeqFW
 
-Path: `./ctx/docs/code/convention/teqfw/component-types.md`
-Template Version: `20260315`
+Path: `ctx/spec/code/platform/teqfw/component-types.md`
+Template Version: `20260329`
 
 ## 1. Purpose
 

@@ -1,7 +1,7 @@
 # Static Configuration Convention
 
-Path: `ctx/docs/code/convention/teqfw/configuration/static.md`
-Template Version: `20260315`
+Path: `ctx/spec/code/platform/teqfw/configuration/static.md`
+Template Version: `20260329`
 
 ## Purpose
 
@@ -17,7 +17,7 @@ Static configuration is a Static Data Component.
 
 Static configuration objects belong to individual packages and may form a hierarchical structure that mirrors the dependency graph of packages.
 
-Component type definitions are described in ctx/docs/code/convention/teqfw/component-types.md.
+Component type definitions are described in ctx/spec/code/platform/teqfw/component-types.md.
 
 Static configuration:
 

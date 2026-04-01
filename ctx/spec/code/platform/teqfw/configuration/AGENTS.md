@@ -1,11 +1,11 @@
 # TeqFW Configuration Conventions
 
-Path: `./ctx/docs/code/convention/teqfw/configuration/AGENTS.md`
-Template Version: `20260317`
+Path: `ctx/spec/code/platform/teqfw/configuration/AGENTS.md`
+Template Version: `20260329`
 
 ## Purpose
 
-The `ctx/docs/code/convention/teqfw/configuration/` directory contains detailed conventions for TeqFW configuration component forms. This level refines the high-level configuration model from `../configuration.md` into concrete static and runtime component contracts.
+This directory contains detailed conventions for TeqFW configuration component forms. This level refines the high-level configuration model from `../configuration.md` into concrete static and runtime component contracts.
 
 ## Level Map
 
@@ -24,7 +24,3 @@ The list above is alphabetical and serves navigation purposes.
 ## Level Boundary
 
 This level defines only detailed conventions for configuration component structure and lifecycle. It must not redefine broader TeqFW namespace conventions, general ES module conventions, or repository-level policies.
-
-## Summary
-
-`ctx/docs/code/convention/teqfw/configuration/AGENTS.md` defines scope and reading order for detailed TeqFW configuration conventions split into static and runtime component contracts.

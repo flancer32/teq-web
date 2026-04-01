@@ -1,7 +1,7 @@
 # Type Maps in TeqFW
 
-Path: `ctx/docs/code/convention/teqfw/types-map.md`
-Template Version: `20260313`
+Path: `ctx/spec/code/platform/teqfw/types-map.md`
+Template Version: `20260329`
 
 ## 1. Purpose
 

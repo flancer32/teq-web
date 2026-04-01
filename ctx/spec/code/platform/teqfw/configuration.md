@@ -1,7 +1,7 @@
 # Configuration Conventions in TeqFW Applications
 
-Path: `ctx/docs/code/convention/teqfw/configuration.md`
-Template Version: `20260315`
+Path: `ctx/spec/code/platform/teqfw/configuration.md`
+Template Version: `20260401`
 
 ## Purpose
 
@@ -9,16 +9,18 @@ This document defines architectural conventions for configuration in TeqFW appli
 
 Detailed implementation conventions are defined in:
 
-- `ctx/docs/code/convention/teqfw/configuration/static.md` for static configuration components.
-- `ctx/docs/code/convention/teqfw/configuration/runtime.md` for runtime configuration components.
+- `ctx/spec/code/platform/teqfw/configuration/static.md` for static configuration components.
+- `ctx/spec/code/platform/teqfw/configuration/runtime.md` for runtime configuration components.
 
 ## Configuration Model
 
-Configuration in TeqFW is organized as a hierarchical system of configuration objects belonging to individual packages. Each package defines its own configuration structure and does not depend on the configuration structure of the application that uses it.
+Configuration in TeqFW is organized as a hierarchical system of package-owned configuration objects. Each package defines its own configuration structure and does not depend on the configuration structure of the application that uses it.
 
 The complete configuration of an application is therefore a composite formed by the configuration objects of all participating packages.
 
-Configuration flows through the dependency hierarchy of packages. A package is responsible for configuring the configuration objects of the packages it depends on.
+Configuration flows through the dependency hierarchy of packages. A package is responsible for configuring its own configuration objects and the configuration objects of its direct dependencies.
+
+The host application initializes the root configuration node of its package branch and does not need to know the internal configuration structure of transitive dependencies.
 
 ## Types of Configuration
 
@@ -35,6 +37,13 @@ Static configuration objects are defined by packages and composed through depend
 Runtime configuration represents values that must be provided when the application starts. These values typically originate from environment variables or external configuration sources such as JSON or XML.
 
 Runtime configuration objects exist for individual packages and are organized according to the dependency hierarchy of the application.
+
+Runtime configuration composition follows package dependency edges:
+
+- each package owns a runtime configuration node
+- a package initializes its own node and the nodes of its direct dependencies
+- transitive runtime configuration is reached by propagating initialization through the DI graph
+- the host application only initializes the root node of its own package branch
 
 Runtime configuration values remain immutable after initialization.
 
@@ -69,7 +78,7 @@ The application is responsible for initializing the configuration hierarchy.
 During application startup the application performs the following steps.
 
 1. External configuration sources are read.
-2. The root configuration handler is obtained from the DI container.
+2. The root configuration handler for the application package branch is obtained from the DI container.
 3. Configuration values are propagated through the dependency hierarchy.
 4. The configuration hierarchy becomes immutable.
 
@@ -79,9 +88,9 @@ After initialization the configuration objects are considered frozen and must no
 
 Configuration in a TeqFW application is compositional.
 
-Each package configuration object contains configuration objects of its dependencies. The root configuration object of the application therefore forms a tree whose structure mirrors the dependency graph of packages.
+Each package configuration object contains configuration objects of its direct dependencies. The root configuration object of the application branch therefore forms a tree whose structure mirrors the dependency graph of packages.
 
-Packages do not know about the application-level configuration object. They operate only on their own configuration objects and on configuration objects of their dependencies.
+Packages do not know about an application-wide configuration registry. They operate only on their own configuration objects and on configuration objects of their dependencies.
 
 ## Initialization Semantics
 

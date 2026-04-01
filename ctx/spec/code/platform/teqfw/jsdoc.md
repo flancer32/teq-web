@@ -1,7 +1,7 @@
 # JSDoc Annotation Conventions for TeqFW Applications
 
-Path: `ctx/docs/code/conventions/teqfw/jsdoc.md`
-Template Version: `20260316`
+Path: `ctx/spec/code/platform/teqfw/jsdoc.md`
+Template Version: `20260330`
 
 ## Document Scope
 
@@ -151,6 +151,7 @@ Unannotated exports are not allowed.
 ## Constructor Annotation Model
 
 Container-managed classes receive dependencies through a single structured constructor parameter.
+For such constructors, the structured parameter MUST be named `deps`.
 
 Inline parameter annotations MUST be used.
 
@@ -159,9 +160,9 @@ Example:
 ```javascript
 export default class UserService {
   /**
-   * @param {object} params
-   * @param {Fl32_Web_Back_Service_Logger} params.logger
-   * @param {Fl32_Web_Back_Repo_User} params.repo
+   * @param {object} deps
+   * @param {Fl32_Web_Back_Service_Logger} deps.logger
+   * @param {Fl32_Web_Back_Repo_User} deps.repo
    */
   constructor({ logger, repo }) {}
 }
@@ -170,6 +171,7 @@ export default class UserService {
 Rules:
 
 - constructor parameters MUST be represented as a structured object
+- the structured constructor parameter MUST be named `deps`
 - each dependency MUST be documented explicitly
 - inline parameter annotations MUST be used
 
@@ -188,7 +190,7 @@ export const __deps__ = Object.freeze({
 Constructor annotation must reference the same dependency.
 
 ```
-@param {Fl32_Web_Back_Service_Logger} params.logger
+@param {Fl32_Web_Back_Service_Logger} deps.logger
 ```
 
 ## Dependency Name Consistency
@@ -212,7 +214,7 @@ constructor({ logger }) {}
 ```
 
 ```
-@param {Fl32_Web_Back_Service_Logger} params.logger
+@param {Fl32_Web_Back_Service_Logger} deps.logger
 ```
 
 Renaming dependencies through destructuring or aliasing is not allowed.
@@ -276,9 +278,9 @@ The following example illustrates the canonical structure of a DI-compatible mod
  */
 export default class Fl32_Web_Back_Service_User {
   /**
-   * @param {object} params
-   * @param {Fl32_Web_Back_Service_Logger} params.logger
-   * @param {Fl32_Web_Back_Repo_User} params.repo
+   * @param {object} deps
+   * @param {Fl32_Web_Back_Service_Logger} deps.logger
+   * @param {Fl32_Web_Back_Repo_User} deps.repo
    */
   constructor({ logger, repo }) {
     /**
@@ -336,7 +338,7 @@ Incorrect:
 Correct:
 
 ```
-@param {Fl32_Web_Back_Repo_User} params.repo
+@param {Fl32_Web_Back_Repo_User} repo
 ```
 
 ### Dependency Name Mismatch

@@ -1,7 +1,7 @@
 # Namespaces in TeqFW
 
-Path: `./ctx/docs/code/convention/teqfw/namespaces.md`
-Template Version: `20260312`
+Path: `ctx/spec/code/platform/teqfw/namespaces.md`
+Template Version: `20260329`
 
 ## Definition
 
