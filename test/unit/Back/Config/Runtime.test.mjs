@@ -45,7 +45,7 @@ describe('Fl32_Web_Back_Config_Runtime', () => {
             runtime.port = 9090;
         }, /immutable/);
         assert.throws(() => factory.configure({port: 1}), /frozen/);
-        assert.equal(factory.freeze(), undefined);
+        assert.equal(factory.freeze(), runtime);
     });
 
     test('applies defaults on freeze', async () => {

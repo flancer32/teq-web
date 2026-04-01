@@ -86,8 +86,8 @@ export class Factory {
  * `Factory` is the DI-managed component described by `__deps__`.
  */
 export const __deps__ = Object.freeze({
-    default: {},
-    Factory: {
+    default: Object.freeze({}),
+    Factory: Object.freeze({
         cast: 'Fl32_Web_Back_Helper_Cast$',
-    },
+    }),
 });

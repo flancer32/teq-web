@@ -70,10 +70,10 @@ export class Factory {
         };
 
         /**
-         * @returns {void}
+         * @returns {Fl32_Web_Back_Config_Runtime}
          */
         this.freeze = function () {
-            if (frozen) return;
+            if (frozen) return proxy;
             if (cfg.port === undefined) cfg.port = 3000;
             if (cfg.type === undefined) cfg.type = SERVER_TYPE.HTTP;
             const tls = tlsFactory.freeze();
@@ -86,6 +86,7 @@ export class Factory {
             }
             Object.freeze(cfg);
             frozen = true;
+            return proxy;
         };
     }
 }
@@ -97,10 +98,10 @@ export class Factory {
  * `Factory` is the DI-managed component described by `__deps__`.
  */
 export const __deps__ = Object.freeze({
-    default: {},
-    Factory: {
+    default: Object.freeze({}),
+    Factory: Object.freeze({
         cast: 'Fl32_Web_Back_Helper_Cast$',
         SERVER_TYPE: 'Fl32_Web_Back_Enum_Server_Type$',
         tlsFactory: 'Fl32_Web_Back_Config_Runtime_Tls__Factory$',
-    },
+    }),
 });
