@@ -1,5 +1,16 @@
 # Changelog
 
+## [0.11.0] - 2026-04-01 - TeqFW spec alignment and runtime contract updates
+
+### Added
+- Added TeqFW specification documents for DI usage, ES module conventions, and package metadata expectations.
+
+### Changed
+- Reworked runtime configuration docs and examples to follow the current spec-level contract.
+- Tightened runtime configuration implementation and unit tests to match the updated contract.
+- Replaced legacy TeqFW convention documents with the current spec-oriented documentation layout.
+- Updated package version metadata to `0.11.0`.
+
 ## [0.10.0] - 2026-03-31 - Validator conformance and release preparation
 
 ### Changed
