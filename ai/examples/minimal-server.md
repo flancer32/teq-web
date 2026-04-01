@@ -6,17 +6,17 @@ This example shows the preferred TeqFW-style usage path: external code resolves 
 // App/Web/Handler/Hello.mjs
 // @ts-check
 
-export const __deps__ = {
+export const __deps__ = Object.freeze({
+    default: Object.freeze({}),
     dtoInfoFactory: 'Fl32_Web_Back_Dto_Info__Factory$',
     STAGE: 'Fl32_Web_Back_Enum_Stage$',
-};
+});
 
 export default class App_Web_Handler_Hello {
     /**
-     * @param {{
-     *   dtoInfoFactory: Fl32_Web_Back_Dto_Info$Factory,
-     *   STAGE: Fl32_Web_Back_Enum_Stage,
-     * }} deps
+     * @param {object} deps
+     * @param {Fl32_Web_Back_Dto_Info$Factory} deps.dtoInfoFactory
+     * @param {Fl32_Web_Back_Enum_Stage} deps.STAGE
      */
     constructor({dtoInfoFactory, STAGE}) {
         const info = dtoInfoFactory.create({
@@ -40,19 +40,19 @@ export default class App_Web_Handler_Hello {
 // App/Web/Server/Start.mjs
 // @ts-check
 
-export const __deps__ = {
+export const __deps__ = Object.freeze({
+    default: Object.freeze({}),
     pipeline: 'Fl32_Web_Back_PipelineEngine$',
     server: 'Fl32_Web_Back_Server$',
     helloHandler: 'App_Web_Handler_Hello$',
-};
+});
 
 export default class App_Web_Server_Start {
     /**
-     * @param {{
-     *   pipeline: Fl32_Web_Back_PipelineEngine,
-     *   server: Fl32_Web_Back_Server,
-     *   helloHandler: App_Web_Handler_Hello,
-     * }} deps
+     * @param {object} deps
+     * @param {Fl32_Web_Back_PipelineEngine} deps.pipeline
+     * @param {Fl32_Web_Back_Server} deps.server
+     * @param {App_Web_Handler_Hello} deps.helloHandler
      */
     constructor({pipeline, server, helloHandler}) {
         this.execute = async function () {

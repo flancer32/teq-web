@@ -42,3 +42,4 @@
 - TLS startup configuration belongs to the dedicated runtime component `Fl32_Web_Back_Config_Runtime_Tls$`, even though consumers read it through `config.tls`.
 - Configure runtime values during startup only; once the runtime configuration is frozen for use, consumers must treat `Fl32_Web_Back_Config_Runtime$` and `Fl32_Web_Back_Config_Runtime_Tls$` as immutable read-only state.
 - Treat helper internals under deep implementation paths as non-essential unless the task specifically requires them. Preferred consumer entry points are the Pipeline Engine, Server, handler API, DTO factories, enums, and built-in handlers.
+- Use `Object.freeze({})` for `__deps__` declarations in examples and application code that is meant to be container-managed.

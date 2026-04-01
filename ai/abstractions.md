@@ -22,7 +22,7 @@ Default transport settings come from flat fields of `Fl32_Web_Back_Config_Runtim
 - `http2`
 - `https`
 
-`https` requires `server.tls`.
+`https` requires `config.tls` to contain both `key` and `cert`.
 
 ## Handler Contract
 
@@ -63,7 +63,7 @@ Only `PROCESS` handlers may mark the request as completed.
 
 ## Built-in Static Handler
 
-`Fl32_Web_Back_Handler_Static$` is a PROCESS-stage handler for static file delivery. Before use, call `init({sources})` with source DTOs created by `Fl32_Web_Back_Dto_Source$Factory`.
+`Fl32_Web_Back_Handler_Static$` is a PROCESS-stage handler for static file delivery. Before use, call `init({sources})` with source DTOs created by `Fl32_Web_Back_Dto_Source__Factory$`.
 
 Each source describes:
 
