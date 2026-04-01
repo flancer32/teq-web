@@ -3,16 +3,15 @@
 This example shows the preferred TeqFW-style usage path: external code resolves one application service from the container, and that service receives web infrastructure through constructor injection.
 
 ```js
-// App/Web/Handler/Hello.mjs
+// src/Handler/Hello.mjs
 // @ts-check
 
-export const __deps__ = Object.freeze({
-    default: Object.freeze({}),
-    dtoInfoFactory: 'Fl32_Web_Back_Dto_Info__Factory$',
-    STAGE: 'Fl32_Web_Back_Enum_Stage$',
-});
+/**
+ * @namespace App_Web_Handler_Hello
+ * @description Example PROCESS handler
+ */
 
-export default class App_Web_Handler_Hello {
+export default class Hello {
     /**
      * @param {object} deps
      * @param {Fl32_Web_Back_Dto_Info$Factory} deps.dtoInfoFactory
@@ -34,20 +33,23 @@ export default class App_Web_Handler_Hello {
         };
     }
 }
+
+export const __deps__ = Object.freeze({
+    dtoInfoFactory: 'Fl32_Web_Back_Dto_Info__Factory$',
+    STAGE: 'Fl32_Web_Back_Enum_Stage$',
+});
 ```
 
 ```js
-// App/Web/Server/Start.mjs
+// src/Server/Start.mjs
 // @ts-check
 
-export const __deps__ = Object.freeze({
-    default: Object.freeze({}),
-    pipeline: 'Fl32_Web_Back_PipelineEngine$',
-    server: 'Fl32_Web_Back_Server$',
-    helloHandler: 'App_Web_Handler_Hello$',
-});
+/**
+ * @namespace App_Web_Server_Start
+ * @description Example application entry service
+ */
 
-export default class App_Web_Server_Start {
+export default class Start {
     /**
      * @param {object} deps
      * @param {Fl32_Web_Back_PipelineEngine} deps.pipeline
@@ -61,6 +63,12 @@ export default class App_Web_Server_Start {
         };
     }
 }
+
+export const __deps__ = Object.freeze({
+    pipeline: 'Fl32_Web_Back_PipelineEngine$',
+    server: 'Fl32_Web_Back_Server$',
+    helloHandler: 'App_Web_Handler_Hello$',
+});
 ```
 
 ```js

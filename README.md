@@ -113,14 +113,14 @@ Handlers do not coordinate with each other directly. Execution order is derived 
 ## Example (TeqFW Style)
 
 ```javascript
-// App/Web/Handler/Hello.mjs
+// src/Handler/Hello.mjs
 
-export const __deps__ = {
-  dtoInfoFactory: "Fl32_Web_Back_Dto_Info__Factory$",
-  STAGE: "Fl32_Web_Back_Enum_Stage$",
-};
+/**
+ * @namespace App_Web_Handler_Hello
+ * @description Example PROCESS handler
+ */
 
-export default class App_Web_Handler_Hello {
+export default class Hello {
   constructor({ dtoInfoFactory, STAGE }) {
     const info = dtoInfoFactory.create({
       name: "App_Web_Handler_Hello",
@@ -139,18 +139,22 @@ export default class App_Web_Handler_Hello {
     };
   }
 }
+
+export const __deps__ = Object.freeze({
+  dtoInfoFactory: "Fl32_Web_Back_Dto_Info__Factory$",
+  STAGE: "Fl32_Web_Back_Enum_Stage$",
+});
 ```
 
 ```javascript
-// App/Web/Server/Start.mjs
+// src/Server/Start.mjs
 
-export const __deps__ = {
-  pipeline: "Fl32_Web_Back_PipelineEngine$",
-  server: "Fl32_Web_Back_Server$",
-  helloHandler: "App_Web_Handler_Hello$",
-};
+/**
+ * @namespace App_Web_Server_Start
+ * @description Example application entry service
+ */
 
-export default class App_Web_Server_Start {
+export default class Start {
   constructor({ pipeline, server, helloHandler }) {
     this.execute = async function () {
       pipeline.addHandler(helloHandler);
@@ -162,6 +166,12 @@ export default class App_Web_Server_Start {
     };
   }
 }
+
+export const __deps__ = Object.freeze({
+  pipeline: "Fl32_Web_Back_PipelineEngine$",
+  server: "Fl32_Web_Back_Server$",
+  helloHandler: "App_Web_Handler_Hello$",
+});
 ```
 
 Application entry point:
