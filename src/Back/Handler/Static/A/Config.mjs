@@ -14,7 +14,7 @@ export default class Fl32_Web_Back_Handler_Static_A_Config {
          * Normalize DTO fields into configuration object.
          *
          * @param {Fl32_Web_Back_Dto_Source} dto
-         * @returns {Fl32_Web_Back_Handler_Static_A_Config_Value}
+         * @returns {Fl32_Web_Back_Handler_Static_A_Config__Value}
          * @throws {Error} When required fields are missing or invalid.
          */
         this.create = (dto) => {
@@ -54,6 +54,17 @@ export default class Fl32_Web_Back_Handler_Static_A_Config {
             return {root, prefix, allow, defaults};
         };
     }
+}
+
+export class Value {
+    /** @type {string} */
+    root;
+    /** @type {string} */
+    prefix;
+    /** @type {Record<string, string[]>|undefined} */
+    allow;
+    /** @type {string[]} */
+    defaults;
 }
 
 /**

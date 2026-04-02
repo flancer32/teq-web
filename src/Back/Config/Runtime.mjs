@@ -50,7 +50,7 @@ export class Factory {
      * @param {object} deps
      * @param {Fl32_Web_Back_Helper_Cast} deps.cast
      * @param {Fl32_Web_Back_Enum_Server_Type} deps.SERVER_TYPE
-     * @param {Fl32_Web_Back_Config_Runtime_Tls$Factory} deps.tlsFactory
+     * @param {Fl32_Web_Back_Config_Runtime_Tls__Factory} deps.tlsFactory
      */
     constructor({cast, SERVER_TYPE, tlsFactory}) {
         /**

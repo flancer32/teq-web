@@ -34,7 +34,7 @@ export default class Fl32_Web_Back_Handler_Static_A_Registry {
          * Find configuration by matching URL prefix.
          *
          * @param {string} url
-         * @returns {Fl32_Web_Back_Handler_Static_A_Match|null}
+         * @returns {Fl32_Web_Back_Handler_Static_A_Registry__Match|null}
          */
         this.find = function (url) {
             for (const cfg of _configs) {
@@ -46,6 +46,13 @@ export default class Fl32_Web_Back_Handler_Static_A_Registry {
             return null;
         };
     }
+}
+
+export class Match {
+    /** @type {Fl32_Web_Back_Handler_Static_A_Config__Value} */
+    config;
+    /** @type {string} */
+    rel;
 }
 
 /**

@@ -8,7 +8,7 @@ export default class Fl32_Web_Back_Handler_Pre_Log {
     /**
      * @param {object} deps
      * @param {Fl32_Web_Back_Logger} deps.logger
-     * @param {Fl32_Web_Back_Dto_Info$Factory} deps.dtoInfoFactory
+     * @param {Fl32_Web_Back_Dto_Info__Factory} deps.dtoInfoFactory
      * @param {Fl32_Web_Back_Enum_Stage} deps.STAGE
      */
     constructor({logger, dtoInfoFactory, STAGE}) {

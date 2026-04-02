@@ -19,7 +19,7 @@ export default class Fl32_Web_Back_Handler_Static_A_FileService {
         /**
          * Serve a file for given config and relative path.
          *
-         * @param {Fl32_Web_Back_Handler_Static_A_Config_Value} config
+         * @param {Fl32_Web_Back_Handler_Static_A_Config__Value} config
          * @param {string} rel
          * @param {Fl32_Web_Node_Http_IncomingMessage|Fl32_Web_Node_Http2_ServerRequest} req
          * @param {Fl32_Web_Back_Response_Target} res

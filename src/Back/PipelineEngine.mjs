@@ -11,7 +11,7 @@ export default class Fl32_Web_Back_PipelineEngine {
     /* eslint-disable jsdoc/require-param-description,jsdoc/check-param-names */
     /**
      * @param {object} params
-     * @param {Fl32_Web_Back_Dto_RequestContext$Factory} params.dtoRequestContextFactory
+     * @param {Fl32_Web_Back_Dto_RequestContext__Factory} params.dtoRequestContextFactory
      * @param {Fl32_Web_Back_Logger} params.logger
      * @param {Fl32_Web_Back_Helper_Respond} params.respond
      * @param {Fl32_Web_Back_Helper_Order_Kahn} params.helpOrder

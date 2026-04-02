@@ -12,7 +12,7 @@ export default class Fl32_Web_Back_Handler_Static_A_Resolver {
          * Resolve a filesystem path for given config and relative URL part.
          * Applies allow rules and prevents path traversal.
          *
-         * @param {Fl32_Web_Back_Handler_Static_A_Config_Value} config
+         * @param {Fl32_Web_Back_Handler_Static_A_Config__Value} config
          * @param {string} rel
          * @returns {string|null}
          * @throws {Error} On traversal or absolute rel paths.
