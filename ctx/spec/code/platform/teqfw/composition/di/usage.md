@@ -1,7 +1,7 @@
 # TeqFW DI — Usage
 
-- Path: `ctx/spec/code/platform/teqfw/di/usage.md`
-- Document Version: `20260331`
+- Path: `ctx/spec/code/platform/teqfw/composition/di/usage.md`
+- Version: `20260401`
 
 ## Purpose
 
@@ -20,7 +20,7 @@ Defines:
 
 Does not define:
 
-- module structure (see `es6-module.md`)
+- module structure (see `ctx/spec/code/platform/teqfw/coding/es6-module.md`)
 - container implementation
 - architectural justification
 
@@ -45,7 +45,7 @@ Invariants:
 - components declare dependency contracts explicitly
 - components are safe to import (no side effects)
 
-DI-compatible modules MUST follow the canonical ES module structure defined in `es6-module.md`.
+DI-compatible modules MUST follow the canonical ES module structure defined in `ctx/spec/code/platform/teqfw/coding/es6-module.md`.
 
 ## Dependency Declaration
 
@@ -106,7 +106,7 @@ Rules:
 
 CDC is the addressing mechanism of components.
 
-Form:
+Canonical forms:
 
 ```text
 Namespace_Component
@@ -114,21 +114,28 @@ Namespace_Component$
 Namespace_Component$$
 Namespace_Component__Export
 Namespace_Component__Export$
+Namespace_Component__Export$$
+Namespace_Component$$$Wrapper
 ```
 
 Meaning:
 
-- no marker → use export as-is
-- `$` → singleton instance (shared)
-- `$$` → transient instance (new instance per injection)
-- `__Export` → named export
+- `Namespace_Component` → default export without lifecycle modifier
+- `__Export` → named export selection inside the same module publication unit
+- `$` → singleton resolution of the selected target
+- `$$` → transient resolution of the selected target
+- `$$$Wrapper` → CDC-only wrapper selection for the whole ES module when lifecycle modifiers are not used
 
 Invariants:
 
 - CDC addresses a component, not a file
-- CDC relies on namespace identifiers
+- namespace identifies the component
+- `__Export` selects the export independently from lifecycle
+- `$` and `$$` apply after component and export selection
+- `$$$` separates wrappers from the namespace only in CDC
 - namespace is defined in module header (`@namespace`)
 - CDC is resolved only by the container
+- static type aliases use the same namespace and `__Export`, but never include CDC markers
 
 ## Component Resolution
 
@@ -197,6 +204,7 @@ Rules:
 
 - `$` is used for singleton services
 - `$$` is used for transient objects created at injection time
+- lifecycle modifiers do not change export selection semantics
 - lifecycle is controlled exclusively by the container
 
 ## Object Creation

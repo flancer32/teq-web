@@ -1,7 +1,7 @@
 # Configuration Conventions in TeqFW Applications
 
-Path: `ctx/spec/code/platform/teqfw/configuration.md`
-Template Version: `20260401`
+- Path: `ctx/spec/code/platform/teqfw/composition/configuration.md`
+- Version: `20260401`
 
 ## Purpose
 
@@ -9,8 +9,8 @@ This document defines architectural conventions for configuration in TeqFW appli
 
 Detailed implementation conventions are defined in:
 
-- `ctx/spec/code/platform/teqfw/configuration/static.md` for static configuration components.
-- `ctx/spec/code/platform/teqfw/configuration/runtime.md` for runtime configuration components.
+- `ctx/spec/code/platform/teqfw/composition/configuration/static.md` for static configuration components.
+- `ctx/spec/code/platform/teqfw/composition/configuration/runtime.md` for runtime configuration components.
 
 ## Configuration Model
 

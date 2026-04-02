@@ -1,7 +1,7 @@
 # Runtime Configuration Convention
 
-Path: `ctx/spec/code/platform/teqfw/configuration/runtime.md`
-Template Version: `20260401`
+- Path: `ctx/spec/code/platform/teqfw/composition/configuration/runtime.md`
+- Version: `20260402`
 
 ## Purpose
 
@@ -71,7 +71,8 @@ When direct dependencies freeze, they return frozen wrappers that are then assig
 
 A runtime configuration module MUST:
 
-- export exactly three symbols: Data, Factory, Wrapper
+- export `Data`, `Factory`, and `Wrapper` (default export)
+- export `__deps__` only when `Factory` has container-managed dependencies
 - NOT declare any additional classes or constructors
 - NOT define nested configuration classes
 - NOT instantiate configuration substructures using `new`
@@ -90,6 +91,7 @@ A runtime configuration module publishes:
 Data
 Factory
 Wrapper (default export)
+__deps__ (optional)
 ```
 
 The structure is fixed and MUST NOT be altered.
@@ -124,10 +126,10 @@ Factory responsibilities:
 Factory methods MUST:
 
 - be defined in constructor using closures
-- NOT return any value
+- return only platform-defined results
 - NOT expose configuration objects
 
-Factory is a mutation interface only.
+`configure()` is a mutation operation only. `freeze()` finalizes the node and returns the read wrapper for the same underlying state.
 
 ### Wrapper
 
@@ -271,15 +273,19 @@ Types are exposed through type map:
 
 ```
 type Ns_Pkg_Config_Runtime = import("./src/Config/Runtime.mjs").Data;
-type Ns_Pkg_Config_Runtime$Factory = import("./src/Config/Runtime.mjs").Factory;
+type Ns_Pkg_Config_Runtime__Factory = import("./src/Config/Runtime.mjs").Factory;
 ```
+
+For runtime configuration, the plain namespace type alias intentionally maps to `Data`.
+The default export `Wrapper` is a DI transport layer returning a proxy over the same configuration state.
+Static typing therefore describes the configuration shape through `Data`, while CDC resolution exposes the wrapper singleton for runtime access.
 
 ## Canonical Runtime Configuration Module
 
 ```javascript
 // Ns_Pkg_Config_Runtime => ./src/Config/Runtime.mjs
 // types.d.ts: type Ns_Pkg_Config_Runtime = import("./src/Config/Runtime.mjs").Data;
-// types.d.ts: type Ns_Pkg_Config_Runtime$Factory = import("./src/Config/Runtime.mjs").Factory;
+// types.d.ts: type Ns_Pkg_Config_Runtime__Factory = import("./src/Config/Runtime.mjs").Factory;
 
 /**
  * Runtime configuration data structure.
@@ -341,7 +347,7 @@ export default class Wrapper {
 export class Factory {
   /**
    * @param {object} deps
-   * @param {Ns_Dep_Config_Runtime$Factory} deps.depFactory
+   * @param {Ns_Dep_Config_Runtime__Factory} deps.depFactory
    */
   constructor({ depFactory }) {
     this.configure = function (params = {}) {
@@ -365,7 +371,6 @@ export class Factory {
 
       frozen = true;
       Object.freeze(cfg);
-      initialized = true;
       return proxy;
     };
   }

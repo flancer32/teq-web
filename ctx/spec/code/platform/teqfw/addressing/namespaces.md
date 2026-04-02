@@ -1,7 +1,7 @@
 # Namespaces in TeqFW
 
-Path: `ctx/spec/code/platform/teqfw/namespaces.md`
-Template Version: `20260329`
+- Path: `ctx/spec/code/platform/teqfw/addressing/namespaces.md`
+- Version: `20260401`
 
 ## Definition
 
@@ -25,7 +25,7 @@ Example:
 Fl32_Web_Back_Dispatcher
 ```
 
-The identifier refers to the component identity. The implementation providing the behavior of this component is determined during application composition.
+The identifier refers to the component identity. The implementation providing the behavior of that component is determined during application composition.
 
 ## Component Identity and Implementation
 
@@ -126,7 +126,7 @@ Namespaces are used for:
 ```
 component identification
 dependency addressing in CDC
-type addressing in JSDoc
+type addressing in JSDoc and types.d.ts
 container resolution
 architectural documentation
 ```
@@ -151,33 +151,50 @@ Fl32_Web_Back_Dispatcher
 
 addresses the component implemented by the module, and the container retrieves the default export as the implementation of that component.
 
-## Named Export Addressing
+## Export Selection
 
-A module may expose multiple exports. When a specific export must be referenced, the export is selected explicitly by the mechanism that references the component.
+A namespace identifies the component. Export selection is a separate addressing layer applied to the publication unit of the implementation module.
 
-Example module:
-
-```javascript
-export function createDispatcher() {}
-```
-
-### Dependency addressing (CDC syntax)
-
-In dependency declarations the export is selected using CDC addressing syntax:
+Universal rule:
 
 ```
-Fl32_Web_Back_Dispatcher__createDispatcher$
+Namespace_Component__Export
 ```
 
-### Type addressing (JSDoc syntax)
+Rules:
 
-In JSDoc type references the export is selected using JSDoc addressing syntax:
+- `__` is the universal export selector in every TeqFW addressing space
+- the plain namespace selects the default export of the component module
+- `__Export` selects a named export inside the same module publication unit
+- static type references use the namespace and optional `__Export` only
+- CDC uses the same namespace and `__Export` selector, then optionally appends runtime markers
+
+Static type examples:
 
 ```
-Fl32_Web_Back_Dispatcher$createDispatcher
+Fl32_Web_Back_Dispatcher
+Fl32_Web_Back_Dispatcher__Factory
+Fl32_Web_Back_Dispatcher__Config
+Fl32_Web_Back_Dispatcher__CONST
 ```
 
-In both cases the namespace identifier still refers to the component identity, while the export selection syntax specifies which export of the implementation module should be used.
+CDC examples:
+
+```
+Fl32_Web_Back_Dispatcher$
+Fl32_Web_Back_Dispatcher$$
+Fl32_Web_Back_Dispatcher__Factory$
+Fl32_Web_Back_Dispatcher__Factory$$
+Fl32_Web_Back_Dispatcher__CONST
+```
+
+CDC-specific additions:
+
+- `$` and `$$` are lifecycle and resolution markers applied after component and export selection
+- `$$$` is a CDC-only separator for module wrappers when wrappers are addressed for the whole ES module without lifecycle modifiers
+- static type syntax never includes `$`, `$$`, or `$$$`
+
+The difference between CDC syntax and static type syntax therefore consists only in CDC runtime markers, not in the export separator.
 
 ## Avoiding Incorrect Analogies
 
@@ -193,6 +210,6 @@ In TeqFW a namespace identifier represents the address of a component within the
 
 A namespace identifier in TeqFW is the canonical logical address of a software component. Components are referenced through namespace identifiers rather than module paths, and the dependency container resolves these identifiers to concrete implementations, usually provided by ES modules.
 
-Export selection may be expressed by context-specific addressing syntax used by dependency declarations or JSDoc annotations, but the namespace itself always refers to the component identity.
+The namespace always identifies the component. `__Export` selects a named export inside the module publication unit. CDC may then add runtime markers such as `$`, `$$`, or `$$$`, while static type references remain limited to the namespace and optional `__Export`.
 
 This mechanism provides a stable addressing system for components across runtime composition, dependency resolution, type annotations, and architectural documentation.

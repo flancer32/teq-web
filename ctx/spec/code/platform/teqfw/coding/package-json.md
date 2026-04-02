@@ -1,7 +1,7 @@
 # Node.js Package Manifest
 
-- Path: `ctx/spec/code/platform/teqfw/package-json.md`
-- Document Version: `20260329`
+- Path: `ctx/spec/code/platform/teqfw/coding/package-json.md`
+- Version: `20260401`
 
 ## Purpose
 

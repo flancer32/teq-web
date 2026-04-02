@@ -1,7 +1,7 @@
 # ES6 Modules in TeqFW
 
-- Path: `ctx/spec/code/platform/teqfw/es6-module.md`
-- Document Version: `20260331`
+- Path: `ctx/spec/code/platform/teqfw/coding/es6-module.md`
+- Version: `20260401`
 
 ## Purpose
 
@@ -13,7 +13,7 @@ The document specifies constraints required for compatibility with:
 - namespace-based addressing
 - JSDoc structural typing
 
-Dependency declaration, lifecycle, and composition rules are defined in `di/usage.md`.
+Dependency declaration, lifecycle, and composition rules are defined in `ctx/spec/code/platform/teqfw/composition/di/usage.md`.
 
 ## Concept
 

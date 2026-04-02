@@ -1,7 +1,7 @@
 # JSDoc Annotation Conventions for TeqFW Applications
 
-Path: `ctx/spec/code/platform/teqfw/jsdoc.md`
-Template Version: `20260330`
+- Path: `ctx/spec/code/platform/teqfw/coding/jsdoc.md`
+- Version: `20260402`
 
 ## Document Scope
 
@@ -35,16 +35,15 @@ JSDoc describes structure. Runtime code implements behavior.
 
 ## Relationship with Namespace Types
 
-Type references in JSDoc MUST use TeqFW namespace identifiers.
+Type references in JSDoc MUST use TeqFW namespace identifiers exposed through `types.d.ts`.
 
 Example:
 
 ```
-
 Fl32_Web_Back_Service_Logger
 Fl32_Web_Back_Config_Runtime
+Fl32_Web_Back_Config_Runtime__Factory
 Fl32_Web_Back_Repo_User
-
 ```
 
 Namespace identifiers represent architectural component identities rather than module paths.
@@ -52,6 +51,13 @@ Namespace identifiers represent architectural component identities rather than m
 The namespace identifier refers to the component, while the dependency container resolves the implementation module during runtime composition.
 
 JSDoc annotations therefore reference architectural components rather than filesystem locations.
+
+Rules:
+
+- the plain namespace identifies the default export type
+- `__Export` selects a named export type
+- JSDoc type references MUST NOT use `$`, `$$`, or `$$$`
+- JSDoc type references MUST NOT encode lifecycle or wrapper semantics
 
 Filesystem paths or `import()` expressions MUST NOT be used as type identifiers inside JSDoc annotations.
 
@@ -65,6 +71,7 @@ Example:
 
 ```ts
 type Fl32_Web_Back_Service_Logger = import("./src/Back/Service/Logger.mjs").default;
+type Fl32_Web_Back_Config_Runtime__Factory = import("./src/Back/Config/Runtime.mjs").Factory;
 ```
 
 The type map exists only for static tooling and IDE analysis.
@@ -151,7 +158,8 @@ Unannotated exports are not allowed.
 ## Constructor Annotation Model
 
 Container-managed classes receive dependencies through a single structured constructor parameter.
-For such constructors, the structured parameter MUST be named `deps`.
+In runtime code, this parameter MAY be destructured directly in the constructor signature.
+In JSDoc annotations, the same structured parameter MUST be documented under the name `deps`.
 
 Inline parameter annotations MUST be used.
 
@@ -171,7 +179,8 @@ export default class UserService {
 Rules:
 
 - constructor parameters MUST be represented as a structured object
-- the structured constructor parameter MUST be named `deps`
+- constructor signatures MAY destructure the single structured parameter directly
+- in JSDoc, the structured constructor parameter MUST be named `deps`
 - each dependency MUST be documented explicitly
 - inline parameter annotations MUST be used
 
@@ -183,15 +192,21 @@ Example dependency descriptor:
 
 ```javascript
 export const __deps__ = Object.freeze({
-  logger: "Fl32_Web_Back_Service_Logger$",
+  factory: "Fl32_Web_Back_Config_Runtime__Factory$",
 });
 ```
 
-Constructor annotation must reference the same dependency.
+Constructor annotation must reference the same selected export without CDC lifecycle markers.
 
 ```
-@param {Fl32_Web_Back_Service_Logger} deps.logger
+@param {Fl32_Web_Back_Config_Runtime__Factory} deps.factory
 ```
+
+Rules:
+
+- CDC and JSDoc use the same namespace and `__Export` selector
+- `$` and `$$` remain CDC-only lifecycle markers
+- JSDoc types reference the static alias only and therefore omit lifecycle markers
 
 ## Dependency Name Consistency
 
@@ -276,7 +291,7 @@ The following example illustrates the canonical structure of a DI-compatible mod
 /**
  * User service responsible for user management operations.
  */
-export default class Fl32_Web_Back_Service_User {
+export default class UserService {
   /**
    * @param {object} deps
    * @param {Fl32_Web_Back_Service_Logger} deps.logger
@@ -341,6 +356,18 @@ Correct:
 @param {Fl32_Web_Back_Repo_User} repo
 ```
 
+### Using `$` as an Export Separator
+
+Incorrect:
+
+Any type reference that inserts `$` between the namespace and the export name.
+
+Correct:
+
+```
+@param {Fl32_Web_Back_Config_Runtime__Factory} deps.factory
+```
+
 ### Dependency Name Mismatch
 
 Incorrect:
@@ -400,6 +427,7 @@ Key principles:
 - runtime JavaScript is the structural source of truth
 - JSDoc defines explicit structural contracts
 - namespace identifiers represent architectural component types
+- named export types use `Namespace__Export`
 - constructor dependencies are annotated inline
 - behavior is implemented through constructor closures
 - `types.d.ts` provides the static type map

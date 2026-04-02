@@ -1,11 +1,11 @@
 # Type Maps in TeqFW
 
-Path: `ctx/spec/code/platform/teqfw/types-map.md`
-Template Version: `20260329`
+- Path: `ctx/spec/code/platform/teqfw/addressing/types-map.md`
+- Version: `20260402`
 
 ## 1. Purpose
 
-A type map provides a static bridge between architectural namespace identifiers used by the dependency container and concrete JavaScript implementation modules.
+A type map provides a static bridge between architectural namespace identifiers used by TeqFW and concrete JavaScript implementation modules.
 
 Type maps exist solely for static tooling and support:
 
@@ -18,11 +18,11 @@ Type maps do not participate in runtime execution and do not influence dependenc
 
 ## 2. Addressing Domains
 
-TeqFW architecture operates across three independent addressing domains.
+TeqFW uses several related but distinct addressing domains. They must remain strictly separated.
 
-### Runtime namespace
+### 2.1 Runtime namespace
 
-Runtime namespace identifiers address components resolved by the dependency container.
+Runtime namespace identifiers address architectural components.
 
 Example:
 
@@ -35,11 +35,31 @@ TeqFw_Di_Enum_Life
 Properties:
 
 - identifies components
-- used by dependency injection
-- used only at runtime
-- must not contain `$`
+- used as the base identity for container resolution
+- contains no lifecycle markers
+- contains no export selector by itself
 
-### Module address space
+### 2.2 CDC
+
+CDC addresses concrete runtime resolution targets derived from a namespace.
+
+Example:
+
+```
+TeqFw_Di_Resolver$
+TeqFw_Di_Resolver__Factory$$
+TeqFw_Di_Enum_Life__CONST
+```
+
+Properties:
+
+- used only by the dependency container
+- starts with the runtime namespace identifier
+- may add `__Export` for named export selection
+- may add `$` or `$$` for lifecycle selection
+- may add `$$$Wrapper` for whole-module wrapper selection without lifecycle modifiers
+
+### 2.3 Module address space
 
 Module addresses identify ES modules in the filesystem.
 
@@ -53,11 +73,11 @@ Example:
 
 Properties:
 
-- represents file system paths
+- represents filesystem paths
 - used by the JavaScript module loader
-- independent from runtime namespace identifiers
+- independent from runtime namespace identifiers and CDC
 
-### Type namespace
+### 2.4 Type namespace
 
 Type identifiers exist only for static analysis.
 
@@ -65,28 +85,35 @@ Example:
 
 ```
 TeqFw_Di_Resolver
-TeqFw_Di_Resolver$Config
+TeqFw_Di_Resolver__Config
 TeqFw_Di_Enum_Life
 ```
 
 Properties:
 
 - used only by IDE tooling and tsserver
-- may reference named exports
-- may contain `$`
+- may reference named exports through `__Export`
+- must not contain `$`, `$$`, or `$$$`
 - must not be interpreted as CDC dependency identifiers
 
 ## 3. Namespace Separation
 
-Two independent identifier systems exist.
+The namespace identifier always identifies the component.
 
-Runtime namespace identifiers represent components used by the dependency container.
+Export selection uses the same rule in runtime and static addressing:
 
-Type namespace identifiers represent type aliases used for static analysis.
+```
+Namespace_Component__Export
+```
 
-Although the identifiers may appear similar, these namespaces serve different purposes and must not be conflated.
+Only CDC adds runtime semantics after component and export selection.
 
-Only runtime namespace identifiers participate in dependency resolution.
+Consequences:
+
+- namespace identity is shared between runtime and static addressing
+- `__Export` has the same meaning in CDC and in type aliases
+- lifecycle and wrapper markers belong only to CDC
+- static type aliases never encode runtime lifecycle semantics
 
 ## 4. Symbolic Component Addressing
 
@@ -122,13 +149,14 @@ This separation ensures that:
 - dependency identifiers remain architectural concepts
 - runtime resolution remains independent from module loader semantics
 
-TeqFW therefore distinguishes three independent layers:
+TeqFW therefore distinguishes four independent layers:
 
 - symbolic component addressing (runtime namespace)
+- CDC runtime addressing
 - module addressing (filesystem paths)
 - type addressing (static analysis)
 
-Only symbolic identifiers participate in dependency resolution.
+Only CDC participates in dependency resolution.
 
 ## 5. Type Map Definition
 
@@ -156,7 +184,7 @@ types.d.ts
 
 The file must be referenced in `package.json`.
 
-```
+```json
 {
   "types": "types.d.ts"
 }
@@ -237,25 +265,44 @@ The namespace identifier maps to the value type of the exported object.
 type Ns_Enum = typeof import("./src/Enum/Name.mjs").default;
 ```
 
+### Structural Alias Exception
+
+Some platform-defined module conventions publish a default export that exists only as a runtime wrapper over another structural type exposed by the same module.
+
+In such cases, the plain namespace type alias may intentionally map to that structural type instead of the default export wrapper type.
+
+Canonical example:
+
+```ts
+type Ns_Pkg_Config_Runtime = import("./src/Config/Runtime.mjs").Data;
+```
+
+In this convention:
+
+- the static alias describes the configuration data shape
+- CDC still resolves the default export wrapper for runtime access
+- the exception must be defined by the component convention, not inferred ad hoc
+
 ### 8.4 Named Export Aliases
 
-Named exports may be referenced using the convention:
+Named exports are referenced using the convention:
 
 ```
-Namespace$ExportName
+Namespace__ExportName
 ```
 
 Example:
 
 ```ts
-type Ns_Component$Config = import("./src/Component.mjs").Config;
+type Ns_Component__Config = import("./src/Component.mjs").Config;
 ```
 
 Properties:
 
-- `$` separates module namespace from export name
+- `__` separates component namespace from export selector
 - the alias exists only in the type namespace
-- it is not a CDC dependency identifier
+- the export selector has the same meaning as in CDC
+- lifecycle and wrapper markers are not allowed in static aliases
 
 ### 8.5 Nested Module Mapping
 
@@ -279,7 +326,7 @@ Mapping:
 type TeqFw_Di_Dto_Resolver_Config_DTO = import("./src/Dto/Resolver/Config/DTO.mjs").default;
 ```
 
-Such identifiers belong to the runtime namespace and therefore must not contain `$`.
+Such identifiers belong to the runtime namespace and therefore must not contain lifecycle or export-selection markers.
 
 ## 9. Deterministic File Structure
 
@@ -293,7 +340,7 @@ Example:
 declare global {
   type Ns_Component = import("./src/Component.mjs").default;
 
-  type Ns_Component$Options = import("./src/Component.mjs").Options;
+  type Ns_Component__Options = import("./src/Component.mjs").Options;
 
   type Ns_Enum = typeof import("./src/Enum/Life.mjs").default;
 }
@@ -309,22 +356,22 @@ Only the following declaration forms are allowed.
 
 Class component mapping
 
-```
+```ts
 type Ns_Component =
   import("./src/...").default;
 ```
 
 Enum value mapping
 
-```
+```ts
 type Ns_Enum =
   typeof import("./src/...").default;
 ```
 
 Named export alias
 
-```
-type Ns_Component$Export =
+```ts
+type Ns_Component__Export =
   import("./src/...").Export;
 ```
 
@@ -364,19 +411,20 @@ Manual edits may be overwritten by generators.
 
 The generated file must satisfy the following invariants:
 
-- every namespace identifier has a corresponding type alias
+- every namespace identifier has a corresponding default-export type alias
+- every required named export alias uses `__Export`
 - referenced source files exist
 - namespace → path rule holds
 - no duplicate type identifiers exist
 - entries are sorted alphabetically
-- `$` never appears in CDC namespace identifiers
+- `$`, `$$`, and `$$$` never appear in type aliases
 - the file ends with `export {}`
 
 ## 13. IDE Integration
 
 When a package declares:
 
-```
+```json
 "types": "types.d.ts"
 ```
 
@@ -394,10 +442,10 @@ A type map:
 
 - maps namespace identifiers to module types
 - supports class components and enum modules
-- supports named export aliases using `Namespace$Export`
+- supports named export aliases using `Namespace__Export`
 - declares all types globally for JSDoc compatibility
 - follows deterministic namespace → file path rules
-- maintains strict separation between runtime and type namespaces
+- keeps CDC lifecycle markers out of static type aliases
 - is generated automatically
 - ends with `export {}`
 

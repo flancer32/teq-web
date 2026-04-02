@@ -1,11 +1,11 @@
 # TeqFW Configuration Conventions
 
-Path: `ctx/spec/code/platform/teqfw/configuration/AGENTS.md`
-Template Version: `20260329`
+- Path: `ctx/spec/code/platform/teqfw/composition/configuration/AGENTS.md`
+- Version: `20260401`
 
 ## Purpose
 
-This directory contains detailed conventions for TeqFW configuration component forms. This level refines the high-level configuration model from `../configuration.md` into concrete static and runtime component contracts.
+This directory contains detailed conventions for TeqFW configuration component forms. This level refines the high-level configuration model from `ctx/spec/code/platform/teqfw/composition/configuration.md` into concrete static and runtime component contracts.
 
 ## Level Map
 
@@ -17,7 +17,7 @@ The list above is alphabetical and serves navigation purposes.
 
 ## Reading Order
 
-1. `../configuration.md` — defines the high-level package-centered configuration model.
+1. `ctx/spec/code/platform/teqfw/composition/configuration.md` — defines the high-level package-centered configuration model.
 2. `static.md` — defines conventions for static configuration component form.
 3. `runtime.md` — defines conventions for runtime configuration component form and initialization lifecycle.
 
