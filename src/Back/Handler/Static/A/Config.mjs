@@ -1,7 +1,9 @@
-/**
- * Static asset config factory.
- */
 // @ts-check
+
+/**
+ * @namespace Fl32_Web_Back_Handler_Static_A_Config
+ * @description Static asset config factory.
+ */
 export default class Fl32_Web_Back_Handler_Static_A_Config {
     static DEFAULT_FILES = ['index.html', 'index.htm', 'index.txt'];
     /**

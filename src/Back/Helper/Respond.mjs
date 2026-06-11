@@ -1,7 +1,9 @@
-/**
- * HTTP response helper.
- */
 // @ts-check
+
+/**
+ * @namespace Fl32_Web_Back_Helper_Respond
+ * @description HTTP response helper.
+ */
 export default class Fl32_Web_Back_Helper_Respond {
     /**
      * @param {object} deps

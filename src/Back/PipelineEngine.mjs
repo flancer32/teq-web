@@ -1,9 +1,10 @@
-/**
- * Pipeline Engine is the single request-lifecycle coordination component.
- * It executes handlers in three deterministic stages:
- * `INIT -> PROCESS -> FINALIZE`.
- */
 // @ts-check
+
+/**
+ * @namespace Fl32_Web_Back_PipelineEngine
+ * @description Pipeline Engine is the single request-lifecycle coordination component.
+ * It executes handlers in three deterministic stages: `INIT -> PROCESS -> FINALIZE`.
+ */
 
 const KEY_STAGE = Symbol('stage');
 

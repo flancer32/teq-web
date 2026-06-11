@@ -1,7 +1,9 @@
-/**
- * Simple logger implementation that delegates to the native console.
- */
 // @ts-check
+
+/**
+ * @namespace Fl32_Web_Back_Logger
+ * @description Simple logger implementation that delegates to the native console.
+ */
 export default class Fl32_Web_Back_Logger {
     constructor() {
         /**

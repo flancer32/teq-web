@@ -1,7 +1,9 @@
-/**
- * Cast helper used by runtime configuration and DTO factories.
- */
 // @ts-check
+
+/**
+ * @namespace Fl32_Web_Back_Helper_Cast
+ * @description Cast helper used by runtime configuration and DTO factories.
+ */
 export default class Fl32_Web_Back_Helper_Cast {
     constructor() {
         /**

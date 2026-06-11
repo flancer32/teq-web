@@ -1,7 +1,9 @@
-/**
- * Static file service.
- */
 // @ts-check
+
+/**
+ * @namespace Fl32_Web_Back_Handler_Static_A_FileService
+ * @description Static file service.
+ */
 export default class Fl32_Web_Back_Handler_Static_A_FileService {
     /**
      * @param {object} deps

@@ -1,8 +1,10 @@
+// @ts-check
+
 /**
- * Web server implementation supporting HTTP/1 and HTTP/2 protocols.
+ * @namespace Fl32_Web_Back_Server
+ * @description Web server implementation supporting HTTP/1 and HTTP/2 protocols.
  * Handles incoming requests and delegates them to the Pipeline Engine.
  */
-// @ts-check
 export default class Fl32_Web_Back_Server {
     /**
      * @param {object} deps

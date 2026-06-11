@@ -1,7 +1,9 @@
-/**
- * Static configuration registry.
- */
 // @ts-check
+
+/**
+ * @namespace Fl32_Web_Back_Handler_Static_A_Registry
+ * @description Static configuration registry.
+ */
 export default class Fl32_Web_Back_Handler_Static_A_Registry {
     /**
      * @param {object} deps

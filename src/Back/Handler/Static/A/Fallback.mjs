@@ -1,7 +1,9 @@
-/**
- * Static asset fallback helper.
- */
 // @ts-check
+
+/**
+ * @namespace Fl32_Web_Back_Handler_Static_A_Fallback
+ * @description Static asset fallback helper.
+ */
 export default class Fl32_Web_Back_Handler_Static_A_Fallback {
     /**
      * @param {object} deps

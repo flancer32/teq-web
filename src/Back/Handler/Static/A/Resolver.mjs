@@ -1,7 +1,9 @@
-/**
- * Static path resolver.
- */
 // @ts-check
+
+/**
+ * @namespace Fl32_Web_Back_Handler_Static_A_Resolver
+ * @description Static path resolver.
+ */
 export default class Fl32_Web_Back_Handler_Static_A_Resolver {
     /**
      * @param {object} deps

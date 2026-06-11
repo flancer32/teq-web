@@ -1,7 +1,9 @@
-/**
- * Source DTO for static handler configuration.
- */
 // @ts-check
+
+/**
+ * @namespace Fl32_Web_Back_Dto_Source
+ * @description Source DTO for static handler configuration.
+ */
 export default class Fl32_Web_Back_Dto_Source {
     /** @type {string} */
     root;
@@ -43,7 +45,6 @@ export class Factory {
 }
 
 export const __deps__ = Object.freeze({
-    default: {},
     Factory: {
         cast: 'Fl32_Web_Back_Helper_Cast$',
     },

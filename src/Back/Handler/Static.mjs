@@ -1,9 +1,10 @@
+// @ts-check
+
 /**
- * Universal static-file PROCESS handler.
- *
+ * @namespace Fl32_Web_Back_Handler_Static
+ * @description Universal static-file PROCESS handler.
  * @implements Fl32_Web_Back_Api_Handler
  */
-// @ts-check
 export default class Fl32_Web_Back_Handler_Static {
     /**
      * @param {object} deps

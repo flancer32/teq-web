@@ -1,7 +1,9 @@
-/**
- * TLS runtime configuration wrapper and factory wiring.
- */
 // @ts-check
+
+/**
+ * @namespace Fl32_Web_Back_Config_Runtime_Tls
+ * @description TLS runtime configuration wrapper and factory wiring.
+ */
 
 export class Data {
     /** @type {string|undefined} */
@@ -95,7 +97,6 @@ export class Factory {
  * `Factory` is the DI-managed component described by `__deps__`.
  */
 export const __deps__ = Object.freeze({
-    default: Object.freeze({}),
     Factory: Object.freeze({
         cast: 'Fl32_Web_Back_Helper_Cast$',
     }),

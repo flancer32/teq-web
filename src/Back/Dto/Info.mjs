@@ -1,7 +1,9 @@
-/**
- * DTO describing handler registration and ordering metadata.
- */
 // @ts-check
+
+/**
+ * @namespace Fl32_Web_Back_Dto_Info
+ * @description DTO describing handler registration and ordering metadata.
+ */
 export default class Fl32_Web_Back_Dto_Info {
     /**
      * Handlers to run before this one.
@@ -56,7 +58,6 @@ export class Factory {
  * DTO dependencies.
  */
 export const __deps__ = Object.freeze({
-    default: {},
     Factory: {
         cast: 'Fl32_Web_Back_Helper_Cast$',
         STAGE: 'Fl32_Web_Back_Enum_Stage$',

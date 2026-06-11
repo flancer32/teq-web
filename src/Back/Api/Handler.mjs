@@ -1,9 +1,10 @@
+// @ts-check
+
 /**
- * Interface for web request handlers used by the Pipeline Engine.
- *
+ * @namespace Fl32_Web_Back_Api_Handler
+ * @description Interface for web request handlers used by the Pipeline Engine.
  * @interface
  */
-// @ts-check
 export default class Fl32_Web_Back_Api_Handler {
     constructor() {
         /**

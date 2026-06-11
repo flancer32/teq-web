@@ -1,9 +1,10 @@
+// @ts-check
+
 /**
- * Logs basic request information at the beginning of the request lifecycle.
- *
+ * @namespace Fl32_Web_Back_Handler_Pre_Log
+ * @description Logs basic request information at the beginning of the request lifecycle.
  * @implements Fl32_Web_Back_Api_Handler
  */
-// @ts-check
 export default class Fl32_Web_Back_Handler_Pre_Log {
     /**
      * @param {object} deps
