@@ -163,6 +163,10 @@ export default class Fl32_Web_Back_PipelineEngine {
                     if (context.isCompleted()) {
                         break;
                     }
+                    if (!respond.isWritable(res)) {
+                        context.completed = true;
+                        break;
+                    }
                     try {
                         await runHandler(handler, STAGE.PROCESS, context);
                     } catch (error) {
