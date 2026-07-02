@@ -51,7 +51,7 @@ Agent behavior is determined exclusively by documents of the cognitive context (
 
 The entry point of the cognitive context is:
 
-```
+```text
 ctx/AGENTS.md
 ```
 
