@@ -145,7 +145,7 @@ export default class Fl32_Web_Back_PipelineEngine {
          */
         this.onEventRequest = async function (req, res) {
             if (!isLocked) {
-                this.orderHandlers();
+                throw new Error('Pipeline handlers must be locked before request execution');
             }
             /** @type {Fl32_Web_Back_Dto_RequestContext & {[KEY_STAGE]: string|null}} */
             const context = createRequestContext(req, res);

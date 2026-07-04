@@ -155,4 +155,16 @@ describe('Fl32_Web_Back_PipelineEngine', () => {
             /registration is locked/
         );
     });
+
+    test('rejects request execution before handlers are locked', async () => {
+        const engine = new Fl32_Web_Back_PipelineEngine({
+            dtoRequestContextFactory, logger, respond, helpOrder, STAGE
+        });
+        engine.addHandler(mkHandler('process', STAGE.PROCESS, async () => {}));
+
+        await assert.rejects(
+            () => engine.onEventRequest({url: '/early'}, createResponse()),
+            /must be locked before request execution/
+        );
+    });
 });

@@ -26,6 +26,24 @@ function createResponse() {
 }
 
 describe('Fl32_Web_Back_PipelineEngine integration', () => {
+    test('requires locked handlers before direct request execution', async () => {
+        const container = new Container();
+        container.addNamespaceRoot('Fl32_Web_', SRC, '.mjs');
+        container.enableTestMode();
+        const engine = await container.get('Fl32_Web_Back_PipelineEngine$');
+        const STAGE = await container.get('Fl32_Web_Back_Enum_Stage$');
+
+        engine.addHandler({
+            getRegistrationInfo: () => ({name: 'Process', stage: STAGE.PROCESS}),
+            handle: async () => {},
+        });
+
+        await assert.rejects(
+            () => engine.handleRequest({url: '/early'}, createResponse()),
+            /must be locked before request execution/
+        );
+    });
+
     test('stops PROCESS stage after completion and still executes FINALIZE', async () => {
         const container = new Container();
         container.addNamespaceRoot('Fl32_Web_', SRC, '.mjs');

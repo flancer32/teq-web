@@ -10,7 +10,7 @@ Main methods:
 
 - `addHandler(handler)` or `registerHandler(handler)` registers a handler before the pipeline is locked;
 - `lockHandlers()` freezes handler order explicitly;
-- `onEventRequest(req, res)` or `handleRequest(req, res)` executes one request lifecycle.
+- `onEventRequest(req, res)` or `handleRequest(req, res)` executes one request lifecycle after the pipeline has been locked.
 
 ## Server
 
