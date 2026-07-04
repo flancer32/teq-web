@@ -1,5 +1,18 @@
 # Changelog
 
+## [0.12.0] - 2026-07-04 - Pipeline locking and transport contract alignment
+
+### Added
+- Added unit and integration coverage for direct request execution with an unlocked pipeline.
+- Added unit coverage for the request-context DTO contract.
+
+### Changed
+- Stopped pipeline processing when the response is no longer writable.
+- Required explicit handler locking before direct `PipelineEngine` request execution.
+- Clarified the transport model as plain HTTP plus secure web transport and aligned AI-facing documentation with the current server behavior.
+- Clarified that runtime-isolation guarantees apply to separate Node.js processes, not to multiple containers within one process.
+- Updated package version metadata to `0.12.0`.
+
 ## [0.11.0] - 2026-04-01 - TeqFW spec alignment and runtime contract updates
 
 ### Added
