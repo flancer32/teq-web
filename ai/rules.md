@@ -32,7 +32,8 @@
 - Runtime is Node.js 20 or newer.
 - The package is intended for long-running server processes.
 - Process supervision, restart, scaling, reverse proxying, and load balancing are external concerns.
-- Multiple instances may run concurrently, but they are independent and must not rely on shared in-memory state.
+- Independent deployment instances should run as separate Node.js processes and must not rely on shared in-memory state between processes.
+- The package does not guarantee isolated runtime-configuration state for multiple containers or runtime assemblies inside the same process.
 
 ## DI Usage Rules
 
