@@ -22,6 +22,12 @@ Default transport settings come from flat fields of `Fl32_Web_Back_Config_Runtim
 - `http2`
 - `https`
 
+Mode meaning:
+
+- `http` is plain HTTP.
+- `http2` is cleartext HTTP/2.
+- `https` is secure web transport implemented through the Node.js secure `http2` server and may negotiate `HTTP/2` or fall back to `HTTP/1.1`.
+
 `https` requires `config.tls` to contain both `key` and `cert`.
 
 ## Handler Contract

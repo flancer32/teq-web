@@ -4,7 +4,7 @@ Infrastructure web server and deterministic request pipeline for TeqFW packages.
 
 `@flancer32/teq-web` is an infrastructural component of the **Tequila Framework (TeqFW)** platform.
 
-The package provides a deterministic **request lifecycle pipeline** and a built-in **Node.js web server** that other TeqFW packages can use as the runtime environment for processing HTTP requests.
+The package provides a deterministic **request lifecycle pipeline** and a built-in **Node.js web server** that other TeqFW packages can use as the runtime environment for processing web requests.
 
 Within the TeqFW ecosystem, this package plays a role similar to how **Express** or **Fastify** are used in typical Node.js applications: it acts as the **web runtime layer** used by higher-level packages.
 
@@ -95,6 +95,12 @@ Supported server types:
 - `http`
 - `http2`
 - `https`
+
+Mode meaning:
+
+- `http` is plain HTTP
+- `http2` is cleartext HTTP/2
+- `https` is secure web transport using the Node.js secure HTTP/2 server with HTTP/1.1 fallback when negotiated by the client
 
 The server locks the handler pipeline before entering the execution phase.
 

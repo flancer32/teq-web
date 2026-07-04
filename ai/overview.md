@@ -10,7 +10,7 @@ Runtime startup configuration is exposed through `Fl32_Web_Back_Config_Runtime$`
 
 Use this package when external code needs one of these roles:
 
-- accept HTTP, HTTPS, or HTTP/2 requests with the built-in server;
+- accept plain HTTP requests or secure web requests with the built-in server;
 - run request handlers through a fixed three-stage lifecycle;
 - register multiple independent handlers with deterministic ordering;
 - serve static files through the built-in PROCESS-stage handler.
