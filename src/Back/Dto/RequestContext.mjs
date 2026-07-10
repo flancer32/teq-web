@@ -23,7 +23,7 @@ export default class Fl32_Web_Back_Dto_RequestContext {
 export class Factory {
     constructor() {
         /**
-         * @returns {Fl32_Web_Back_Dto_RequestContext}
+         * @returns {Fl32_Web_Back_Dto_RequestContext$}
          */
         this.create = function () {
             return new Fl32_Web_Back_Dto_RequestContext();

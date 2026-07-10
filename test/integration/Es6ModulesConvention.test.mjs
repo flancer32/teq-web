@@ -19,6 +19,7 @@ import {__deps__ as pipelineEngineDeps} from '../../src/Back/PipelineEngine.mjs'
 import {__deps__ as serverDeps} from '../../src/Back/Server.mjs';
 
 const SRC = path.resolve(import.meta.dirname, '../../src');
+const LOG_SRC = path.resolve(import.meta.dirname, '../../node_modules/@teqfw/log/src');
 const DEP_DESCRIPTORS = [
     dtoInfoDeps,
     dtoSourceDeps,
@@ -36,7 +37,6 @@ const DEP_DESCRIPTORS = [
     serverDeps,
 ];
 const MANAGED_MODULE_IDS = [
-    'Fl32_Web_Back_Logger$',
     'Fl32_Web_Back_Enum_Stage$',
     'Fl32_Web_Back_Enum_Server_Type$',
     'Fl32_Web_Back_Helper_Cast$',
@@ -62,6 +62,7 @@ const MANAGED_MODULE_IDS = [
 function createContainer() {
     const container = new Container();
     container.addNamespaceRoot('Fl32_Web_', SRC, '.mjs');
+    container.addNamespaceRoot('TeqFw_Log_', LOG_SRC, '.mjs');
     container.enableTestMode();
     return container;
 }
@@ -81,7 +82,7 @@ describe('TeqFW ES6 module convention integration', () => {
             assert.ok(instance, `Expected container instance for ${id}`);
         }
 
-        const logger = await container.get('Fl32_Web_Back_Logger$');
+        const logger = await container.get('TeqFw_Log_Provider$');
         const runtimeConfigFactory = await container.get('Fl32_Web_Back_Config_Runtime__Factory$');
         const runtimeFromFactory = runtimeConfigFactory.configure({port: '3001', type: 'http'});
         runtimeConfigFactory.freeze();
@@ -92,7 +93,7 @@ describe('TeqFW ES6 module convention integration', () => {
         const cast = await container.get('Fl32_Web_Back_Helper_Cast$');
         const kahn = await container.get('Fl32_Web_Back_Helper_Order_Kahn$');
 
-        assert.equal(typeof logger.info, 'function');
+        assert.equal(typeof logger.forSource, 'function');
         assert.equal(typeof server.start, 'function');
         assert.equal(runtimeFromFactory, undefined);
         assert.equal(runtimeConfig.port, 3001);

@@ -3,16 +3,17 @@
 /**
  * @namespace Fl32_Web_Back_Handler_Pre_Log
  * @description Logs basic request information at the beginning of the request lifecycle.
- * @implements Fl32_Web_Back_Api_Handler
+ * @implements {Fl32_Web_Back_Api_Handler$}
  */
 export default class Fl32_Web_Back_Handler_Pre_Log {
     /**
      * @param {object} deps
-     * @param {Fl32_Web_Back_Logger} deps.logger
-     * @param {Fl32_Web_Back_Dto_Info__Factory} deps.dtoInfoFactory
-     * @param {Fl32_Web_Back_Enum_Stage} deps.STAGE
+     * @param {TeqFw_Log_Provider$} deps.logger
+     * @param {Fl32_Web_Back_Dto_Info__Factory$} deps.dtoInfoFactory
+     * @param {Fl32_Web_Back_Enum_Stage$} deps.STAGE
      */
     constructor({logger, dtoInfoFactory, STAGE}) {
+        const log = logger.forSource('Fl32_Web_Back_Handler_Pre_Log');
         // VARS
         const _info = dtoInfoFactory.create({
             name: this.constructor.name,
@@ -24,17 +25,17 @@ export default class Fl32_Web_Back_Handler_Pre_Log {
         /**
          * Log request method and URL.
          *
-         * @param {Fl32_Web_Back_Dto_RequestContext} context
+         * @param {Fl32_Web_Back_Dto_RequestContext$} context
          * @returns {Promise<void>}
          */
         this.handle = async function (context) {
-            logger.debug(`${context.request.method} ${context.request.url}`);
+            log.debug(`${context.request.method} ${context.request.url}`);
         };
 
         /**
          * Return handler registration info.
          *
-         * @returns {Fl32_Web_Back_Dto_Info}
+         * @returns {Fl32_Web_Back_Dto_Info$}
          */
         this.getRegistrationInfo = () => _info;
     }
@@ -45,7 +46,7 @@ export default class Fl32_Web_Back_Handler_Pre_Log {
  */
 export const __deps__ = Object.freeze({
     default: {
-        logger: 'Fl32_Web_Back_Logger$',
+        logger: 'TeqFw_Log_Provider$',
         dtoInfoFactory: 'Fl32_Web_Back_Dto_Info__Factory$',
         STAGE: 'Fl32_Web_Back_Enum_Stage$',
     },

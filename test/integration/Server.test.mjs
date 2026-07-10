@@ -5,6 +5,17 @@ import Container from '@teqfw/di';
 import Fl32_Web_Back_Server from '../../src/Back/Server.mjs';
 
 const SRC = path.resolve(import.meta.dirname, '../../src');
+const LOG_SRC = path.resolve(import.meta.dirname, '../../node_modules/@teqfw/log/src');
+
+function createLoggerProvider() {
+    return {
+        forSource: () => ({
+            info: () => {},
+            warn: () => {},
+            error: () => {},
+        }),
+    };
+}
 
 /**
  * @returns {{headersSent:boolean,writableEnded:boolean,statusCode?:number,body?:string,writeHead:(status:number)=>void,end:(body?:string)=>void}}
@@ -61,6 +72,7 @@ describe('Fl32_Web_Back_Server integration', () => {
     test('returns 404 through transport when no PROCESS handler completes', async () => {
         const container = new Container();
         container.addNamespaceRoot('Fl32_Web_', SRC, '.mjs');
+        container.addNamespaceRoot('TeqFw_Log_', LOG_SRC, '.mjs');
         container.enableTestMode();
         const runtimeFactory = await container.get('Fl32_Web_Back_Config_Runtime__Factory$');
         runtimeFactory.freeze();
@@ -76,7 +88,7 @@ describe('Fl32_Web_Back_Server integration', () => {
             http: mockHttp,
             http2: mockHttp2,
             config: await container.get('Fl32_Web_Back_Config_Runtime$'),
-            logger: {info: () => {}, warn: () => {}, error: () => {}, exception: () => {}},
+            logger: createLoggerProvider(),
             pipelineEngine: await container.get('Fl32_Web_Back_PipelineEngine$'),
             SERVER_TYPE: await container.get('Fl32_Web_Back_Enum_Server_Type$'),
         });
@@ -95,6 +107,7 @@ describe('Fl32_Web_Back_Server integration', () => {
     test('returns 500 through transport when PROCESS handler throws', async () => {
         const container = new Container();
         container.addNamespaceRoot('Fl32_Web_', SRC, '.mjs');
+        container.addNamespaceRoot('TeqFw_Log_', LOG_SRC, '.mjs');
         container.enableTestMode();
         const runtimeFactory = await container.get('Fl32_Web_Back_Config_Runtime__Factory$');
         runtimeFactory.freeze();
@@ -114,7 +127,7 @@ describe('Fl32_Web_Back_Server integration', () => {
                 createSecureServer: () => createMockServer('https', []),
             },
             config: await container.get('Fl32_Web_Back_Config_Runtime$'),
-            logger: {info: () => {}, warn: () => {}, error: () => {}, exception: () => {}},
+            logger: createLoggerProvider(),
             pipelineEngine,
             SERVER_TYPE: await container.get('Fl32_Web_Back_Enum_Server_Type$'),
         });

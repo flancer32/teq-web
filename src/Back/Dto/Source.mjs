@@ -19,7 +19,7 @@ export class Factory {
     /* eslint-disable jsdoc/require-param-description */
     /**
      * @param {object} params
-     * @param {Fl32_Web_Back_Helper_Cast} params.cast
+     * @param {Fl32_Web_Back_Helper_Cast$} params.cast
      */
     constructor(
         {
@@ -29,7 +29,7 @@ export class Factory {
         /* eslint-enable jsdoc/require-param-description */
         /**
          * @param {*} [data]
-         * @returns {Fl32_Web_Back_Dto_Source}
+         * @returns {Fl32_Web_Back_Dto_Source$}
          */
         this.create = function (data) {
             const res = new Fl32_Web_Back_Dto_Source();

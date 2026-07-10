@@ -24,6 +24,16 @@ const mockHttp2 = {
   }
 };
 
+function createLoggerProvider(logs) {
+  return {
+    forSource: () => ({
+      info: (...args) => logs.push(['info', ...args]),
+      warn: (...args) => logs.push(['warn', ...args]),
+      error: (...args) => logs.push(['error', ...args])
+    })
+  };
+}
+
 class MockRes extends EventEmitter {
   constructor() {
     super();
@@ -93,12 +103,7 @@ describe('Fl32_Web_Back_Handler_Static_A_FileService', () => {
     };
 
     logs = [];
-    // simple logger collecting calls
-    logger = {
-      info: (...args) => logs.push(['info', ...args]),
-      warn: (...args) => logs.push(['warn', ...args]),
-      exception: (...args) => logs.push(['exception', ...args])
-    };
+    logger = createLoggerProvider(logs);
 
     // helpers to populate mock FS
     addFile = (p, content) => {
@@ -228,7 +233,7 @@ describe('Fl32_Web_Back_Handler_Static_A_FileService', () => {
     assert.strictEqual(logs[0][0], 'warn');
   });
 
-  test('logs exception on unexpected errors', async () => {
+  test('logs error on unexpected errors', async () => {
     addFile('/root/x.txt', 'X');
     mockFs.createReadStream = () => { throw new Error('boom'); };
 
@@ -251,6 +256,6 @@ describe('Fl32_Web_Back_Handler_Static_A_FileService', () => {
 
     assert.strictEqual(ok, false);
     assert.strictEqual(logs.length, 1);
-    assert.strictEqual(logs[0][0], 'exception');
+    assert.strictEqual(logs[0][0], 'error');
   });
 });

@@ -34,14 +34,14 @@ export default class Fl32_Web_Back_Dto_Info {
 export class Factory {
     /**
      * @param {object} deps
-     * @param {Fl32_Web_Back_Helper_Cast} deps.cast
-     * @param {Fl32_Web_Back_Enum_Stage} deps.STAGE
+     * @param {Fl32_Web_Back_Helper_Cast$} deps.cast
+     * @param {Fl32_Web_Back_Enum_Stage$} deps.STAGE
      */
     constructor({cast, STAGE}) {
 
         /**
          * @param {*} [data]
-         * @returns {Fl32_Web_Back_Dto_Info}
+         * @returns {Fl32_Web_Back_Dto_Info$}
          */
         this.create = function (data) {
             const res = new Fl32_Web_Back_Dto_Info();

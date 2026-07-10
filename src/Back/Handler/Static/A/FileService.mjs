@@ -10,13 +10,14 @@ export default class Fl32_Web_Back_Handler_Static_A_FileService {
      * @param {Fl32_Web_Node_Fs} deps.fs
      * @param {Fl32_Web_Node_Http2} deps.http2
      * @param {Fl32_Web_Node_Path} deps.path
-     * @param {Fl32_Web_Back_Logger} deps.logger
-     * @param {Fl32_Web_Back_Helper_Mime} deps.helpMime
-     * @param {Fl32_Web_Back_Handler_Static_A_Resolver} deps.resolver
-     * @param {Fl32_Web_Back_Handler_Static_A_Fallback} deps.fallback
+     * @param {TeqFw_Log_Provider$} deps.logger
+     * @param {Fl32_Web_Back_Helper_Mime$} deps.helpMime
+     * @param {Fl32_Web_Back_Handler_Static_A_Resolver$} deps.resolver
+     * @param {Fl32_Web_Back_Handler_Static_A_Fallback$} deps.fallback
      */
     constructor({fs, http2, path, logger, helpMime, resolver, fallback}) {
         const {constants: H2} = http2;
+        const log = logger.forSource('Fl32_Web_Back_Handler_Static_A_FileService');
 
         /**
          * Serve a file for given config and relative path.
@@ -51,11 +52,15 @@ export default class Fl32_Web_Back_Handler_Static_A_FileService {
                 return true;
             } catch (e) {
                 if (e?.code === 'ENOENT') {
-                    logger.info(`File not found: ${fsPath}`);
+                    log.info(`File not found: ${fsPath}`);
                 } else if (e?.code === 'EACCES' || e?.code === 'EPERM') {
-                    logger.warn(`Access denied: ${fsPath}`);
+                    log.warn(`Access denied: ${fsPath}`);
                 } else {
-                    logger.exception(e);
+                    log.error('Static file service failed', {
+                        err: e,
+                        path: fsPath,
+                        requestUrl: req?.url,
+                    });
                 }
                 return false;
             }
@@ -71,7 +76,7 @@ export const __deps__ = Object.freeze({
         fs: 'node:fs',
         http2: 'node:http2',
         path: 'node:path',
-        logger: 'Fl32_Web_Back_Logger$',
+        logger: 'TeqFw_Log_Provider$',
         helpMime: 'Fl32_Web_Back_Helper_Mime$',
         resolver: 'Fl32_Web_Back_Handler_Static_A_Resolver$',
         fallback: 'Fl32_Web_Back_Handler_Static_A_Fallback$',

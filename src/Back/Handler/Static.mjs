@@ -3,19 +3,18 @@
 /**
  * @namespace Fl32_Web_Back_Handler_Static
  * @description Universal static-file PROCESS handler.
- * @implements Fl32_Web_Back_Api_Handler
+ * @implements {Fl32_Web_Back_Api_Handler$}
  */
 export default class Fl32_Web_Back_Handler_Static {
     /**
      * @param {object} deps
-     * @param {Fl32_Web_Back_Handler_Static_A_Registry} deps.registry
-     * @param {Fl32_Web_Back_Handler_Static_A_FileService} deps.fileService
-     * @param {Fl32_Web_Back_Helper_Respond} deps.respond
-     * @param {Fl32_Web_Back_Logger} deps.logger
-     * @param {Fl32_Web_Back_Dto_Info__Factory} deps.dtoInfoFactory
-     * @param {Fl32_Web_Back_Enum_Stage} deps.STAGE
+     * @param {Fl32_Web_Back_Handler_Static_A_Registry$} deps.registry
+     * @param {Fl32_Web_Back_Handler_Static_A_FileService$} deps.fileService
+     * @param {Fl32_Web_Back_Helper_Respond$} deps.respond
+     * @param {Fl32_Web_Back_Dto_Info__Factory$} deps.dtoInfoFactory
+     * @param {Fl32_Web_Back_Enum_Stage$} deps.STAGE
      */
-    constructor({registry, fileService, respond, logger, dtoInfoFactory, STAGE}) {
+    constructor({registry, fileService, respond, dtoInfoFactory, STAGE}) {
 
         const _info = dtoInfoFactory.create({
             name: this.constructor.name,
@@ -25,7 +24,7 @@ export default class Fl32_Web_Back_Handler_Static {
         /**
          * Initialize registry with provided sources.
          *
-         * @param {{sources: Fl32_Web_Back_Dto_Source[]}} params
+         * @param {{sources: Fl32_Web_Back_Dto_Source$[]}} params
          * @returns {Promise<void>}
          */
         this.init = async ({sources = []} = {}) => {
@@ -35,7 +34,7 @@ export default class Fl32_Web_Back_Handler_Static {
         /**
          * Attempt to handle incoming request.
          *
-         * @param {Fl32_Web_Back_Dto_RequestContext} context
+         * @param {Fl32_Web_Back_Dto_RequestContext$} context
          * @returns {Promise<void>}
          */
         this.handle = async (context) => {
@@ -52,7 +51,7 @@ export default class Fl32_Web_Back_Handler_Static {
         };
 
         /**
-         * @returns {Fl32_Web_Back_Dto_Info}
+         * @returns {Fl32_Web_Back_Dto_Info$}
          */
         this.getRegistrationInfo = () => _info;
     }
@@ -66,7 +65,6 @@ export const __deps__ = Object.freeze({
         registry: 'Fl32_Web_Back_Handler_Static_A_Registry$',
         fileService: 'Fl32_Web_Back_Handler_Static_A_FileService$',
         respond: 'Fl32_Web_Back_Helper_Respond$',
-        logger: 'Fl32_Web_Back_Logger$',
         dtoInfoFactory: 'Fl32_Web_Back_Dto_Info__Factory$',
         STAGE: 'Fl32_Web_Back_Enum_Stage$',
     },

@@ -3,6 +3,16 @@ import assert from 'node:assert/strict';
 import Fl32_Web_Back_Server from '../../../src/Back/Server.mjs';
 import Fl32_Web_Back_Enum_Server_Type from '../../../src/Back/Enum/Server/Type.mjs';
 
+function createLoggerProvider(log) {
+    return {
+        forSource: () => ({
+            info: (...args) => log.push(['info', ...args]),
+            error: (...args) => log.push(['error', ...args]),
+            warn: (...args) => log.push(['warn', ...args]),
+        }),
+    };
+}
+
 describe('Fl32_Web_Back_Server (mocked)', () => {
 
     /** @type {Array<*>} */
@@ -35,11 +45,7 @@ describe('Fl32_Web_Back_Server (mocked)', () => {
 
     beforeEach(() => {
         log.length = 0;
-        logger = {
-            info: (...args) => log.push(['info', ...args]),
-            error: (...args) => log.push(['error', ...args]),
-            warn: (...args) => log.push(['warn', ...args]),
-        };
+        logger = createLoggerProvider(log);
         pipelineEngine = {
             lockHandlers: () => log.push('pipeline.lockHandlers'),
             handleRequest: () => {},

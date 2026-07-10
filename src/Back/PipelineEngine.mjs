@@ -12,32 +12,33 @@ export default class Fl32_Web_Back_PipelineEngine {
     /* eslint-disable jsdoc/require-param-description,jsdoc/check-param-names */
     /**
      * @param {object} params
-     * @param {Fl32_Web_Back_Dto_RequestContext__Factory} params.dtoRequestContextFactory
-     * @param {Fl32_Web_Back_Logger} params.logger
-     * @param {Fl32_Web_Back_Helper_Respond} params.respond
-     * @param {Fl32_Web_Back_Helper_Order_Kahn} params.helpOrder
-     * @param {Fl32_Web_Back_Enum_Stage} params.STAGE
+     * @param {Fl32_Web_Back_Dto_RequestContext__Factory$} params.dtoRequestContextFactory
+     * @param {TeqFw_Log_Provider$} params.logger
+     * @param {Fl32_Web_Back_Helper_Respond$} params.respond
+     * @param {Fl32_Web_Back_Helper_Order_Kahn$} params.helpOrder
+     * @param {Fl32_Web_Back_Enum_Stage$} params.STAGE
      */
     constructor({dtoRequestContextFactory, logger, respond, helpOrder, STAGE}) {
         /* eslint-enable jsdoc/require-param-description,jsdoc/check-param-names */
-        /** @type {Map<string, Fl32_Web_Back_Api_Handler>} */
+        const log = logger.forSource('Fl32_Web_Back_PipelineEngine');
+        /** @type {Map<string, Fl32_Web_Back_Api_Handler$>} */
         const handlers = new Map();
-        /** @type {Fl32_Web_Back_Api_Handler[]} */
+        /** @type {Fl32_Web_Back_Api_Handler$[]} */
         let initHandlers = [];
-        /** @type {Fl32_Web_Back_Api_Handler[]} */
+        /** @type {Fl32_Web_Back_Api_Handler$[]} */
         let processHandlers = [];
-        /** @type {Fl32_Web_Back_Api_Handler[]} */
+        /** @type {Fl32_Web_Back_Api_Handler$[]} */
         let finalizeHandlers = [];
         let isLocked = false;
 
         /**
          * @param {Fl32_Web_Node_Http_IncomingMessage|Fl32_Web_Node_Http2_ServerRequest} request
          * @param {Fl32_Web_Back_Response_Target} response
-         * @returns {Fl32_Web_Back_Dto_RequestContext}
+         * @returns {Fl32_Web_Back_Dto_RequestContext$}
          */
         function createRequestContext(request, response) {
             let completed = false;
-            /** @type {Fl32_Web_Back_Dto_RequestContext & {[KEY_STAGE]: string|null}} */
+            /** @type {Fl32_Web_Back_Dto_RequestContext$ & {[KEY_STAGE]: string|null}} */
             const context = dtoRequestContextFactory.create();
             context.request = request;
             context.response = response;
@@ -75,9 +76,9 @@ export default class Fl32_Web_Back_PipelineEngine {
         }
 
         /**
-         * @param {Fl32_Web_Back_Api_Handler} handler
+         * @param {Fl32_Web_Back_Api_Handler$} handler
          * @param {string} stage
-         * @param {Fl32_Web_Back_Dto_RequestContext & {[KEY_STAGE]: string|null}} context
+         * @param {Fl32_Web_Back_Dto_RequestContext$ & {[KEY_STAGE]: string|null}} context
          * @returns {Promise<void>}
          */
         async function runHandler(handler, stage, context) {
@@ -118,7 +119,7 @@ export default class Fl32_Web_Back_PipelineEngine {
         this.lockHandlers = () => this.orderHandlers();
 
         /**
-         * @param {Fl32_Web_Back_Api_Handler} handler
+         * @param {Fl32_Web_Back_Api_Handler$} handler
          * @returns {void}
          */
         this.addHandler = function (handler) {
@@ -133,7 +134,7 @@ export default class Fl32_Web_Back_PipelineEngine {
         };
 
         /**
-         * @param {Fl32_Web_Back_Api_Handler} handler
+         * @param {Fl32_Web_Back_Api_Handler$} handler
          * @returns {void}
          */
         this.registerHandler = (handler) => this.addHandler(handler);
@@ -147,7 +148,7 @@ export default class Fl32_Web_Back_PipelineEngine {
             if (!isLocked) {
                 throw new Error('Pipeline handlers must be locked before request execution');
             }
-            /** @type {Fl32_Web_Back_Dto_RequestContext & {[KEY_STAGE]: string|null}} */
+            /** @type {Fl32_Web_Back_Dto_RequestContext$ & {[KEY_STAGE]: string|null}} */
             const context = createRequestContext(req, res);
 
             try {
@@ -155,7 +156,11 @@ export default class Fl32_Web_Back_PipelineEngine {
                     try {
                         await runHandler(handler, STAGE.INIT, context);
                     } catch (error) {
-                        logger.exception(error);
+                        log.error('INIT handler failed', {
+                            err: error,
+                            handler: handler.getRegistrationInfo()?.name,
+                            url: req.url,
+                        });
                     }
                 }
 
@@ -170,7 +175,11 @@ export default class Fl32_Web_Back_PipelineEngine {
                     try {
                         await runHandler(handler, STAGE.PROCESS, context);
                     } catch (error) {
-                        logger.exception(error);
+                        log.error('PROCESS handler failed', {
+                            err: error,
+                            handler: handler.getRegistrationInfo()?.name,
+                            url: req.url,
+                        });
                         if (respond.isWritable(res)) {
                             respond.code500_InternalServerError({res, body: 'Internal Server Error'});
                         }
@@ -180,7 +189,7 @@ export default class Fl32_Web_Back_PipelineEngine {
                 }
 
                 if (!context.isCompleted() && respond.isWritable(res)) {
-                    logger.error(`404 Not Found: ${req.url}`);
+                    log.error(`404 Not Found: ${req.url}`);
                     respond.code404_NotFound({res});
                 }
             } finally {
@@ -188,7 +197,11 @@ export default class Fl32_Web_Back_PipelineEngine {
                     try {
                         await runHandler(handler, STAGE.FINALIZE, context);
                     } catch (error) {
-                        logger.exception(error);
+                        log.error('FINALIZE handler failed', {
+                            err: error,
+                            handler: handler.getRegistrationInfo()?.name,
+                            url: req.url,
+                        });
                     }
                 }
                 context[KEY_STAGE] = null;
@@ -207,7 +220,7 @@ export default class Fl32_Web_Back_PipelineEngine {
 export const __deps__ = Object.freeze({
     default: {
         dtoRequestContextFactory: 'Fl32_Web_Back_Dto_RequestContext__Factory$',
-        logger: 'Fl32_Web_Back_Logger$',
+        logger: 'TeqFw_Log_Provider$',
         respond: 'Fl32_Web_Back_Helper_Respond$',
         helpOrder: 'Fl32_Web_Back_Helper_Order_Kahn$',
         STAGE: 'Fl32_Web_Back_Enum_Stage$',

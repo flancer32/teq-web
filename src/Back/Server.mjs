@@ -10,15 +10,16 @@ export default class Fl32_Web_Back_Server {
      * @param {object} deps
      * @param {Fl32_Web_Node_Http} deps.http
      * @param {Fl32_Web_Node_Http2} deps.http2
-     * @param {Fl32_Web_Back_Config_Runtime} deps.config
-     * @param {Fl32_Web_Back_Logger} deps.logger
-     * @param {Fl32_Web_Back_PipelineEngine} deps.pipelineEngine
-     * @param {Fl32_Web_Back_Enum_Server_Type} deps.SERVER_TYPE
+     * @param {Fl32_Web_Back_Config_Runtime$} deps.config
+     * @param {TeqFw_Log_Provider$} deps.logger
+     * @param {Fl32_Web_Back_PipelineEngine$} deps.pipelineEngine
+     * @param {Fl32_Web_Back_Enum_Server_Type$} deps.SERVER_TYPE
      */
     constructor({http, http2, config, logger, pipelineEngine, SERVER_TYPE}) {
         // VARS
         const { createServer } = http;
         const { createServer: createServerH2, createSecureServer } = http2;
+        const log = logger.forSource('Fl32_Web_Back_Server');
         /** @type {Fl32_Web_Node_Http_Server} */
         let _instance;
 
@@ -30,7 +31,7 @@ export default class Fl32_Web_Back_Server {
 
         /**
          * Starts the server with optional configuration.
-         * @param {Fl32_Web_Back_Config_Runtime} [cfg]
+         * @param {Fl32_Web_Back_Config_Runtime$} [cfg]
          * @returns {Promise<void>}
          */
         this.start = async function (cfg) {
@@ -42,19 +43,19 @@ export default class Fl32_Web_Back_Server {
 
             if (type === SERVER_TYPE.HTTP2) {
                 _instance = createServerH2();
-                logger.info(`Starting server in HTTP/2 mode on port ${port}...`);
+                log.info(`Starting server in HTTP/2 mode on port ${port}...`);
             } else if (type === SERVER_TYPE.HTTP) {
                 _instance = createServer({});
-                logger.info(`Starting server in HTTP/1 mode on port ${port}...`);
+                log.info(`Starting server in HTTP/1 mode on port ${port}...`);
             } else if (type === SERVER_TYPE.HTTPS) {
                 if (!tls?.key || !tls?.cert) {
-                    logger.error('HTTPS server requires TLS key and certificate');
+                    log.error('HTTPS server requires TLS key and certificate');
                     throw new Error('TLS key and certificate are required for HTTPS server');
                 }
                 _instance = createSecureServer(tls);
-                logger.info(`Starting server in HTTPS (HTTP/2 + TLS) mode on port ${port}...`);
+                log.info(`Starting server in HTTPS (HTTP/2 + TLS) mode on port ${port}...`);
             } else {
-                logger.error(`Unsupported server type: ${type}`);
+                log.error(`Unsupported server type: ${type}`);
                 throw new Error(`Server type '${type}' is not supported`);
             }
 
@@ -71,10 +72,10 @@ export default class Fl32_Web_Back_Server {
                 await new Promise((resolve, reject) => {
                     _instance.close(err => err ? reject(err) : resolve());
                 });
-                logger.info('Server stopped');
+                log.info('Server stopped');
                 _instance = undefined;
             } else {
-                logger.warn('Server is not running');
+                log.warn('Server is not running');
             }
         };
     }
@@ -88,7 +89,7 @@ export const __deps__ = Object.freeze({
         http: 'node:http',
         http2: 'node:http2',
         config: 'Fl32_Web_Back_Config_Runtime$',
-        logger: 'Fl32_Web_Back_Logger$',
+        logger: 'TeqFw_Log_Provider$',
         pipelineEngine: 'Fl32_Web_Back_PipelineEngine$',
         SERVER_TYPE: 'Fl32_Web_Back_Enum_Server_Type$',
     },

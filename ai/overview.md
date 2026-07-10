@@ -4,7 +4,7 @@
 
 This package is not a general-purpose web framework. It does not define routing, controllers, domain models, persistence, session handling, or application structure. Its role is limited to coordinating one request lifecycle inside a TeqFW modular monolith.
 
-The package assumes `@teqfw/di` and exposes its runtime surface through DI-managed modules under the `Fl32_Web_` namespace rooted at the published `src/` tree. In normal usage, application modules receive these dependencies through constructor injection and orchestrate them from DI-managed services rather than creating containers or wiring collaborators manually inside feature code.
+The package assumes the TeqFW DI runtime model and exposes its runtime surface through DI-managed modules under the `Fl32_Web_` namespace rooted at the published `src/` tree. In normal usage, application modules receive these dependencies through constructor injection and orchestrate them from DI-managed services rather than creating containers or wiring collaborators manually inside feature code.
 
 Runtime startup configuration is exposed through `Fl32_Web_Back_Config_Runtime$` with flat transport fields `config.port`, `config.type`, and `config.tls`. The `tls` field is backed by `Fl32_Web_Back_Config_Runtime_Tls$`.
 
@@ -25,5 +25,5 @@ The main consumer entry points are:
 
 - `Fl32_Web_Back_PipelineEngine$` for request lifecycle coordination;
 - `Fl32_Web_Back_Server$` for the built-in Node.js server;
-- `Fl32_Web_Back_Api_Handler` plus `Fl32_Web_Back_Dto_Info__Factory$` and `Fl32_Web_Back_Dto_Info` for custom handlers;
-- `Fl32_Web_Back_Handler_Static$` plus `Fl32_Web_Back_Dto_Source` values for static file serving.
+- `Fl32_Web_Back_Api_Handler` plus `Fl32_Web_Back_Dto_Info__Factory$` and `Fl32_Web_Back_Dto_Info$` for custom handlers;
+- `Fl32_Web_Back_Handler_Static$` plus `Fl32_Web_Back_Dto_Source$` values for static file serving.

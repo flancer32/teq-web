@@ -4,6 +4,17 @@ import Fl32_Web_Back_PipelineEngine from '../../../src/Back/PipelineEngine.mjs';
 import {Factory as Fl32_Web_Back_Dto_RequestContext_Factory} from '../../../src/Back/Dto/RequestContext.mjs';
 import Fl32_Web_Back_Enum_Stage from '../../../src/Back/Enum/Stage.mjs';
 
+function createLoggerProvider({errors, exceptions}) {
+    return {
+        forSource: () => ({
+            error(message, data) {
+                errors.push(message);
+                if (data?.err) exceptions.push(String(data.err.message ?? data.err));
+            },
+        }),
+    };
+}
+
 /**
  * @returns {{headersSent:boolean,writableEnded:boolean,statusCode?:number,body?:string,writeHead:(status:number)=>void,end:(body?:string)=>void}}
  */
@@ -52,10 +63,7 @@ describe('Fl32_Web_Back_PipelineEngine', () => {
                 res.end(body);
             },
         };
-        logger = {
-            error: (message) => errors.push(message),
-            exception: (error) => exceptions.push(String(error.message ?? error)),
-        };
+        logger = createLoggerProvider({errors, exceptions});
         helpOrder = {sort: (items) => items};
         dtoRequestContextFactory = new Fl32_Web_Back_Dto_RequestContext_Factory();
     });

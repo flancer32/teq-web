@@ -7,18 +7,19 @@
 export default class Fl32_Web_Back_Handler_Static_A_Registry {
     /**
      * @param {object} deps
-     * @param {Fl32_Web_Back_Handler_Static_A_Config} deps.configFactory
-     * @param {Fl32_Web_Back_Logger} deps.logger
+     * @param {Fl32_Web_Back_Handler_Static_A_Config$} deps.configFactory
+     * @param {TeqFw_Log_Provider$} deps.logger
      */
     constructor({configFactory, logger}) {
-        /** @type {Fl32_Web_Back_Dto_Source[]} */
+        const log = logger.forSource('Fl32_Web_Back_Handler_Static_A_Registry');
+        /** @type {Fl32_Web_Back_Handler_Static_A_Config__Value[]} */
         let _configs = [];
 
         /**
          * Add configurations ensuring unique prefixes.
          * Existing entries are not modified.
          *
-         * @param {Fl32_Web_Back_Dto_Source[]} dtoList
+         * @param {Fl32_Web_Back_Dto_Source$[]} dtoList
          */
         this.addConfigs = function (dtoList = []) {
             const list = dtoList.map(dto => configFactory.create(dto));
@@ -26,7 +27,7 @@ export default class Fl32_Web_Back_Handler_Static_A_Registry {
                 if (!_configs.some(c => c.prefix === cfg.prefix)) {
                     _configs.push(cfg);
                 } else {
-                    logger.warn(`Static config with prefix ${cfg.prefix} already exists`);
+                    log.warn(`Static config with prefix ${cfg.prefix} already exists`);
                 }
             }
             _configs.sort((a, b) => b.prefix.length - a.prefix.length);
@@ -63,6 +64,6 @@ export class Match {
 export const __deps__ = Object.freeze({
     default: {
         configFactory: 'Fl32_Web_Back_Handler_Static_A_Config$',
-        logger: 'Fl32_Web_Back_Logger$',
+        logger: 'TeqFw_Log_Provider$',
     },
 });

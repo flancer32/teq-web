@@ -9,8 +9,8 @@ export default class Fl32_Web_Back_Helper_Order_Kahn {
         /**
          * Topologically sorts handlers with `name`, `before`, `after` fields.
          *
-         * @param {Fl32_Web_Back_Api_Handler[]} handlers - Handlers to sort.
-         * @returns {Fl32_Web_Back_Api_Handler[]} - Sorted list.
+         * @param {Fl32_Web_Back_Api_Handler$[]} handlers - Handlers to sort.
+         * @returns {Fl32_Web_Back_Api_Handler$[]} - Sorted list.
          * @throws {Error} - If circular dependency is detected.
          */
         this.sort = function (handlers) {

@@ -10,7 +10,7 @@ Within the TeqFW ecosystem, this package plays a role similar to how **Express**
 
 Unlike general-purpose web frameworks, this package focuses only on coordinating **request lifecycle execution through a deterministic handler pipeline**.
 
-The package requires the dependency container **@teqfw/di**.
+The package uses the **TeqFW DI container model** and is intended to run inside applications assembled through the Tequila Framework platform.
 
 Platform website: <https://teqfw.com/>
 
@@ -44,9 +44,9 @@ Its sole responsibility is coordinating the **lifecycle of a web request**.
 | -------------------- | ----------------------------------------- |
 | Application packages | business logic, handlers                  |
 | `@flancer32/teq-web` | web server and request lifecycle pipeline |
-| `@teqfw/di`          | runtime dependency linking                |
+| TeqFW DI layer       | runtime dependency linking                |
 
-TeqFW applications are composed of multiple packages that declare dependencies through the DI container.
+TeqFW applications are composed of multiple packages that declare dependencies through the platform DI container.
 
 `@flancer32/teq-web` provides the **web runtime layer** in which those packages handle incoming requests.
 
@@ -187,6 +187,19 @@ const app = await container.get("App_Web_Server_Start$");
 await app.execute();
 ```
 
+## Design Basis
+
+`@flancer32/teq-web` is built for the TeqFW platform DI model and is intended to be composed inside applications that use the TeqFW container-based runtime assembly approach.
+
+The package also uses [`@teqfw/log`](https://www.npmjs.com/package/@teqfw/log) as the platform logging contract, so runtime components emit source-bound logs through the shared TeqFW logging surface instead of defining package-local logging abstractions.
+
+The package is also developed using ADSM, Alex Gusev's approach to maintaining product and architecture context alongside implementation work. Background materials:
+
+- ADSM book: http://fly.wiredgeese.com/flancer/leanpub/adsm-en/
+- Alex Gusev: https://wiredgeese.com/
+
+ADSM and TeqFW are original developments by Alex Gusev.
+
 ## Designed for Development with LLM Agents
 
 TeqFW is an architectural approach designed for software development in which **LLM agents participate directly in the development process**.
@@ -258,7 +271,7 @@ Human developers typically read the README and source code, while **LLM agents c
 npm install @flancer32/teq-web
 ```
 
-The package requires a configured `@teqfw/di` container.
+The package requires a configured TeqFW DI container and namespace registration for its published modules.
 
 ## Tequila Framework
 

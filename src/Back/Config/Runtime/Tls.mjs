@@ -23,13 +23,13 @@ export class Params {
     key;
 }
 
-/** @type {Fl32_Web_Back_Config_Runtime_Tls} */
+/** @type {Fl32_Web_Back_Config_Runtime_Tls__Data} */
 const cfg = new Data();
 let frozen = false;
 
 const facade = {};
 
-/** @type {Fl32_Web_Back_Config_Runtime_Tls} */
+/** @type {Fl32_Web_Back_Config_Runtime_Tls$} */
 const proxy = new Proxy(facade, {
     get(_target, prop) {
         const isServiceProp = (prop === 'then') || (typeof prop === 'symbol');
@@ -59,7 +59,7 @@ export default class Wrapper {
 export class Factory {
     /**
      * @param {object} deps
-     * @param {Fl32_Web_Back_Helper_Cast} deps.cast
+     * @param {Fl32_Web_Back_Helper_Cast$} deps.cast
      */
     constructor({cast}) {
         /**
@@ -79,7 +79,7 @@ export class Factory {
         };
 
         /**
-         * @returns {Fl32_Web_Back_Config_Runtime_Tls}
+         * @returns {Fl32_Web_Back_Config_Runtime_Tls$}
          */
         this.freeze = function () {
             if (frozen) return proxy;

@@ -15,7 +15,7 @@ export default class Fl32_Web_Back_Handler_Static_A_Config {
         /**
          * Normalize DTO fields into configuration object.
          *
-         * @param {Fl32_Web_Back_Dto_Source} dto
+         * @param {Fl32_Web_Back_Dto_Source$} dto
          * @returns {Fl32_Web_Back_Handler_Static_A_Config__Value}
          * @throws {Error} When required fields are missing or invalid.
          */

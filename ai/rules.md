@@ -37,7 +37,7 @@
 
 ## DI Usage Rules
 
-- The package is designed for `@teqfw/di`.
+- The package is designed for the TeqFW DI container model.
 - Consumer code should resolve package modules through the `Fl32_Web_` namespace mapped to the package `src/` path.
 - Startup configuration for the built-in server should be supplied through `Fl32_Web_Back_Config_Runtime__Factory$` using flat runtime fields (`{port, type, tls}`).
 - TLS startup configuration belongs to the dedicated runtime component `Fl32_Web_Back_Config_Runtime_Tls$`, even though consumers read it through `config.tls`.

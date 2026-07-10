@@ -14,8 +14,8 @@ This example shows the preferred TeqFW-style usage path: external code resolves 
 export default class Hello {
     /**
      * @param {object} deps
-     * @param {Fl32_Web_Back_Dto_Info$Factory} deps.dtoInfoFactory
-     * @param {Fl32_Web_Back_Enum_Stage} deps.STAGE
+     * @param {Fl32_Web_Back_Dto_Info__Factory$} deps.dtoInfoFactory
+     * @param {Fl32_Web_Back_Enum_Stage$} deps.STAGE
      */
     constructor({dtoInfoFactory, STAGE}) {
         const info = dtoInfoFactory.create({
@@ -52,8 +52,8 @@ export const __deps__ = Object.freeze({
 export default class Start {
     /**
      * @param {object} deps
-     * @param {Fl32_Web_Back_PipelineEngine} deps.pipeline
-     * @param {Fl32_Web_Back_Server} deps.server
+     * @param {Fl32_Web_Back_PipelineEngine$} deps.pipeline
+     * @param {Fl32_Web_Back_Server$} deps.server
      * @param {App_Web_Handler_Hello} deps.helloHandler
      */
     constructor({pipeline, server, helloHandler}) {

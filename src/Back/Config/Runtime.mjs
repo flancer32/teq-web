@@ -10,17 +10,17 @@ export class Data {
     port;
     /** @type {string|undefined} */
     type;
-    /** @type {Fl32_Web_Back_Config_Runtime_Tls|undefined} */
+    /** @type {Fl32_Web_Back_Config_Runtime_Tls$|undefined} */
     tls;
 }
 
-/** @type {Fl32_Web_Back_Config_Runtime} */
+/** @type {Fl32_Web_Back_Config_Runtime__Data} */
 const cfg = new Data();
 let frozen = false;
 
 const facade = {};
 
-/** @type {Fl32_Web_Back_Config_Runtime} */
+/** @type {Fl32_Web_Back_Config_Runtime$} */
 const proxy = new Proxy(facade, {
     get(_target, prop) {
         const isServiceProp = (prop === 'then') || (typeof prop === 'symbol');
@@ -50,13 +50,13 @@ export default class Wrapper {
 export class Factory {
     /**
      * @param {object} deps
-     * @param {Fl32_Web_Back_Helper_Cast} deps.cast
-     * @param {Fl32_Web_Back_Enum_Server_Type} deps.SERVER_TYPE
-     * @param {Fl32_Web_Back_Config_Runtime_Tls__Factory} deps.tlsFactory
+     * @param {Fl32_Web_Back_Helper_Cast$} deps.cast
+     * @param {Fl32_Web_Back_Enum_Server_Type$} deps.SERVER_TYPE
+     * @param {Fl32_Web_Back_Config_Runtime_Tls__Factory$} deps.tlsFactory
      */
     constructor({cast, SERVER_TYPE, tlsFactory}) {
         /**
-         * @param {Fl32_Web_Back_Config_Runtime} [params]
+         * @param {Fl32_Web_Back_Config_Runtime$} [params]
          */
         this.configure = function (params = {}) {
             if (frozen) throw new Error('Runtime configuration is frozen.');
@@ -72,7 +72,7 @@ export class Factory {
         };
 
         /**
-         * @returns {Fl32_Web_Back_Config_Runtime}
+         * @returns {Fl32_Web_Back_Config_Runtime$}
          */
         this.freeze = function () {
             if (frozen) return proxy;

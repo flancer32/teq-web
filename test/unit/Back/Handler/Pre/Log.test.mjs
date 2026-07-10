@@ -4,6 +4,14 @@ import Fl32_Web_Back_Handler_Pre_Log from '../../../../../src/Back/Handler/Pre/L
 import {Factory as Fl32_Web_Back_Dto_Info_Factory} from '../../../../../src/Back/Dto/Info.mjs';
 import Fl32_Web_Back_Helper_Cast from '../../../../../src/Back/Helper/Cast.mjs';
 
+function createLoggerProvider(log) {
+    return {
+        forSource: () => ({
+            debug: (msg) => log.push(msg),
+        }),
+    };
+}
+
 describe('Fl32_Web_Back_Handler_Pre_Log', () => {
     const log = [];
     const STAGE = Object.freeze({INIT: 'INIT', PROCESS: 'PROCESS', FINALIZE: 'FINALIZE'});
@@ -13,9 +21,7 @@ describe('Fl32_Web_Back_Handler_Pre_Log', () => {
 
     beforeEach(() => {
         log.length = 0;
-        logger = {
-            debug: (msg) => log.push(msg),
-        };
+        logger = createLoggerProvider(log);
     });
 
     test('logs method and url', async () => {

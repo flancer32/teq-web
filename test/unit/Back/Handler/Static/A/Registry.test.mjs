@@ -7,12 +7,20 @@ function getMockFactory() {
     return { create: dto => ({ root: dto.root, prefix: dto.prefix }) };
 }
 
+function createLoggerProvider(onWarn = () => {}) {
+    return {
+        forSource: () => ({
+            warn: (...args) => onWarn(...args),
+        }),
+    };
+}
+
 describe('Fl32_Web_Back_Handler_Static_A_Registry', () => {
     test('stores initial config', async () => {
         /** @type {Fl32_Web_Back_Handler_Static_A_Registry} */
         const registry = new Fl32_Web_Back_Handler_Static_A_Registry({
             configFactory: getMockFactory(),
-            logger: {warn: () => {}},
+            logger: createLoggerProvider(),
         });
 
         registry.addConfigs([{ root: '/a', prefix: '/p/' }]);
@@ -26,7 +34,7 @@ describe('Fl32_Web_Back_Handler_Static_A_Registry', () => {
         /** @type {Fl32_Web_Back_Handler_Static_A_Registry} */
         const registry = new Fl32_Web_Back_Handler_Static_A_Registry({
             configFactory: getMockFactory(),
-            logger: {warn: () => {}},
+            logger: createLoggerProvider(),
         });
 
         registry.addConfigs([{ root: '/a', prefix: '/p/' }]);
@@ -41,7 +49,7 @@ describe('Fl32_Web_Back_Handler_Static_A_Registry', () => {
         /** @type {Fl32_Web_Back_Handler_Static_A_Registry} */
         const registry = new Fl32_Web_Back_Handler_Static_A_Registry({
             configFactory: getMockFactory(),
-            logger: {warn: () => {}},
+            logger: createLoggerProvider(),
         });
 
         registry.addConfigs([{ root: '/a', prefix: '/p/' }]);
@@ -58,7 +66,7 @@ describe('Fl32_Web_Back_Handler_Static_A_Registry', () => {
         /** @type {Fl32_Web_Back_Handler_Static_A_Registry} */
         const registry = new Fl32_Web_Back_Handler_Static_A_Registry({
             configFactory: getMockFactory(),
-            logger: {warn: (...args) => log.push(args)},
+            logger: createLoggerProvider((...args) => log.push(args)),
         });
 
         registry.addConfigs([{ root: '/a', prefix: '/p/' }]);
@@ -72,7 +80,7 @@ describe('Fl32_Web_Back_Handler_Static_A_Registry', () => {
         /** @type {Fl32_Web_Back_Handler_Static_A_Registry} */
         const registry = new Fl32_Web_Back_Handler_Static_A_Registry({
             configFactory: getMockFactory(),
-            logger: {warn: () => {}},
+            logger: createLoggerProvider(),
         });
 
         registry.addConfigs([

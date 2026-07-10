@@ -4,6 +4,7 @@ import Fl32_Web_Back_Server from '../../src/Back/Server.mjs';
 
 const PORT = Number.parseInt(process.env.PORT ?? '3000', 10);
 const SRC = path.resolve(import.meta.dirname, '../../src');
+const LOG_SRC = path.resolve(import.meta.dirname, '../../node_modules/@teqfw/log/src');
 const WEB_ROOT = path.resolve(import.meta.dirname, './web');
 
 function waitForServerStart(instance) {
@@ -25,16 +26,17 @@ function waitForServerStart(instance) {
 async function main() {
     const container = new Container();
     container.addNamespaceRoot('Fl32_Web_', SRC, '.mjs');
+    container.addNamespaceRoot('TeqFw_Log_', LOG_SRC, '.mjs');
 
-    /** @type {Fl32_Web_Back_PipelineEngine} */
+    /** @type {Fl32_Web_Back_PipelineEngine$} */
     const pipelineEngine = await container.get('Fl32_Web_Back_PipelineEngine$');
-    /** @type {Fl32_Web_Back_Dto_Source$Factory} */
+    /** @type {Fl32_Web_Back_Dto_Source__Factory$} */
     const sourceDtoFactory = await container.get('Fl32_Web_Back_Dto_Source__Factory$');
-    /** @type {Fl32_Web_Back_Handler_Pre_Log} */
+    /** @type {Fl32_Web_Back_Handler_Pre_Log$} */
     const logHandler = await container.get('Fl32_Web_Back_Handler_Pre_Log$');
-    /** @type {Fl32_Web_Back_Handler_Static} */
+    /** @type {Fl32_Web_Back_Handler_Static$} */
     const staticHandler = await container.get('Fl32_Web_Back_Handler_Static$');
-    /** @type {Fl32_Web_Back_Config_Runtime$Factory} */
+    /** @type {Fl32_Web_Back_Config_Runtime__Factory$} */
     const runtimeConfigFactory = await container.get('Fl32_Web_Back_Config_Runtime__Factory$');
 
     await staticHandler.init({
@@ -52,13 +54,13 @@ async function main() {
     pipelineEngine.addHandler(logHandler);
     pipelineEngine.addHandler(staticHandler);
 
-    /** @type {Fl32_Web_Back_Logger} */
-    const logger = await container.get('Fl32_Web_Back_Logger$');
-    /** @type {Fl32_Web_Back_Enum_Server_Type} */
+    /** @type {TeqFw_Log_Provider$} */
+    const logger = await container.get('TeqFw_Log_Provider$');
+    /** @type {Fl32_Web_Back_Enum_Server_Type$} */
     const SERVER_TYPE = await container.get('Fl32_Web_Back_Enum_Server_Type$');
     runtimeConfigFactory.configure({port: PORT});
     runtimeConfigFactory.freeze();
-    /** @type {Fl32_Web_Back_Config_Runtime} */
+    /** @type {Fl32_Web_Back_Config_Runtime$} */
     const config = await container.get('Fl32_Web_Back_Config_Runtime$');
 
     const server = new Fl32_Web_Back_Server({

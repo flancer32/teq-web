@@ -10,7 +10,7 @@ The interface describes how external code should use the package and excludes re
 
 ## TeqFW Usage Model
 
-`@flancer32/teq-web` is designed for TeqFW-style runtime composition with `@teqfw/di`.
+`@flancer32/teq-web` is designed for TeqFW-style runtime composition through the platform DI container.
 
 Dependencies should be linked through Canonical Dependency Codes and constructor injection rather than through direct static imports between application modules. External code should treat the package as infrastructure resolved by the container:
 
