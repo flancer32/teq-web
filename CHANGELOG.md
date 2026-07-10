@@ -1,5 +1,18 @@
 # Changelog
 
+## [0.13.0] - 2026-07-10 - TeqFW logging migration and package surface alignment
+
+### Added
+- Added `jsconfig.json` to the published npm package surface.
+- Added class-and-instance public type aliases in `types.d.ts` following the TeqFW `$` instance convention.
+
+### Changed
+- Migrated runtime logging from the local logger facade to `@teqfw/log` with source-bound logger usage.
+- Removed the direct `@teqfw/di` package dependency and relied on the platform component graph through `@teqfw/log`.
+- Aligned README, `ai/`, tests, and code-level context documentation with the current logging and typing contracts.
+- Removed the unused ESLint config from the package root.
+- Updated package version metadata to `0.13.0`.
+
 ## [0.12.0] - 2026-07-04 - Pipeline locking and transport contract alignment
 
 ### Added
