@@ -46,7 +46,7 @@ export default class Fl32_Web_Back_Handler_Static {
             if (!match) return;
             const served = await fileService.serve(match.config, match.rel, req, res);
             if (served) {
-                context.complete();
+                context.completed = true;
             }
         };
 
