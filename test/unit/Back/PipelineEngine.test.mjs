@@ -87,7 +87,7 @@ describe('Fl32_Web_Back_PipelineEngine', () => {
         engine.addHandler(mkHandler('init', STAGE.INIT, async () => { log.push('init'); }));
         engine.addHandler(mkHandler('processA', STAGE.PROCESS, async (context) => {
             log.push('processA');
-            context.complete();
+            context.completed = true;
         }));
         engine.addHandler(mkHandler('processB', STAGE.PROCESS, async () => { log.push('processB'); }));
         engine.addHandler(mkHandler('finalize', STAGE.FINALIZE, async () => { log.push('finalize'); }));
@@ -135,11 +135,11 @@ describe('Fl32_Web_Back_PipelineEngine', () => {
             dtoRequestContextFactory, logger, respond, helpOrder, STAGE
         });
         engine.addHandler(mkHandler('init', STAGE.INIT, async (context) => {
-            context.complete();
+            context.completed = true;
         }));
         engine.addHandler(mkHandler('process', STAGE.PROCESS, async (context) => {
             log.push('process');
-            context.complete();
+            context.completed = true;
         }));
         engine.orderHandlers();
 

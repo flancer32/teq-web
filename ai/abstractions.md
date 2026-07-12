@@ -46,18 +46,27 @@ Handler metadata is created with `Fl32_Web_Back_Dto_Info__Factory$` and contains
 
 Ordering is resolved once from this metadata and is deterministic within each stage.
 
+Preferred generated code shape:
+
+- Prefer ordinary class methods over assigning handler methods inside the constructor.
+- Keep `getRegistrationInfo()` stable after construction.
+- In `PROCESS` handlers, prefer `context.completed = true` after the response is finalized.
+
 ## Request Context
 
-The Pipeline Engine passes one request-scoped context to every handler. Its stable fields are:
+The Pipeline Engine passes one request-scoped context to every handler. Consumer code should rely on these stable fields:
 
 - `request`: Node.js request object;
 - `response`: Node.js response object;
 - `data`: mutable per-request shared storage for handlers;
-- `completed`: completion flag;
-- `complete()`: marks request processing as completed;
-- `isCompleted()`: reads the completion state.
+- `completed`: completion flag.
 
 Handlers may mutate `data` and may read the rest of the context. They must not replace the context object.
+
+Runtime detail:
+
+- The Pipeline Engine enforces completion semantics through the `completed` field during request execution.
+- For generated handler code, use the stable field `context.completed = true`.
 
 ## Stage Semantics
 
@@ -75,7 +84,37 @@ Each source describes:
 
 - `root`: filesystem root;
 - `prefix`: URL prefix matched by the handler;
-- `allow`: optional allowlist map for paths under the source;
+- `allow`: optional allowlist map that limits which paths under `root` may be served;
 - `defaults`: optional fallback filenames for directory requests.
+
+Important behavior:
+
+- Omitting `allow` does not enable directory listing. The handler still serves only a concrete file path or a fallback file from `defaults`.
+- If `allow` is omitted, any path under `root` may be resolved, subject to traversal protection and file existence checks.
+- If `allow` is provided, only paths matched by its rules may be served.
+- For agent-generated configurations, prefer specifying `allow` explicitly instead of relying on omission.
+
+Example static handler setup:
+
+```javascript
+const source = dtoSourceFactory.create({
+  root: "./web",
+  prefix: "/",
+  allow: {
+    ".": ["assets", "favicon.ico", "robots.txt"],
+  },
+  defaults: ["index.html"],
+});
+
+await staticHandler.init({sources: [source]});
+pipeline.addHandler(staticHandler);
+```
+
+In this example:
+
+- `root` points to the filesystem directory used for static files;
+- `prefix` means requests under `/` are checked against this source;
+- `allow` permits only `assets/**`, `favicon.ico`, and `robots.txt` under `root`;
+- `defaults` allows `/` or any allowed directory request to fall back to `index.html` when that file exists.
 
 If the static handler serves a file successfully, it marks the request as completed.

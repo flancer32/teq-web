@@ -64,7 +64,7 @@ describe('Fl32_Web_Back_PipelineEngine integration', () => {
             getRegistrationInfo: () => ({name: 'ProcessA', stage: STAGE.PROCESS}),
             handle: async (context) => {
                 log.push('processA');
-                context.complete();
+                context.completed = true;
             },
         });
         engine.addHandler({

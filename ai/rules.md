@@ -10,9 +10,11 @@
 ## Completion Rules
 
 - Request completion is a monotonic flag for one request.
-- Only `PROCESS` handlers may call `context.complete()` or set completion to `true`.
+- Only `PROCESS` handlers may set completion to `true`.
 - `INIT` and `FINALIZE` handlers must never mark the request completed.
 - Completion cannot be reset once set.
+- For generated code, use `context.completed = true`.
+- Do not generate or rely on `context.complete()` or `context.isCompleted()`. Those helpers were removed and old handlers using them must be migrated.
 
 ## Response Rules
 

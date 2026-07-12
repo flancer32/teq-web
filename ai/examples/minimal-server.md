@@ -18,19 +18,21 @@ export default class Hello {
      * @param {Fl32_Web_Back_Enum_Stage$} deps.STAGE
      */
     constructor({dtoInfoFactory, STAGE}) {
-        const info = dtoInfoFactory.create({
+        this.info = dtoInfoFactory.create({
             name: 'App_Web_Handler_Hello',
             stage: STAGE.PROCESS,
         });
+    }
 
-        this.getRegistrationInfo = () => info;
+    getRegistrationInfo() {
+        return this.info;
+    }
 
-        this.handle = async function (context) {
-            const {response} = context;
-            response.writeHead(200, {'Content-Type': 'text/plain; charset=utf-8'});
-            response.end('ok');
-            context.complete();
-        };
+    async handle(context) {
+        const {response} = context;
+        response.writeHead(200, {'Content-Type': 'text/plain; charset=utf-8'});
+        response.end('ok');
+        context.completed = true;
     }
 }
 
@@ -57,10 +59,14 @@ export default class Start {
      * @param {App_Web_Handler_Hello} deps.helloHandler
      */
     constructor({pipeline, server, helloHandler}) {
-        this.execute = async function () {
-            pipeline.addHandler(helloHandler);
-            await server.start({port: 3000, type: 'http'});
-        };
+        this.pipeline = pipeline;
+        this.server = server;
+        this.helloHandler = helloHandler;
+    }
+
+    async execute() {
+        this.pipeline.addHandler(this.helloHandler);
+        await this.server.start({port: 3000, type: 'http'});
     }
 }
 
@@ -84,4 +90,4 @@ Consumer notes:
 - `server.start()` locks handler registration for the runtime lifetime of that server instance.
 - Built-in server defaults may also be supplied through `Fl32_Web_Back_Config_Runtime__Factory$` as `{port, type, tls}`, where `tls` is owned by the runtime component `Fl32_Web_Back_Config_Runtime_Tls$`.
 - If your application already has its own transport layer, inject `Fl32_Web_Back_PipelineEngine$`, call `pipeline.lockHandlers()` during startup, and only then call `pipeline.onEventRequest(req, res)` from that adapter.
-- A correct PROCESS handler ends the response and then marks the context completed.
+- A correct PROCESS handler ends the response and then sets `context.completed = true`.

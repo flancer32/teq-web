@@ -47,9 +47,6 @@ describe('Fl32_Web_Back_Handler_Static', () => {
             request: {url: '/file.txt'},
             response: {},
             completed: false,
-            complete() {
-                this.completed = true;
-            },
         };
 
         await handler.handle(context);
@@ -62,9 +59,6 @@ describe('Fl32_Web_Back_Handler_Static', () => {
             request: {url: '/missing'},
             response: {},
             completed: false,
-            complete() {
-                this.completed = true;
-            },
         };
 
         await handler.handle(context);

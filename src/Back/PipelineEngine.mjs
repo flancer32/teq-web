@@ -44,10 +44,6 @@ export default class Fl32_Web_Back_PipelineEngine {
             context.response = response;
             context.data = {};
             context.completed = false;
-            context.complete = () => {
-                context.completed = true;
-            };
-            context.isCompleted = () => completed;
             context[KEY_STAGE] = null;
 
             Object.defineProperty(context, 'completed', {
@@ -165,7 +161,7 @@ export default class Fl32_Web_Back_PipelineEngine {
                 }
 
                 for (const handler of processHandlers) {
-                    if (context.isCompleted()) {
+                    if (context.completed) {
                         break;
                     }
                     if (!respond.isWritable(res)) {
@@ -188,7 +184,7 @@ export default class Fl32_Web_Back_PipelineEngine {
                     }
                 }
 
-                if (!context.isCompleted() && respond.isWritable(res)) {
+                if (!context.completed && respond.isWritable(res)) {
                     log.error(`404 Not Found: ${req.url}`);
                     respond.code404_NotFound({res});
                 }

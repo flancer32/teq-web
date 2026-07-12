@@ -1,5 +1,22 @@
 # Changelog
 
+## [0.14.0] - 2026-07-12 - Completion contract simplification and agent interface hardening
+
+### Added
+- Added `ai/recipes.md` with canonical agent-oriented patterns for custom handlers, static handler setup, and external transport adapters.
+
+### Changed
+- Simplified request completion semantics to rely on `context.completed = true` as the stable handler-facing contract.
+- Realigned `README.md`, `ai/`, tests, and code-level context documentation with the preferred class-based handler shape and explicit static-source configuration guidance.
+- Strengthened AI-facing static handler documentation with explicit `allow` semantics and configuration examples.
+- Updated package version metadata to `0.14.0`.
+
+### Removed
+- Removed runtime helper methods `context.complete()` and `context.isCompleted()` from `Fl32_Web_Back_PipelineEngine` request contexts.
+
+### Compatibility
+- Existing custom handlers that still call `context.complete()` or read `context.isCompleted()` will break and must be migrated to the `completed` flag contract.
+
 ## [0.13.0] - 2026-07-10 - TeqFW logging migration and package surface alignment
 
 ### Added

@@ -141,7 +141,7 @@ export default class Hello {
       response.writeHead(200, { "Content-Type": "text/plain" });
       response.end("ok");
 
-      context.complete();
+      context.completed = true;
     };
   }
 }

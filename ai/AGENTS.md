@@ -27,7 +27,8 @@ Agents should read the documents in this directory in the following order:
 2. `overview.md` — package role, intended usage boundary, and main entry points.
 3. `abstractions.md` — core runtime concepts and consumer-facing abstractions.
 4. `rules.md` — mandatory usage constraints and invariants.
-5. `examples/minimal-server.md` — minimal TeqFW-style orchestration example.
+5. `recipes.md` — canonical implementation patterns for common agent tasks.
+6. `examples/minimal-server.md` — minimal TeqFW-style orchestration example.
 
 ## Interface Scope
 

@@ -27,3 +27,11 @@ The main consumer entry points are:
 - `Fl32_Web_Back_Server$` for the built-in Node.js server;
 - `Fl32_Web_Back_Api_Handler` plus `Fl32_Web_Back_Dto_Info__Factory$` and `Fl32_Web_Back_Dto_Info$` for custom handlers;
 - `Fl32_Web_Back_Handler_Static$` plus `Fl32_Web_Back_Dto_Source$` values for static file serving.
+
+## Agent Notes
+
+- Prefer the canonical patterns in `recipes.md` when generating code.
+- Treat `examples/minimal-server.md` as a minimal wiring example, not as the only acceptable code shape.
+- Do not infer support for routing, controllers, middleware stacks, or directory listing from the existence of handlers or static-file serving.
+- Prefer explicit static-source configuration, especially `allow`, instead of relying on omission-driven defaults.
+- Compatibility note: older handlers may still use `context.complete()` or `context.isCompleted()`. These helpers are removed. Generate and migrate handler code to use `context.completed = true`.
