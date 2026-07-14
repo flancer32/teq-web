@@ -17,8 +17,8 @@ jobs:
         with:
           node-version: 20
 
-      # Install dependencies using package-lock.json
-      - run: npm ci
+      # Install dependencies from package metadata
+      - run: npm install
 
       # Run all tests
       - run: npm run test
@@ -36,8 +36,8 @@ jobs:
           node-version: 20
           registry-url: https://registry.npmjs.org/
 
-      # Install dependencies again
-      - run: npm ci
+      # Install dependencies from package metadata again
+      - run: npm install
 
       # Publish package to npm registry with authentication token
       - run: npm publish --access public

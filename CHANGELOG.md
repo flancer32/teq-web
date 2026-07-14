@@ -1,31 +1,25 @@
 # Changelog
 
-## [0.16.0] - 2026-07-14 - TeqFW ESM naming and runtime configuration conformance
-
-### Changed
-- Renamed non-runtime default-exported classes to their final namespace segments while preserving full `@namespace` annotations and DI identifiers.
-- Reused the TLS runtime `Data` shape as the `configure()` input contract.
-- Synchronized cognitive-context filesystem facts, listening-endpoint terminology, module naming rules, and architecture constraints.
-- Updated package version metadata to `0.16.0`.
-
-### Removed
-- Removed the redundant `Fl32_Web_Back_Config_Runtime_Tls.Params` export and `Fl32_Web_Back_Config_Runtime_Tls__Params` type alias.
-
-### Compatibility
-- Default imports and DI identifiers are unchanged. Code that inspects default class `name` values or references the removed TLS `Params` type must migrate to the short class name or `Fl32_Web_Back_Config_Runtime_Tls__Data` respectively.
-
-## [0.15.0] - 2026-07-14 - Explicit listening host configuration
+## [0.15.0] - 2026-07-14 - Listening host and TeqFW ESM conformance
 
 ### Added
 - Added optional flat runtime field `host` for selecting the native server bind address.
 - Added unit and integration coverage for forwarding and applying an explicit listening host.
 
 ### Changed
+- Renamed non-runtime default-exported classes to their final namespace segments while preserving full `@namespace` annotations and DI identifiers.
+- Reused the TLS runtime `Data` shape as the `configure()` input contract.
 - Updated human-facing and AI-facing usage documentation with explicit loopback-binding guidance.
+- Synchronized cognitive-context filesystem facts, listening-endpoint terminology, module naming rules, and architecture constraints.
+- Stopped tracking `package-lock.json` for this library and changed release jobs to install dependencies from package metadata.
 - Updated package version metadata to `0.15.0`.
+
+### Removed
+- Removed the redundant `Fl32_Web_Back_Config_Runtime_Tls.Params` export and `Fl32_Web_Back_Config_Runtime_Tls__Params` type alias.
 
 ### Compatibility
 - Omitting `host` preserves the previous Node.js default listen-address selection.
+- Default imports and DI identifiers are unchanged. Code that inspects default class `name` values or references the removed TLS `Params` type must migrate to the short class name or `Fl32_Web_Back_Config_Runtime_Tls__Data` respectively.
 
 ## [0.14.0] - 2026-07-12 - Completion contract simplification and agent interface hardening
 
