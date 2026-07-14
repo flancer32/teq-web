@@ -4,7 +4,7 @@
  * @namespace Fl32_Web_Back_Handler_Static_A_Config
  * @description Static asset config factory.
  */
-export default class Fl32_Web_Back_Handler_Static_A_Config {
+export default class Config {
     static DEFAULT_FILES = ['index.html', 'index.htm', 'index.txt'];
     /**
      * @param {object} deps
@@ -50,7 +50,7 @@ export default class Fl32_Web_Back_Handler_Static_A_Config {
                     throw new Error("Field 'defaults' must be an array of strings");
                 }
             } else {
-                defaults = Fl32_Web_Back_Handler_Static_A_Config.DEFAULT_FILES;
+                defaults = Config.DEFAULT_FILES;
             }
 
             return {root, prefix, allow, defaults};

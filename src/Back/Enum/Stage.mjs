@@ -4,7 +4,7 @@
  * @namespace Fl32_Web_Back_Enum_Stage
  * @description Enum-like DTO for web request processing stages.
  */
-export default class Fl32_Web_Back_Enum_Stage {
+export default class Stage {
     constructor() {
         this.INIT = 'INIT';
         this.PROCESS = 'PROCESS';

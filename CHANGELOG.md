@@ -1,5 +1,19 @@
 # Changelog
 
+## [0.16.0] - 2026-07-14 - TeqFW ESM naming and runtime configuration conformance
+
+### Changed
+- Renamed non-runtime default-exported classes to their final namespace segments while preserving full `@namespace` annotations and DI identifiers.
+- Reused the TLS runtime `Data` shape as the `configure()` input contract.
+- Synchronized cognitive-context filesystem facts, listening-endpoint terminology, module naming rules, and architecture constraints.
+- Updated package version metadata to `0.16.0`.
+
+### Removed
+- Removed the redundant `Fl32_Web_Back_Config_Runtime_Tls.Params` export and `Fl32_Web_Back_Config_Runtime_Tls__Params` type alias.
+
+### Compatibility
+- Default imports and DI identifiers are unchanged. Code that inspects default class `name` values or references the removed TLS `Params` type must migrate to the short class name or `Fl32_Web_Back_Config_Runtime_Tls__Data` respectively.
+
 ## [0.15.0] - 2026-07-14 - Explicit listening host configuration
 
 ### Added

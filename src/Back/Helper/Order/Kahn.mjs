@@ -4,7 +4,7 @@
  * @namespace Fl32_Web_Back_Helper_Order_Kahn
  * @description Sorts named handlers by relative `before` / `after` constraints using Kahn's algorithm.
  */
-export default class Fl32_Web_Back_Helper_Order_Kahn {
+export default class Kahn {
     constructor() {
         /**
          * Topologically sorts handlers with `name`, `before`, `after` fields.

@@ -4,7 +4,7 @@
  * @namespace Fl32_Web_Back_Handler_Static_A_Registry
  * @description Static configuration registry.
  */
-export default class Fl32_Web_Back_Handler_Static_A_Registry {
+export default class Registry {
     /**
      * @param {object} deps
      * @param {Fl32_Web_Back_Handler_Static_A_Config$} deps.configFactory

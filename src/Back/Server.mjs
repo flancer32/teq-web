@@ -5,7 +5,7 @@
  * @description Web server implementation supporting HTTP/1 and HTTP/2 protocols.
  * Handles incoming requests and delegates them to the Pipeline Engine.
  */
-export default class Fl32_Web_Back_Server {
+export default class Server {
     /**
      * @param {object} deps
      * @param {Fl32_Web_Node_Http} deps.http

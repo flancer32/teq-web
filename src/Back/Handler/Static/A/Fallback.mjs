@@ -4,7 +4,7 @@
  * @namespace Fl32_Web_Back_Handler_Static_A_Fallback
  * @description Static asset fallback helper.
  */
-export default class Fl32_Web_Back_Handler_Static_A_Fallback {
+export default class Fallback {
     /**
      * @param {object} deps
      * @param {Fl32_Web_Node_Fs} deps.fs

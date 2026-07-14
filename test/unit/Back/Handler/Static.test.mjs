@@ -37,7 +37,7 @@ describe('Fl32_Web_Back_Handler_Static', () => {
     test('uses PROCESS stage registration info', () => {
         const info = handler.getRegistrationInfo();
         assert.strictEqual(info.stage, STAGE.PROCESS);
-        assert.strictEqual(typeof info.name, 'string');
+        assert.strictEqual(info.name, 'Fl32_Web_Back_Handler_Static');
     });
 
     test('marks request completed when file is served', async () => {

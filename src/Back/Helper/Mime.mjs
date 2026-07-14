@@ -5,7 +5,7 @@
  * @description MIME type helper with built-in mapping for common file extensions.
  * Can be replaced or extended by the application via the DI container.
  */
-export default class Fl32_Web_Back_Helper_Mime {
+export default class Mime {
     constructor() {
         /**
          * Mapping from file extension to MIME type.

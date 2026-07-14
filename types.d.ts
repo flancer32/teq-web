@@ -13,8 +13,6 @@ declare global {
   type Fl32_Web_Back_Config_Runtime_Tls__Data = import("./src/Back/Config/Runtime/Tls.mjs").Data;
   type Fl32_Web_Back_Config_Runtime_Tls__Factory = typeof import("./src/Back/Config/Runtime/Tls.mjs").Factory;
   type Fl32_Web_Back_Config_Runtime_Tls__Factory$ = InstanceType<typeof import("./src/Back/Config/Runtime/Tls.mjs").Factory>;
-  type Fl32_Web_Back_Config_Runtime_Tls__Params = import("./src/Back/Config/Runtime/Tls.mjs").Params;
-
   type Fl32_Web_Back_Dto_Info = typeof import("./src/Back/Dto/Info.mjs").default;
   type Fl32_Web_Back_Dto_Info$ = InstanceType<typeof import("./src/Back/Dto/Info.mjs").default>;
   type Fl32_Web_Back_Dto_Info__Factory = typeof import("./src/Back/Dto/Info.mjs").Factory;

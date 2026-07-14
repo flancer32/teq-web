@@ -8,7 +8,7 @@
 
 const KEY_STAGE = Symbol('stage');
 
-export default class Fl32_Web_Back_PipelineEngine {
+export default class PipelineEngine {
     /* eslint-disable jsdoc/require-param-description,jsdoc/check-param-names */
     /**
      * @param {object} params

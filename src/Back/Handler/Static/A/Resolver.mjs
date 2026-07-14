@@ -4,7 +4,7 @@
  * @namespace Fl32_Web_Back_Handler_Static_A_Resolver
  * @description Static path resolver.
  */
-export default class Fl32_Web_Back_Handler_Static_A_Resolver {
+export default class Resolver {
     /**
      * @param {object} deps
      * @param {Fl32_Web_Node_Path} deps.path

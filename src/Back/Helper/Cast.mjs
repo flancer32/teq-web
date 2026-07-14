@@ -4,7 +4,7 @@
  * @namespace Fl32_Web_Back_Helper_Cast
  * @description Cast helper used by runtime configuration and DTO factories.
  */
-export default class Fl32_Web_Back_Helper_Cast {
+export default class Cast {
     constructor() {
         /**
          * Cast input data into an array. Ensures the result is always an array.

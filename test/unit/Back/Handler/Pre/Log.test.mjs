@@ -27,6 +27,7 @@ describe('Fl32_Web_Back_Handler_Pre_Log', () => {
     test('logs method and url', async () => {
         /** @type {Fl32_Web_Back_Handler_Pre_Log} */
         const handler = new Fl32_Web_Back_Handler_Pre_Log({logger, dtoInfoFactory, STAGE});
+        assert.strictEqual(handler.getRegistrationInfo().name, 'Fl32_Web_Back_Handler_Pre_Log');
         await handler.handle({request: {method: 'GET', url: '/path'}});
         assert.deepStrictEqual(log, ['GET /path']);
     });

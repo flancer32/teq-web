@@ -5,7 +5,7 @@
  * @description Universal static-file PROCESS handler.
  * @implements {Fl32_Web_Back_Api_Handler$}
  */
-export default class Fl32_Web_Back_Handler_Static {
+export default class Static {
     /**
      * @param {object} deps
      * @param {Fl32_Web_Back_Handler_Static_A_Registry$} deps.registry
@@ -17,7 +17,7 @@ export default class Fl32_Web_Back_Handler_Static {
     constructor({registry, fileService, respond, dtoInfoFactory, STAGE}) {
 
         const _info = dtoInfoFactory.create({
-            name: this.constructor.name,
+            name: 'Fl32_Web_Back_Handler_Static',
             stage: STAGE.PROCESS,
         });
 

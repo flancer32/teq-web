@@ -4,7 +4,7 @@
  * @namespace Fl32_Web_Back_Handler_Static_A_FileService
  * @description Static file service.
  */
-export default class Fl32_Web_Back_Handler_Static_A_FileService {
+export default class FileService {
     /**
      * @param {object} deps
      * @param {Fl32_Web_Node_Fs} deps.fs

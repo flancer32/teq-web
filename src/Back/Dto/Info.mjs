@@ -4,7 +4,7 @@
  * @namespace Fl32_Web_Back_Dto_Info
  * @description DTO describing handler registration and ordering metadata.
  */
-export default class Fl32_Web_Back_Dto_Info {
+export default class Info {
     /**
      * Handlers to run before this one.
      * @type {string[]}
@@ -44,7 +44,7 @@ export class Factory {
          * @returns {Fl32_Web_Back_Dto_Info$}
          */
         this.create = function (data) {
-            const res = new Fl32_Web_Back_Dto_Info();
+            const res = new Info();
             res.after = cast.array(data?.after, cast.string);
             res.before = cast.array(data?.before, cast.string);
             res.name = cast.string(data?.name);

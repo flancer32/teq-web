@@ -4,7 +4,7 @@
  * @namespace Fl32_Web_Back_Dto_Source
  * @description Source DTO for static handler configuration.
  */
-export default class Fl32_Web_Back_Dto_Source {
+export default class Source {
     /** @type {string} */
     root;
     /** @type {string} */
@@ -32,7 +32,7 @@ export class Factory {
          * @returns {Fl32_Web_Back_Dto_Source$}
          */
         this.create = function (data) {
-            const res = new Fl32_Web_Back_Dto_Source();
+            const res = new Source();
             if (data) {
                 res.root = cast.string(data.root);
                 res.prefix = cast.string(data.prefix);

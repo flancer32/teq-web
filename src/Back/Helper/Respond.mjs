@@ -4,7 +4,7 @@
  * @namespace Fl32_Web_Back_Helper_Respond
  * @description HTTP response helper.
  */
-export default class Fl32_Web_Back_Helper_Respond {
+export default class Respond {
     /**
      * @param {object} deps
      * @param {Fl32_Web_Node_Http2} deps.http2

@@ -5,7 +5,7 @@
  * @description Logs basic request information at the beginning of the request lifecycle.
  * @implements {Fl32_Web_Back_Api_Handler$}
  */
-export default class Fl32_Web_Back_Handler_Pre_Log {
+export default class Log {
     /**
      * @param {object} deps
      * @param {TeqFw_Log_Provider$} deps.logger
@@ -16,7 +16,7 @@ export default class Fl32_Web_Back_Handler_Pre_Log {
         const log = logger.forSource('Fl32_Web_Back_Handler_Pre_Log');
         // VARS
         const _info = dtoInfoFactory.create({
-            name: this.constructor.name,
+            name: 'Fl32_Web_Back_Handler_Pre_Log',
             stage: STAGE.INIT,
         });
 
