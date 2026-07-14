@@ -16,7 +16,7 @@ Main methods:
 
 `Fl32_Web_Back_Server$` is the built-in transport adapter around Node.js `http` and `http2`. On `start(cfg)` it locks the pipeline, creates the server instance, binds request events to the Pipeline Engine, and starts listening.
 
-Default transport settings come from flat fields of `Fl32_Web_Back_Config_Runtime$` (`port`, `type`, `tls`). TLS values for `tls` are provided by the dedicated runtime configuration component `Fl32_Web_Back_Config_Runtime_Tls$`. Supported transport modes come from `Fl32_Web_Back_Enum_Server_Type$`:
+Default transport settings come from flat fields of `Fl32_Web_Back_Config_Runtime$` (`host`, `port`, `type`, `tls`). `host` is optional; when present, the Server passes it to the native listen operation, and when absent, Node.js chooses its default listen address. TLS values for `tls` are provided by the dedicated runtime configuration component `Fl32_Web_Back_Config_Runtime_Tls$`. Supported transport modes come from `Fl32_Web_Back_Enum_Server_Type$`:
 
 - `http`
 - `http2`

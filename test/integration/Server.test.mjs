@@ -1,5 +1,8 @@
 import {describe, test} from 'node:test';
 import assert from 'node:assert/strict';
+import {once} from 'node:events';
+import * as http from 'node:http';
+import * as http2 from 'node:http2';
 import path from 'node:path';
 import Container from '@teqfw/di';
 import Fl32_Web_Back_Server from '../../src/Back/Server.mjs';
@@ -39,8 +42,8 @@ function createResponse() {
 
 /**
  * @param {string} label
- * @param {string[]} log
- * @returns {{listening:boolean,on:(name:string,handler:Function)=>void,listen:()=>void,close:(cb?:Function)=>void,emitRequest:(req:any,res:any)=>Promise<void>}}
+ * @param {Array<*>} log
+ * @returns {{listening:boolean,on:(name:string,handler:Function)=>void,listen:(...args:any[])=>void,close:(cb?:Function)=>void,emitRequest:(req:any,res:any)=>Promise<void>}}
  */
 function createMockServer(label, log) {
     /** @type {((req:any,res:any)=>Promise<void>)|undefined} */
@@ -53,9 +56,9 @@ function createMockServer(label, log) {
             }
             log.push(`${label}.on`);
         },
-        listen() {
+        listen(...args) {
             this.listening = true;
-            log.push(`${label}.listen`);
+            log.push([`${label}.listen`, ...args]);
         },
         close(cb) {
             this.listening = false;
@@ -98,7 +101,7 @@ describe('Fl32_Web_Back_Server integration', () => {
         await server.getInstance().emitRequest({url: '/missing'}, res);
 
         assert.strictEqual(res.statusCode, 404);
-        assert.deepStrictEqual(log, ['http.on', 'http.listen']);
+        assert.deepStrictEqual(log, ['http.on', ['http.listen', 3000]]);
 
         await server.stop();
         assert.strictEqual(server.getInstance(), undefined);
@@ -140,5 +143,35 @@ describe('Fl32_Web_Back_Server integration', () => {
         assert.strictEqual(res.body, 'Internal Server Error');
 
         await server.stop();
+    });
+
+    test('binds the native HTTP server to an explicitly configured host', async () => {
+        const container = new Container();
+        container.addNamespaceRoot('Fl32_Web_', SRC, '.mjs');
+        container.addNamespaceRoot('TeqFw_Log_', LOG_SRC, '.mjs');
+        container.enableTestMode();
+        const runtimeFactory = await container.get('Fl32_Web_Back_Config_Runtime__Factory$');
+        runtimeFactory.freeze();
+
+        const server = new Fl32_Web_Back_Server({
+            http,
+            http2,
+            config: await container.get('Fl32_Web_Back_Config_Runtime$'),
+            logger: createLoggerProvider(),
+            pipelineEngine: await container.get('Fl32_Web_Back_PipelineEngine$'),
+            SERVER_TYPE: await container.get('Fl32_Web_Back_Enum_Server_Type$'),
+        });
+
+        try {
+            await server.start({host: '127.0.0.1', port: 0, type: 'http'});
+            const instance = server.getInstance();
+            if (!instance.listening) await once(instance, 'listening');
+            const address = instance.address();
+
+            assert.equal(typeof address, 'object');
+            assert.equal(address?.address, '127.0.0.1');
+        } finally {
+            await server.stop();
+        }
     });
 });

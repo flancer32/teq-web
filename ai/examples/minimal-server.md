@@ -66,7 +66,7 @@ export default class Start {
 
     async execute() {
         this.pipeline.addHandler(this.helloHandler);
-        await this.server.start({port: 3000, type: 'http'});
+        await this.server.start({host: '127.0.0.1', port: 3000, type: 'http'});
     }
 }
 
@@ -88,6 +88,7 @@ Consumer notes:
 - The composition root configures namespace roots once and resolves one application entry service.
 - Application modules do not construct collaborators directly and do not call `new` for DI-managed handlers or infrastructure services.
 - `server.start()` locks handler registration for the runtime lifetime of that server instance.
-- Built-in server defaults may also be supplied through `Fl32_Web_Back_Config_Runtime__Factory$` as `{port, type, tls}`, where `tls` is owned by the runtime component `Fl32_Web_Back_Config_Runtime_Tls$`.
+- Built-in server defaults may also be supplied through `Fl32_Web_Back_Config_Runtime__Factory$` as `{host, port, type, tls}`, where `host` is optional and `tls` is owned by the runtime component `Fl32_Web_Back_Config_Runtime_Tls$`.
+- Set `host` when a specific bind address is required. Omitting it preserves Node.js default listen-address selection.
 - If your application already has its own transport layer, inject `Fl32_Web_Back_PipelineEngine$`, call `pipeline.lockHandlers()` during startup, and only then call `pipeline.onEventRequest(req, res)` from that adapter.
 - A correct PROCESS handler ends the response and then sets `context.completed = true`.

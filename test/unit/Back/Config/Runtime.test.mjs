@@ -34,10 +34,11 @@ describe('Fl32_Web_Back_Config_Runtime', () => {
 
         assert.throws(() => runtime.port, /not initialized/);
 
-        factory.configure({port: '8080', type: 'http2'});
-        factory.configure({port: '9090', type: 'https'});
+        factory.configure({host: '127.0.0.1', port: '8080', type: 'http2'});
+        factory.configure({host: '0.0.0.0', port: '9090', type: 'https'});
         factory.freeze();
 
+        assert.equal(runtime.host, '127.0.0.1');
         assert.equal(runtime.port, 8080);
         assert.equal(runtime.type, 'http2');
         assert.throws(() => Object.freeze(runtime), /cannot be frozen/);
@@ -68,6 +69,7 @@ describe('Fl32_Web_Back_Config_Runtime', () => {
 
         factory.freeze();
 
+        assert.equal(runtime.host, undefined);
         assert.equal(runtime.port, 3000);
         assert.equal(runtime.type, 'http');
         assert.throws(() => Object.freeze(runtime), /cannot be frozen/);

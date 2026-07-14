@@ -84,7 +84,7 @@ describe('TeqFW ES6 module convention integration', () => {
 
         const logger = await container.get('TeqFw_Log_Provider$');
         const runtimeConfigFactory = await container.get('Fl32_Web_Back_Config_Runtime__Factory$');
-        const runtimeFromFactory = runtimeConfigFactory.configure({port: '3001', type: 'http'});
+        const runtimeFromFactory = runtimeConfigFactory.configure({host: '127.0.0.1', port: '3001', type: 'http'});
         runtimeConfigFactory.freeze();
         const runtimeConfig = await container.get('Fl32_Web_Back_Config_Runtime$');
         const server = await container.get('Fl32_Web_Back_Server$');
@@ -96,6 +96,7 @@ describe('TeqFW ES6 module convention integration', () => {
         assert.equal(typeof logger.forSource, 'function');
         assert.equal(typeof server.start, 'function');
         assert.equal(runtimeFromFactory, undefined);
+        assert.equal(runtimeConfig.host, '127.0.0.1');
         assert.equal(runtimeConfig.port, 3001);
         assert.equal(runtimeConfig.type, 'http');
         assert.equal(typeof runtimeConfig.tls, 'object');

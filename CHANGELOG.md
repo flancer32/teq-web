@@ -1,5 +1,18 @@
 # Changelog
 
+## [0.15.0] - 2026-07-14 - Explicit listening host configuration
+
+### Added
+- Added optional flat runtime field `host` for selecting the native server bind address.
+- Added unit and integration coverage for forwarding and applying an explicit listening host.
+
+### Changed
+- Updated human-facing and AI-facing usage documentation with explicit loopback-binding guidance.
+- Updated package version metadata to `0.15.0`.
+
+### Compatibility
+- Omitting `host` preserves the previous Node.js default listen-address selection.
+
 ## [0.14.0] - 2026-07-12 - Completion contract simplification and agent interface hardening
 
 ### Added

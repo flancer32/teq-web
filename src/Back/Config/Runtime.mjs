@@ -6,6 +6,8 @@
  */
 
 export class Data {
+    /** @type {string|undefined} */
+    host;
     /** @type {number|undefined} */
     port;
     /** @type {string|undefined} */
@@ -60,6 +62,9 @@ export class Factory {
          */
         this.configure = function (params = {}) {
             if (frozen) throw new Error('Runtime configuration is frozen.');
+            if (cfg.host === undefined && params.host !== undefined) {
+                cfg.host = cast.string(params.host);
+            }
             if (cfg.port === undefined && params.port !== undefined) {
                 cfg.port = cast.int(params.port);
             }

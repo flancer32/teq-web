@@ -24,7 +24,7 @@ describe('Fl32_Web_Back_Server (mocked)', () => {
     // Mocks for HTTP/1 and HTTP/2 servers
     const mockHttp = {
         createServer: () => ({
-            listen: () => { log.push('http.listen'); },
+            listen: (...args) => { log.push(['http.listen', ...args]); },
             on: () => { log.push('http.on'); },
             close: (cb) => { log.push('http.close'); cb && cb(); },
         }),
@@ -32,12 +32,12 @@ describe('Fl32_Web_Back_Server (mocked)', () => {
 
     const mockHttp2 = {
         createServer: () => ({
-            listen: () => { log.push('http2.listen'); },
+            listen: (...args) => { log.push(['http2.listen', ...args]); },
             on: () => { log.push('http2.on'); },
             close: (cb) => { log.push('http2.close'); cb && cb(); },
         }),
         createSecureServer: (tlsOpts) => ({
-            listen: () => { log.push('http2s.listen'); },
+            listen: (...args) => { log.push(['http2s.listen', ...args]); },
             on: () => { log.push('http2s.on'); },
             close: (cb) => { log.push('http2s.close'); cb && cb(); },
         })
@@ -67,29 +67,29 @@ describe('Fl32_Web_Back_Server (mocked)', () => {
             'pipeline.lockHandlers',
             ['info', 'Starting server in HTTP/1 mode on port 3000...'],
             'http.on',
-            'http.listen',
+            ['http.listen', 3000],
         ]);
     });
 
-    test('should start in HTTP/2 mode if specified', async () => {
+    test('should start in HTTP/2 mode on the specified host and port', async () => {
         /** @type {Fl32_Web_Back_Server} */
-        await server.start({type: 'http2', port: 8080});
+        await server.start({host: '127.0.0.1', type: 'http2', port: 8080});
         assert.deepStrictEqual(log, [
             'pipeline.lockHandlers',
-            ['info', 'Starting server in HTTP/2 mode on port 8080...'],
+            ['info', 'Starting server in HTTP/2 mode on host 127.0.0.1 and port 8080...'],
             'http2.on',
-            'http2.listen',
+            ['http2.listen', 8080, '127.0.0.1'],
         ]);
     });
 
     test('should start in HTTPS/2 mode with TLS config', async () => {
         /** @type {Fl32_Web_Back_Server} */
-        await server.start({type: 'https', port: 8443, tls: {key: 'a', cert: 'b'}});
+        await server.start({host: '::1', type: 'https', port: 8443, tls: {key: 'a', cert: 'b'}});
         assert.deepStrictEqual(log, [
             'pipeline.lockHandlers',
-            ['info', 'Starting server in HTTPS (HTTP/2 + TLS) mode on port 8443...'],
+            ['info', 'Starting server in HTTPS (HTTP/2 + TLS) mode on host ::1 and port 8443...'],
             'http2s.on',
-            'http2s.listen',
+            ['http2s.listen', 8443, '::1'],
         ]);
     });
 

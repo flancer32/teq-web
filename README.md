@@ -104,6 +104,8 @@ Mode meaning:
 
 The server locks the handler pipeline before entering the execution phase.
 
+The listening endpoint is configured with the flat `host` and `port` fields. Set `host: "127.0.0.1"` to bind explicitly to the IPv4 loopback interface. If `host` is omitted, the package preserves Node.js default listen-address selection.
+
 ### Handlers
 
 Handlers are independent modules participating in request processing.
@@ -166,6 +168,7 @@ export default class Start {
       pipeline.addHandler(helloHandler);
 
       await server.start({
+        host: "127.0.0.1",
         port: 3000,
         type: "http",
       });

@@ -37,30 +37,33 @@ export default class Fl32_Web_Back_Server {
         this.start = async function (cfg) {
             pipelineEngine.lockHandlers();
             // create server
+            const host = cfg?.host ?? config.host;
             const port = cfg?.port ?? config.port;
             const type = cfg?.type ?? config.type;
             const tls = cfg?.tls ?? config.tls;
+            const endpoint = host === undefined ? `port ${port}` : `host ${host} and port ${port}`;
 
             if (type === SERVER_TYPE.HTTP2) {
                 _instance = createServerH2();
-                log.info(`Starting server in HTTP/2 mode on port ${port}...`);
+                log.info(`Starting server in HTTP/2 mode on ${endpoint}...`);
             } else if (type === SERVER_TYPE.HTTP) {
                 _instance = createServer({});
-                log.info(`Starting server in HTTP/1 mode on port ${port}...`);
+                log.info(`Starting server in HTTP/1 mode on ${endpoint}...`);
             } else if (type === SERVER_TYPE.HTTPS) {
                 if (!tls?.key || !tls?.cert) {
                     log.error('HTTPS server requires TLS key and certificate');
                     throw new Error('TLS key and certificate are required for HTTPS server');
                 }
                 _instance = createSecureServer(tls);
-                log.info(`Starting server in HTTPS (HTTP/2 + TLS) mode on port ${port}...`);
+                log.info(`Starting server in HTTPS (HTTP/2 + TLS) mode on ${endpoint}...`);
             } else {
                 log.error(`Unsupported server type: ${type}`);
                 throw new Error(`Server type '${type}' is not supported`);
             }
 
             _instance.on('request', pipelineEngine.handleRequest);
-            _instance.listen(port);
+            if (host === undefined) _instance.listen(port);
+            else _instance.listen(port, host);
         };
 
         /**
