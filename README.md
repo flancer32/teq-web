@@ -198,55 +198,6 @@ The package also uses [`@teqfw/log`](https://www.npmjs.com/package/@teqfw/log) a
 
 Runtime configuration uses [`@teqfw/cfg`](https://github.com/teqfw/cfg) as a direct GitHub dependency because the plugin is not published to npm. After application bootstrap loads the plugin, `Fl32_Web_Back_Config_Runtime__Factory$` reads the `TEQFW_WEB` namespace through `TeqFw_Cfg_Reader$` and projects `HOST`, `PORT`, `TYPE`, and `TLS` into the transport configuration (`host`, `port`, `type`, and `tls`).
 
-The package is also developed using ADSM, Alex Gusev's approach to maintaining product and architecture context alongside implementation work. Background materials:
-
-- ADSM book: http://fly.wiredgeese.com/flancer/leanpub/adsm-en/
-- Alex Gusev: https://wiredgeese.com/
-
-ADSM and TeqFW are original developments by Alex Gusev.
-
-## Designed for Development with LLM Agents
-
-TeqFW is an architectural approach designed for software development in which **LLM agents participate directly in the development process**.
-
-Traditional software architectures assume that all code is written and maintained by humans.
-
-TeqFW assumes a different workflow:
-
-- humans design the **architecture and specifications**
-- LLM agents generate and maintain the **implementation**
-
-To support this workflow, TeqFW structures applications so they are easier for automated agents to analyze and modify.
-
-Key design principles include:
-
-- explicit dependency contracts
-- deterministic runtime linking
-- predictable module structure
-- namespace-based component addressing
-- minimal hidden coupling between modules
-
-This allows systems to be more reliably:
-
-- analyzed
-- generated
-- refactored
-- extended
-
-by both **human developers and AI agents**.
-
-## Agent-Driven Implementation
-
-TeqFW libraries are developed using **Agent-Driven Software Management (ADSM)**, a methodology created by **Alex Gusev**.
-
-The workflow is:
-
-1. A human architect defines the **product model and specifications**
-2. **LLM agents (Codex)** generate the implementation
-3. The human architect reviews and integrates the generated code
-
-This package is part of that experiment and demonstrates how **human-designed architecture can be implemented by AI agents**.
-
 ## Agent Interface
 
 This package includes **agent interface documentation** intended for LLM agents that use the library as a dependency.
@@ -278,30 +229,11 @@ npm install @flancer32/teq-web
 
 The package requires a configured TeqFW DI container and namespace registration for its published modules.
 
-## Tequila Framework
+## Development and Ecosystem
 
-`@flancer32/teq-web` is part of the **Tequila Framework (TeqFW)** ecosystem.
+This product is developed by AI agents under the direction of Alex Gusev, following the Agent-Driven Software Management (ADSM) methodology. It is built for the Tequila Framework (TeqFW) platform and contributes to its ecosystem.
 
-More information about the platform:
-[https://teqfw.com/](https://teqfw.com/)
-
-TeqFW is an experimental platform exploring how software architecture changes when **AI agents become active participants in the development process**.
-
-Key architectural ideas include:
-
-- modular monolith architecture
-- runtime dependency linking
-- namespace-based component addressing
-- pure JavaScript without compilation
-- system structures optimized for collaboration with LLM agents
-
-## Author
-
-**Alex Gusev**
-
-Creator of:
-
-- **Tequila Framework (TeqFW)**
-- **ADSM (Agent-Driven Software Management)**
-
-This project explores how software architecture evolves when **LLM agents become active participants in the development process**.
+- [Tequila Framework](https://teqfw.com/)
+- [Alex Gusev's Personal Website](https://wiredgeese.com/)
+- [Alex Gusev's Telegram Channel](https://t.me/alexgusev_lab_en)
+- [Agent-Driven Software Management: A Practical Guide](http://fly.wiredgeese.com/flancer/leanpub/adsm-en/)
