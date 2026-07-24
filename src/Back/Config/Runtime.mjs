@@ -57,9 +57,10 @@ export class Factory {
      * @param {object} deps
      * @param {Fl32_Web_Back_Helper_Cast$} deps.cast
      * @param {Fl32_Web_Back_Enum_Server_Type$} deps.SERVER_TYPE
+     * @param {TeqFw_Cfg_Reader$} deps.reader
      * @param {Fl32_Web_Back_Config_Runtime_Tls__Factory$} deps.tlsFactory
      */
-    constructor({cast, SERVER_TYPE, tlsFactory}) {
+    constructor({cast, SERVER_TYPE, reader, tlsFactory}) {
         /**
          * @param {Fl32_Web_Back_Config_Runtime__Data} params
          */
@@ -84,6 +85,13 @@ export class Factory {
          */
         this.freeze = function () {
             if (frozen) return proxy;
+            const values = reader.get('TEQFW_WEB');
+            this.configure({
+                host: values.HOST,
+                port: values.PORT,
+                type: values.TYPE,
+                tls: values.TLS,
+            });
             if (cfg.port === undefined) cfg.port = 3000;
             if (cfg.type === undefined) cfg.type = SERVER_TYPE.HTTP;
             const tls = tlsFactory.freeze();
@@ -111,6 +119,7 @@ export const __deps__ = Object.freeze({
     Factory: Object.freeze({
         cast: 'Fl32_Web_Back_Helper_Cast$',
         SERVER_TYPE: 'Fl32_Web_Back_Enum_Server_Type$',
+        reader: 'TeqFw_Cfg_Reader$',
         tlsFactory: 'Fl32_Web_Back_Config_Runtime_Tls__Factory$',
     }),
 });

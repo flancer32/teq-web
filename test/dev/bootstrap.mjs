@@ -5,6 +5,7 @@ import Fl32_Web_Back_Server from '../../src/Back/Server.mjs';
 const PORT = Number.parseInt(process.env.PORT ?? '3000', 10);
 const SRC = path.resolve(import.meta.dirname, '../../src');
 const LOG_SRC = path.resolve(import.meta.dirname, '../../node_modules/@teqfw/log/src');
+const CFG_SRC = path.resolve(import.meta.dirname, '../../node_modules/@teqfw/cfg/src');
 const WEB_ROOT = path.resolve(import.meta.dirname, './web');
 
 function waitForServerStart(instance) {
@@ -27,6 +28,15 @@ async function main() {
     const container = new Container();
     container.addNamespaceRoot('Fl32_Web_', SRC, '.mjs');
     container.addNamespaceRoot('TeqFw_Log_', LOG_SRC, '.mjs');
+    container.addNamespaceRoot('TeqFw_Cfg_', CFG_SRC, '.mjs');
+
+    const cfgLoader = await container.get('TeqFw_Cfg_Loader$');
+    const cfgObject = await container.get('TeqFw_Cfg_Source_Object$');
+    const cfgProcessEnv = await container.get('TeqFw_Cfg_Source_ProcessEnv$');
+    await cfgLoader.load([
+        cfgObject.create({TEQFW_WEB__PORT: PORT}, 'development-defaults'),
+        cfgProcessEnv.create(process.env),
+    ]);
 
     /** @type {Fl32_Web_Back_PipelineEngine$} */
     const pipelineEngine = await container.get('Fl32_Web_Back_PipelineEngine$');
@@ -58,7 +68,6 @@ async function main() {
     const logger = await container.get('TeqFw_Log_Provider$');
     /** @type {Fl32_Web_Back_Enum_Server_Type$} */
     const SERVER_TYPE = await container.get('Fl32_Web_Back_Enum_Server_Type$');
-    runtimeConfigFactory.configure({port: PORT});
     runtimeConfigFactory.freeze();
     /** @type {Fl32_Web_Back_Config_Runtime$} */
     const config = await container.get('Fl32_Web_Back_Config_Runtime$');
@@ -72,7 +81,7 @@ async function main() {
         SERVER_TYPE,
     });
 
-    await server.start({port: PORT});
+    await server.start();
     await waitForServerStart(server.getInstance());
 
     const shutdown = async (signal) => {

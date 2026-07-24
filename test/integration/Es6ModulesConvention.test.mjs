@@ -20,6 +20,7 @@ import {__deps__ as serverDeps} from '../../src/Back/Server.mjs';
 
 const SRC = path.resolve(import.meta.dirname, '../../src');
 const LOG_SRC = path.resolve(import.meta.dirname, '../../node_modules/@teqfw/log/src');
+const CFG_SRC = path.resolve(import.meta.dirname, '../../node_modules/@teqfw/cfg/src');
 const DEP_DESCRIPTORS = [
     dtoInfoDeps,
     dtoSourceDeps,
@@ -63,6 +64,7 @@ function createContainer() {
     const container = new Container();
     container.addNamespaceRoot('Fl32_Web_', SRC, '.mjs');
     container.addNamespaceRoot('TeqFw_Log_', LOG_SRC, '.mjs');
+    container.addNamespaceRoot('TeqFw_Cfg_', CFG_SRC, '.mjs');
     container.enableTestMode();
     return container;
 }
@@ -83,8 +85,15 @@ describe('TeqFW ES6 module convention integration', () => {
         }
 
         const logger = await container.get('TeqFw_Log_Provider$');
+        const cfgLoader = await container.get('TeqFw_Cfg_Loader$');
+        const cfgObject = await container.get('TeqFw_Cfg_Source_Object$');
+        await cfgLoader.load([cfgObject.create({
+            TEQFW_WEB__HOST: '127.0.0.1',
+            TEQFW_WEB__PORT: '3001',
+            TEQFW_WEB__TYPE: 'http',
+        })]);
         const runtimeConfigFactory = await container.get('Fl32_Web_Back_Config_Runtime__Factory$');
-        const runtimeFromFactory = runtimeConfigFactory.configure({host: '127.0.0.1', port: '3001', type: 'http'});
+        const runtimeFromFactory = runtimeConfigFactory.configure();
         runtimeConfigFactory.freeze();
         const runtimeConfig = await container.get('Fl32_Web_Back_Config_Runtime$');
         const server = await container.get('Fl32_Web_Back_Server$');

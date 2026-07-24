@@ -13,6 +13,13 @@ async function loadRuntimeTlsModule() {
     return import(`${href}?case=${Math.random()}`);
 }
 
+function createReader(values = {}) {
+    return {get: (namespace) => {
+        assert.equal(namespace, 'TEQFW_WEB');
+        return values;
+    }};
+}
+
 describe('Fl32_Web_Back_Config_Runtime', () => {
     test('uses flat runtime values after freeze and keeps first write wins', async () => {
         const {default: RuntimeConfig, Factory} = await loadRuntimeModule();
@@ -24,11 +31,13 @@ describe('Fl32_Web_Back_Config_Runtime', () => {
         const runtime = new RuntimeConfig({
             cast,
             SERVER_TYPE: new ServerType(),
+            reader: createReader(),
             tlsFactory: new TlsFactory({cast}),
         });
         const factory = new Factory({
             cast,
             SERVER_TYPE: new ServerType(),
+            reader: createReader(),
             tlsFactory: new TlsFactory({cast}),
         });
 
@@ -59,11 +68,13 @@ describe('Fl32_Web_Back_Config_Runtime', () => {
         const runtime = new RuntimeConfig({
             cast,
             SERVER_TYPE: new ServerType(),
+            reader: createReader(),
             tlsFactory: new TlsFactory({cast}),
         });
         const factory = new Factory({
             cast,
             SERVER_TYPE: new ServerType(),
+            reader: createReader(),
             tlsFactory: new TlsFactory({cast}),
         });
 
@@ -85,6 +96,7 @@ describe('Fl32_Web_Back_Config_Runtime', () => {
         const factory = new Factory({
             cast,
             SERVER_TYPE: new ServerType(),
+            reader: createReader(),
             tlsFactory: new TlsFactory({cast}),
         });
 
@@ -102,11 +114,13 @@ describe('Fl32_Web_Back_Config_Runtime', () => {
         const runtime = new RuntimeConfig({
             cast,
             SERVER_TYPE: new ServerType(),
+            reader: createReader(),
             tlsFactory: new TlsFactory({cast}),
         });
         const factory = new Factory({
             cast,
             SERVER_TYPE: new ServerType(),
+            reader: createReader(),
             tlsFactory: new TlsFactory({cast}),
         });
 
@@ -118,5 +132,29 @@ describe('Fl32_Web_Back_Config_Runtime', () => {
         assert.equal(runtime.tls.ca, 'ca');
         assert.throws(() => Object.freeze(runtime.tls), /cannot be frozen/);
         assert.throws(() => Object.freeze(runtime), /cannot be frozen/);
+    });
+
+    test('reads transport settings from the TEQFW_WEB configuration namespace', async () => {
+        const {default: RuntimeConfig, Factory} = await loadRuntimeModule();
+        const {default: Cast} = await import('../../../../src/Back/Helper/Cast.mjs');
+        const {default: ServerType} = await import('../../../../src/Back/Enum/Server/Type.mjs');
+        const {Factory: TlsFactory} = await loadRuntimeTlsModule();
+
+        const cast = new Cast();
+        const runtime = new RuntimeConfig();
+        const factory = new Factory({
+            cast,
+            SERVER_TYPE: new ServerType(),
+            reader: createReader({HOST: '127.0.0.1', PORT: '8080', TYPE: 'https', TLS: {key: 'key', cert: 'cert'}}),
+            tlsFactory: new TlsFactory({cast}),
+        });
+
+        factory.freeze();
+
+        assert.equal(runtime.host, '127.0.0.1');
+        assert.equal(runtime.port, 8080);
+        assert.equal(runtime.type, 'https');
+        assert.equal(runtime.tls.key, 'key');
+        assert.equal(runtime.tls.cert, 'cert');
     });
 });

@@ -9,6 +9,19 @@ import Fl32_Web_Back_Server from '../../src/Back/Server.mjs';
 
 const SRC = path.resolve(import.meta.dirname, '../../src');
 const LOG_SRC = path.resolve(import.meta.dirname, '../../node_modules/@teqfw/log/src');
+const CFG_SRC = path.resolve(import.meta.dirname, '../../node_modules/@teqfw/cfg/src');
+
+async function createContainer() {
+    const container = new Container();
+    container.addNamespaceRoot('Fl32_Web_', SRC, '.mjs');
+    container.addNamespaceRoot('TeqFw_Log_', LOG_SRC, '.mjs');
+    container.addNamespaceRoot('TeqFw_Cfg_', CFG_SRC, '.mjs');
+    container.enableTestMode();
+    const loader = await container.get('TeqFw_Cfg_Loader$');
+    const object = await container.get('TeqFw_Cfg_Source_Object$');
+    await loader.load([object.create({})]);
+    return container;
+}
 
 function createLoggerProvider() {
     return {
@@ -73,10 +86,7 @@ function createMockServer(label, log) {
 
 describe('Fl32_Web_Back_Server integration', () => {
     test('returns 404 through transport when no PROCESS handler completes', async () => {
-        const container = new Container();
-        container.addNamespaceRoot('Fl32_Web_', SRC, '.mjs');
-        container.addNamespaceRoot('TeqFw_Log_', LOG_SRC, '.mjs');
-        container.enableTestMode();
+        const container = await createContainer();
         const runtimeFactory = await container.get('Fl32_Web_Back_Config_Runtime__Factory$');
         runtimeFactory.freeze();
         const log = [];
@@ -108,10 +118,7 @@ describe('Fl32_Web_Back_Server integration', () => {
     });
 
     test('returns 500 through transport when PROCESS handler throws', async () => {
-        const container = new Container();
-        container.addNamespaceRoot('Fl32_Web_', SRC, '.mjs');
-        container.addNamespaceRoot('TeqFw_Log_', LOG_SRC, '.mjs');
-        container.enableTestMode();
+        const container = await createContainer();
         const runtimeFactory = await container.get('Fl32_Web_Back_Config_Runtime__Factory$');
         runtimeFactory.freeze();
         const STAGE = await container.get('Fl32_Web_Back_Enum_Stage$');
@@ -146,10 +153,7 @@ describe('Fl32_Web_Back_Server integration', () => {
     });
 
     test('binds the native HTTP server to an explicitly configured host', async () => {
-        const container = new Container();
-        container.addNamespaceRoot('Fl32_Web_', SRC, '.mjs');
-        container.addNamespaceRoot('TeqFw_Log_', LOG_SRC, '.mjs');
-        container.enableTestMode();
+        const container = await createContainer();
         const runtimeFactory = await container.get('Fl32_Web_Back_Config_Runtime__Factory$');
         runtimeFactory.freeze();
 

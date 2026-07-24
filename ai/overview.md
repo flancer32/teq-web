@@ -6,7 +6,7 @@ This package is not a general-purpose web framework. It does not define routing,
 
 The package assumes the TeqFW DI runtime model and exposes its runtime surface through DI-managed modules under the `Fl32_Web_` namespace rooted at the published `src/` tree. In normal usage, application modules receive these dependencies through constructor injection and orchestrate them from DI-managed services rather than creating containers or wiring collaborators manually inside feature code.
 
-Runtime startup configuration is exposed through `Fl32_Web_Back_Config_Runtime$` with flat transport fields `config.host`, `config.port`, `config.type`, and `config.tls`. The optional `host` field selects the listening address; when omitted, Node.js chooses its default listen address. The `tls` field is backed by `Fl32_Web_Back_Config_Runtime_Tls$`. Application-level configuration loading is coupled to the direct GitHub dependency `@teqfw/cfg`; this package owns only the transport-specific schema.
+Runtime startup configuration is exposed through `Fl32_Web_Back_Config_Runtime$` with flat transport fields `config.host`, `config.port`, `config.type`, and `config.tls`. The optional `host` field selects the listening address; when omitted, Node.js chooses its default listen address. The `tls` field is backed by `Fl32_Web_Back_Config_Runtime_Tls$`. Before freezing this runtime configuration, bootstrap must load `@teqfw/cfg`; the factory reads its `TEQFW_WEB` namespace through `TeqFw_Cfg_Reader$` and maps `HOST`, `PORT`, `TYPE`, and `TLS`.
 
 Use this package when external code needs one of these roles:
 

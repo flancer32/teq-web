@@ -42,7 +42,7 @@
 - The package is designed for the TeqFW DI container model.
 - Consumer code should resolve package modules through the `Fl32_Web_` namespace mapped to the package `src/` path.
 - Startup configuration for the built-in server should be supplied through `Fl32_Web_Back_Config_Runtime__Factory$` using flat runtime fields (`{host, port, type, tls}`).
-- Application configuration loading should use `@teqfw/cfg` once its DI contract is available; do not introduce a parallel package-level configuration loader in `@flancer32/teq-web`.
+- Load `@teqfw/cfg` exactly once before freezing `Fl32_Web_Back_Config_Runtime__Factory$`. The factory reads the `TEQFW_WEB` namespace; use `TEQFW_WEB__HOST`, `TEQFW_WEB__PORT`, `TEQFW_WEB__TYPE`, and `TEQFW_WEB__TLS` as complete configuration keys.
 - Set `host` explicitly when the application requires a guaranteed bind address, such as `127.0.0.1`; omission intentionally preserves Node.js default listen-address selection.
 - TLS startup configuration belongs to the dedicated runtime component `Fl32_Web_Back_Config_Runtime_Tls$`, even though consumers read it through `config.tls`.
 - Configure runtime values during startup only; once the runtime configuration is frozen for use, consumers must treat `Fl32_Web_Back_Config_Runtime$` and `Fl32_Web_Back_Config_Runtime_Tls$` as immutable read-only state.

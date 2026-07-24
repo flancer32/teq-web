@@ -18,6 +18,8 @@ Main methods:
 
 Default transport settings come from flat fields of `Fl32_Web_Back_Config_Runtime$` (`host`, `port`, `type`, `tls`). `host` is optional; when present, the Server passes it to the native listen operation, and when absent, Node.js chooses its default listen address. TLS values for `tls` are provided by the dedicated runtime configuration component `Fl32_Web_Back_Config_Runtime_Tls$`. Supported transport modes come from `Fl32_Web_Back_Enum_Server_Type$`:
 
+The runtime factory reads these values from the `TEQFW_WEB` namespace of a ready `@teqfw/cfg` Store: `HOST`, `PORT`, `TYPE`, and `TLS` map to the corresponding lower-case transport fields. Explicit `factory.configure()` values take precedence over values read from the plugin.
+
 - `http`
 - `http2`
 - `https`
