@@ -196,6 +196,8 @@ await app.execute();
 
 The package also uses [`@teqfw/log`](https://www.npmjs.com/package/@teqfw/log) as the platform logging contract, so runtime components emit source-bound logs through the shared TeqFW logging surface instead of defining package-local logging abstractions.
 
+Runtime configuration is coupled to [`@teqfw/cfg`](https://github.com/teqfw/cfg) as a direct GitHub dependency because the plugin is not published to npm. `Fl32_Web_Back_Config_Runtime$` remains this package's transport configuration schema (`host`, `port`, `type`, and `tls`); application-level configuration loading and DI provisioning belong to the configuration plugin as its public API becomes available.
+
 The package is also developed using ADSM, Alex Gusev's approach to maintaining product and architecture context alongside implementation work. Background materials:
 
 - ADSM book: http://fly.wiredgeese.com/flancer/leanpub/adsm-en/

@@ -41,6 +41,7 @@
     ]
   },
   "dependencies": {
+    "@teqfw/cfg": "github:teqfw/cfg#main",
     "@teqfw/log": "^0.1.0"
   },
   "devDependencies": {
