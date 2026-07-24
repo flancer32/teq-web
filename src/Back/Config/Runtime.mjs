@@ -44,6 +44,9 @@ const proxy = new Proxy(facade, {
 });
 
 export default class Wrapper {
+    /**
+     * Creates the immutable runtime configuration wrapper.
+     */
     constructor() {
         return proxy;
     }
@@ -58,7 +61,7 @@ export class Factory {
      */
     constructor({cast, SERVER_TYPE, tlsFactory}) {
         /**
-         * @param {Fl32_Web_Back_Config_Runtime$} [params]
+         * @param {Fl32_Web_Back_Config_Runtime__Data} params
          */
         this.configure = function (params = {}) {
             if (frozen) throw new Error('Runtime configuration is frozen.');

@@ -16,19 +16,17 @@ export default class Source {
 }
 
 export class Factory {
-    /* eslint-disable jsdoc/require-param-description */
     /**
-     * @param {object} params
-     * @param {Fl32_Web_Back_Helper_Cast$} params.cast
+     * @param {object} deps
+     * @param {Fl32_Web_Back_Helper_Cast$} deps.cast
      */
     constructor(
         {
             cast,
         }
     ) {
-        /* eslint-enable jsdoc/require-param-description */
         /**
-         * @param {*} [data]
+         * @param {*} data
          * @returns {Fl32_Web_Back_Dto_Source$}
          */
         this.create = function (data) {

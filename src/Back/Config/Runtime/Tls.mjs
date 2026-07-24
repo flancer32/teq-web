@@ -42,6 +42,9 @@ const proxy = new Proxy(facade, {
 });
 
 export default class Wrapper {
+    /**
+     * Creates the immutable TLS configuration wrapper.
+     */
     constructor() {
         return proxy;
     }
@@ -54,7 +57,7 @@ export class Factory {
      */
     constructor({cast}) {
         /**
-         * @param {Fl32_Web_Back_Config_Runtime_Tls__Data} [params]
+         * @param {Fl32_Web_Back_Config_Runtime_Tls__Data} params
          */
         this.configure = function (params = {}) {
             if (frozen) throw new Error('Runtime configuration is frozen.');

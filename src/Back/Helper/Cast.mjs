@@ -5,13 +5,16 @@
  * @description Cast helper used by runtime configuration and DTO factories.
  */
 export default class Cast {
+    /**
+     * Creates the cast helper.
+     */
     constructor() {
         /**
          * Cast input data into an array. Ensures the result is always an array.
          * Optionally casts each item using the provided itemCast function.
          *
          * @param {*} data - Input data to be cast to array.
-         * @param {function(*): *} [itemCast] - Optional function to cast each item.
+         * @param {any} itemCast - Optional function to cast each item.
          * @returns {Array}
          */
         this.array = function (data, itemCast) {
@@ -45,9 +48,6 @@ export default class Cast {
          *
          * @param {*} data - The input to cast.
          * @param {object} enu - Object whose values represent valid enum values.
-         * @param {object} [params] - Parameters object.
-         * @param {boolean} [params.lower] - Normalize input to lower case before comparison.
-         * @param {boolean} [params.upper] - Normalize input to upper case before comparison.
          * @returns {string|undefined}
          */
         this.enum = function (data, enu, {lower, upper} = {}) {

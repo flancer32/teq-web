@@ -5,6 +5,9 @@
  * @description Enum-like DTO for web request processing stages.
  */
 export default class Stage {
+    /**
+     * Creates the request-stage enumeration.
+     */
     constructor() {
         this.INIT = 'INIT';
         this.PROCESS = 'PROCESS';

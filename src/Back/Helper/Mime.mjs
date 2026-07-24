@@ -6,6 +6,9 @@
  * Can be replaced or extended by the application via the DI container.
  */
 export default class Mime {
+    /**
+     * Creates the MIME type helper.
+     */
     constructor() {
         /**
          * Mapping from file extension to MIME type.

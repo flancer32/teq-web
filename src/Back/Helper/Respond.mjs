@@ -37,10 +37,10 @@ export default class Respond {
         /**
          * Sends an HTTP response with a given status code.
          *
-         * @param {object} params
-         * @param {Fl32_Web_Back_Response_Target} params.res - HTTP response object.
-         * @param {Fl32_Web_Back_Response_Headers} [params.headers={}] - Custom headers.
-         * @param {Fl32_Web_Back_Response_Body} [params.body=''] - Response body.
+         * @param {object} deps
+         * @param {Fl32_Web_Back_Response_Target} deps.res - HTTP response object.
+         * @param {Fl32_Web_Back_Response_Headers} deps.headers - Custom headers.
+         * @param {Fl32_Web_Back_Response_Body} deps.body - Response body.
          * @param {number} status - HTTP status code.
          * @returns {boolean} - `true` if response was sent, `false` if headers were already sent.
          */
@@ -53,67 +53,145 @@ export default class Respond {
 
         // MAIN
 
-        /** @see send */
+        /**
+         * @param {object} deps
+         * @param {Fl32_Web_Back_Response_Target} deps.res
+         * @param {Fl32_Web_Back_Response_Headers} deps.headers
+         * @param {Fl32_Web_Back_Response_Body} deps.body
+         * @returns {boolean}
+         */
         this.code200_Ok = function ({res, headers = {}, body = ''}) {
             return send({res, headers, body}, HTTP_STATUS_OK);
         };
 
-        /** @see send */
+        /**
+         * @param {object} deps
+         * @param {Fl32_Web_Back_Response_Target} deps.res
+         * @param {Fl32_Web_Back_Response_Headers} deps.headers
+         * @param {Fl32_Web_Back_Response_Body} deps.body
+         * @returns {boolean}
+         */
         this.code201_Created = function ({res, headers = {}, body = ''}) {
             return send({res, headers, body}, HTTP_STATUS_CREATED);
         };
 
-        /** @see send */
+        /**
+         * @param {object} deps
+         * @param {Fl32_Web_Back_Response_Target} deps.res
+         * @param {Fl32_Web_Back_Response_Headers} deps.headers
+         * @returns {boolean}
+         */
         this.code204_NoContent = function ({res, headers = {}}) {
             return send({res, headers}, HTTP_STATUS_NO_CONTENT);
         };
 
-        /** @see send */
+        /**
+         * @param {object} deps
+         * @param {Fl32_Web_Back_Response_Target} deps.res
+         * @param {Fl32_Web_Back_Response_Headers} deps.headers
+         * @param {Fl32_Web_Back_Response_Body} deps.body
+         * @returns {boolean}
+         */
         this.code301_MovedPermanently = function ({res, headers = {}, body = ''}) {
             return send({res, headers, body}, HTTP_STATUS_MOVED_PERMANENTLY);
         };
 
-        /** @see send */
+        /**
+         * @param {object} deps
+         * @param {Fl32_Web_Back_Response_Target} deps.res
+         * @param {Fl32_Web_Back_Response_Headers} deps.headers
+         * @param {Fl32_Web_Back_Response_Body} deps.body
+         * @returns {boolean}
+         */
         this.code302_Found = function ({res, headers = {}, body = ''}) {
             return send({res, headers, body}, HTTP_STATUS_FOUND);
         };
 
-        /** @see send */
+        /**
+         * @param {object} deps
+         * @param {Fl32_Web_Back_Response_Target} deps.res
+         * @param {Fl32_Web_Back_Response_Headers} deps.headers
+         * @param {Fl32_Web_Back_Response_Body} deps.body
+         * @returns {boolean}
+         */
         this.code303_SeeOther = function ({res, headers = {}, body = ''}) {
             return send({res, headers, body}, HTTP_STATUS_SEE_OTHER);
         };
 
-        /** @see send */
+        /**
+         * @param {object} deps
+         * @param {Fl32_Web_Back_Response_Target} deps.res
+         * @param {Fl32_Web_Back_Response_Headers} deps.headers
+         * @param {Fl32_Web_Back_Response_Body} deps.body
+         * @returns {boolean}
+         */
         this.code304_NotModified = function ({res, headers = {}, body = ''}) {
             return send({res, headers, body}, HTTP_STATUS_NOT_MODIFIED);
         };
 
-        /** @see send */
+        /**
+         * @param {object} deps
+         * @param {Fl32_Web_Back_Response_Target} deps.res
+         * @param {Fl32_Web_Back_Response_Headers} deps.headers
+         * @param {Fl32_Web_Back_Response_Body} deps.body
+         * @returns {boolean}
+         */
         this.code400_BadRequest = function ({res, headers = {}, body = ''}) {
             return send({res, headers, body}, HTTP_STATUS_BAD_REQUEST);
         };
 
-        /** @see send */
+        /**
+         * @param {object} deps
+         * @param {Fl32_Web_Back_Response_Target} deps.res
+         * @param {Fl32_Web_Back_Response_Headers} deps.headers
+         * @param {Fl32_Web_Back_Response_Body} deps.body
+         * @returns {boolean}
+         */
         this.code401_Unauthorized = function ({res, headers = {}, body = ''}) {
             return send({res, headers, body}, HTTP_STATUS_UNAUTHORIZED);
         };
 
-        /** @see send */
+        /**
+         * @param {object} deps
+         * @param {Fl32_Web_Back_Response_Target} deps.res
+         * @param {Fl32_Web_Back_Response_Headers} deps.headers
+         * @param {Fl32_Web_Back_Response_Body} deps.body
+         * @returns {boolean}
+         */
         this.code402_PaymentRequired = function ({res, headers = {}, body = ''}) {
             return send({res, headers, body}, HTTP_STATUS_PAYMENT_REQUIRED);
         };
 
-        /** @see send */
+        /**
+         * @param {object} deps
+         * @param {Fl32_Web_Back_Response_Target} deps.res
+         * @param {Fl32_Web_Back_Response_Headers} deps.headers
+         * @param {Fl32_Web_Back_Response_Body} deps.body
+         * @returns {boolean}
+         */
         this.code403_Forbidden = function ({res, headers = {}, body = ''}) {
             return send({res, headers, body}, HTTP_STATUS_FORBIDDEN);
         };
 
-        /** @see send */
+        /**
+         * @param {object} deps
+         * @param {Fl32_Web_Back_Response_Target} deps.res
+         * @param {Fl32_Web_Back_Response_Headers} deps.headers
+         * @param {Fl32_Web_Back_Response_Body} deps.body
+         * @returns {boolean}
+         */
         this.code404_NotFound = function ({res, headers = {}, body = ''}) {
             return send({res, headers, body}, HTTP_STATUS_NOT_FOUND);
         };
 
-        /** @see send */
+        /**
+         * @param {object} deps
+         * @param {Fl32_Web_Back_Response_Target} deps.res
+         * @param {Fl32_Web_Back_Response_Headers} deps.headers
+         * @param {Fl32_Web_Back_Response_Body} deps.body
+         * @param {string} deps.allowed
+         * @returns {boolean}
+         */
         this.code405_MethodNotAllowed = function ({res, headers = {}, body = '', allowed = 'HEAD, GET, POST'}) {
             return send(
                 {
@@ -125,22 +203,46 @@ export default class Respond {
             );
         };
 
-        /** @see send */
+        /**
+         * @param {object} deps
+         * @param {Fl32_Web_Back_Response_Target} deps.res
+         * @param {Fl32_Web_Back_Response_Headers} deps.headers
+         * @param {Fl32_Web_Back_Response_Body} deps.body
+         * @returns {boolean}
+         */
         this.code409_Conflict = function ({res, headers = {}, body = ''}) {
             return send({res, headers, body}, HTTP_STATUS_CONFLICT);
         };
 
-        /** @see send */
+        /**
+         * @param {object} deps
+         * @param {Fl32_Web_Back_Response_Target} deps.res
+         * @param {Fl32_Web_Back_Response_Headers} deps.headers
+         * @param {Fl32_Web_Back_Response_Body} deps.body
+         * @returns {boolean}
+         */
         this.code500_InternalServerError = function ({res, headers = {}, body = 'Internal Server Error'}) {
             return send({res, headers, body}, HTTP_STATUS_INTERNAL_SERVER_ERROR);
         };
 
-        /** @see send */
+        /**
+         * @param {object} deps
+         * @param {Fl32_Web_Back_Response_Target} deps.res
+         * @param {Fl32_Web_Back_Response_Headers} deps.headers
+         * @param {Fl32_Web_Back_Response_Body} deps.body
+         * @returns {boolean}
+         */
         this.code502_BadGateway = function ({res, headers = {}, body = ''}) {
             return send({res, headers, body}, HTTP_STATUS_BAD_GATEWAY);
         };
 
-        /** @see send */
+        /**
+         * @param {object} deps
+         * @param {Fl32_Web_Back_Response_Target} deps.res
+         * @param {Fl32_Web_Back_Response_Headers} deps.headers
+         * @param {Fl32_Web_Back_Response_Body} deps.body
+         * @returns {boolean}
+         */
         this.code503_ServiceUnavailable = function ({res, headers = {}, body = ''}) {
             return send({res, headers, body}, HTTP_STATUS_SERVICE_UNAVAILABLE);
         };

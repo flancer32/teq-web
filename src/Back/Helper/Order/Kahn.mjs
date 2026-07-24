@@ -5,6 +5,9 @@
  * @description Sorts named handlers by relative `before` / `after` constraints using Kahn's algorithm.
  */
 export default class Kahn {
+    /**
+     * Creates the handler ordering helper.
+     */
     constructor() {
         /**
          * Topologically sorts handlers with `name`, `before`, `after` fields.

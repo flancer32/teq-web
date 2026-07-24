@@ -5,6 +5,9 @@
  * @description Request context passed through the pipeline lifecycle.
  */
 export default class RequestContext {
+    /**
+     * Creates an empty request context.
+     */
     constructor() {
         /** @type {Fl32_Web_Node_Http_IncomingMessage|Fl32_Web_Node_Http2_ServerRequest} */
         this.request;
@@ -21,6 +24,9 @@ export default class RequestContext {
 }
 
 export class Factory {
+    /**
+     * Creates the request context factory.
+     */
     constructor() {
         /**
          * @returns {Fl32_Web_Back_Dto_RequestContext$}

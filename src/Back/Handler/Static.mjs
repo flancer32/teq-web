@@ -24,10 +24,11 @@ export default class Static {
         /**
          * Initialize registry with provided sources.
          *
-         * @param {{sources: Fl32_Web_Back_Dto_Source$[]}} params
+         * @param {object} params
          * @returns {Promise<void>}
          */
-        this.init = async ({sources = []} = {}) => {
+        this.init = async (params = {}) => {
+            const {sources = []} = params;
             registry.addConfigs(sources);
         };
 

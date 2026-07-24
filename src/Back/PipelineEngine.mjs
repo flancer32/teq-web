@@ -9,17 +9,15 @@
 const KEY_STAGE = Symbol('stage');
 
 export default class PipelineEngine {
-    /* eslint-disable jsdoc/require-param-description,jsdoc/check-param-names */
     /**
-     * @param {object} params
-     * @param {Fl32_Web_Back_Dto_RequestContext__Factory$} params.dtoRequestContextFactory
-     * @param {TeqFw_Log_Provider$} params.logger
-     * @param {Fl32_Web_Back_Helper_Respond$} params.respond
-     * @param {Fl32_Web_Back_Helper_Order_Kahn$} params.helpOrder
-     * @param {Fl32_Web_Back_Enum_Stage$} params.STAGE
+     * @param {object} deps
+     * @param {Fl32_Web_Back_Dto_RequestContext__Factory$} deps.dtoRequestContextFactory
+     * @param {TeqFw_Log_Provider$} deps.logger
+     * @param {Fl32_Web_Back_Helper_Respond$} deps.respond
+     * @param {Fl32_Web_Back_Helper_Order_Kahn$} deps.helpOrder
+     * @param {Fl32_Web_Back_Enum_Stage$} deps.STAGE
      */
     constructor({dtoRequestContextFactory, logger, respond, helpOrder, STAGE}) {
-        /* eslint-enable jsdoc/require-param-description,jsdoc/check-param-names */
         const log = logger.forSource('Fl32_Web_Back_PipelineEngine');
         /** @type {Map<string, Fl32_Web_Back_Api_Handler$>} */
         const handlers = new Map();
@@ -74,7 +72,7 @@ export default class PipelineEngine {
         /**
          * @param {Fl32_Web_Back_Api_Handler$} handler
          * @param {string} stage
-         * @param {Fl32_Web_Back_Dto_RequestContext$ & {[KEY_STAGE]: string|null}} context
+         * @param {Fl32_Web_Back_Dto_RequestContext$} context
          * @returns {Promise<void>}
          */
         async function runHandler(handler, stage, context) {

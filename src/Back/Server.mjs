@@ -31,7 +31,7 @@ export default class Server {
 
         /**
          * Starts the server with optional configuration.
-         * @param {Fl32_Web_Back_Config_Runtime$} [cfg]
+         * @param {Fl32_Web_Back_Config_Runtime$} cfg
          * @returns {Promise<void>}
          */
         this.start = async function (cfg) {
