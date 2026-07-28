@@ -1,10 +1,21 @@
 import {describe, test} from 'node:test';
 import assert from 'node:assert/strict';
+import fs from 'node:fs/promises';
 import path from 'node:path';
 import Container from '@teqfw/di';
+import NamespaceRegistry from '@teqfw/di/node/registry/namespace';
 
-const SRC = path.resolve(import.meta.dirname, '../../src');
-const LOG_SRC = path.resolve(import.meta.dirname, '../../node_modules/@teqfw/log/src');
+const APP_ROOT = path.resolve(import.meta.dirname, '../..');
+
+async function createContainer() {
+    const container = new Container();
+    const registry = new NamespaceRegistry({fs, path, appRoot: APP_ROOT});
+    for (const {prefix, dirAbs, ext} of await registry.build()) {
+        container.addNamespaceRoot(prefix, dirAbs, ext);
+    }
+    container.enableTestMode();
+    return container;
+}
 
 /**
  * @returns {{headersSent:boolean,writableEnded:boolean,statusCode?:number,body?:string,writeHead:(status:number)=>void,end:(body?:string)=>void}}
@@ -28,10 +39,7 @@ function createResponse() {
 
 describe('Fl32_Web_Back_PipelineEngine integration', () => {
     test('requires locked handlers before direct request execution', async () => {
-        const container = new Container();
-        container.addNamespaceRoot('Fl32_Web_', SRC, '.mjs');
-        container.addNamespaceRoot('TeqFw_Log_', LOG_SRC, '.mjs');
-        container.enableTestMode();
+        const container = await createContainer();
         const engine = await container.get('Fl32_Web_Back_PipelineEngine$');
         const STAGE = await container.get('Fl32_Web_Back_Enum_Stage$');
 
@@ -47,10 +55,7 @@ describe('Fl32_Web_Back_PipelineEngine integration', () => {
     });
 
     test('stops PROCESS stage after completion and still executes FINALIZE', async () => {
-        const container = new Container();
-        container.addNamespaceRoot('Fl32_Web_', SRC, '.mjs');
-        container.addNamespaceRoot('TeqFw_Log_', LOG_SRC, '.mjs');
-        container.enableTestMode();
+        const container = await createContainer();
         const engine = await container.get('Fl32_Web_Back_PipelineEngine$');
         const STAGE = await container.get('Fl32_Web_Back_Enum_Stage$');
         /** @type {string[]} */
@@ -83,10 +88,7 @@ describe('Fl32_Web_Back_PipelineEngine integration', () => {
     });
 
     test('produces 500 on PROCESS exception', async () => {
-        const container = new Container();
-        container.addNamespaceRoot('Fl32_Web_', SRC, '.mjs');
-        container.addNamespaceRoot('TeqFw_Log_', LOG_SRC, '.mjs');
-        container.enableTestMode();
+        const container = await createContainer();
         const engine = await container.get('Fl32_Web_Back_PipelineEngine$');
         const STAGE = await container.get('Fl32_Web_Back_Enum_Stage$');
         engine.addHandler({

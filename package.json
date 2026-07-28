@@ -32,16 +32,21 @@
     "node": ">=20"
   },
   "teqfw": {
-    "namespaces": [
-      {
-        "prefix": "Fl32_Web_",
-        "path": "./src",
-        "ext": ".mjs"
+    "fw": {
+      "di": {
+        "namespaces": [
+          {
+            "prefix": "Fl32_Web_",
+            "path": "./src",
+            "ext": ".mjs"
+          }
+        ]
       }
-    ]
+    }
   },
   "dependencies": {
     "@teqfw/cfg": "github:teqfw/cfg#main",
+    "@teqfw/di": "github:teqfw/di#main",
     "@teqfw/log": "^0.1.0"
   },
   "devDependencies": {

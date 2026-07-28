@@ -1,11 +1,11 @@
 import Container from '@teqfw/di';
+import NamespaceRegistry from '@teqfw/di/node/registry/namespace';
+import fs from 'node:fs/promises';
 import path from 'node:path';
 import Fl32_Web_Back_Server from '../../src/Back/Server.mjs';
 
 const PORT = Number.parseInt(process.env.PORT ?? '3000', 10);
-const SRC = path.resolve(import.meta.dirname, '../../src');
-const LOG_SRC = path.resolve(import.meta.dirname, '../../node_modules/@teqfw/log/src');
-const CFG_SRC = path.resolve(import.meta.dirname, '../../node_modules/@teqfw/cfg/src');
+const APP_ROOT = path.resolve(import.meta.dirname, '../..');
 const WEB_ROOT = path.resolve(import.meta.dirname, './web');
 
 function waitForServerStart(instance) {
@@ -26,9 +26,10 @@ function waitForServerStart(instance) {
 
 async function main() {
     const container = new Container();
-    container.addNamespaceRoot('Fl32_Web_', SRC, '.mjs');
-    container.addNamespaceRoot('TeqFw_Log_', LOG_SRC, '.mjs');
-    container.addNamespaceRoot('TeqFw_Cfg_', CFG_SRC, '.mjs');
+    const registry = new NamespaceRegistry({fs, path, appRoot: APP_ROOT});
+    for (const {prefix, dirAbs, ext} of await registry.build()) {
+        container.addNamespaceRoot(prefix, dirAbs, ext);
+    }
 
     const cfgLoader = await container.get('TeqFw_Cfg_Loader$');
     const cfgObject = await container.get('TeqFw_Cfg_Source_Object$');

@@ -1,21 +1,22 @@
 import {describe, test} from 'node:test';
 import assert from 'node:assert/strict';
 import {once} from 'node:events';
+import fs from 'node:fs/promises';
 import * as http from 'node:http';
 import * as http2 from 'node:http2';
 import path from 'node:path';
 import Container from '@teqfw/di';
+import NamespaceRegistry from '@teqfw/di/node/registry/namespace';
 import Fl32_Web_Back_Server from '../../src/Back/Server.mjs';
 
-const SRC = path.resolve(import.meta.dirname, '../../src');
-const LOG_SRC = path.resolve(import.meta.dirname, '../../node_modules/@teqfw/log/src');
-const CFG_SRC = path.resolve(import.meta.dirname, '../../node_modules/@teqfw/cfg/src');
+const APP_ROOT = path.resolve(import.meta.dirname, '../..');
 
 async function createContainer() {
     const container = new Container();
-    container.addNamespaceRoot('Fl32_Web_', SRC, '.mjs');
-    container.addNamespaceRoot('TeqFw_Log_', LOG_SRC, '.mjs');
-    container.addNamespaceRoot('TeqFw_Cfg_', CFG_SRC, '.mjs');
+    const registry = new NamespaceRegistry({fs, path, appRoot: APP_ROOT});
+    for (const {prefix, dirAbs, ext} of await registry.build()) {
+        container.addNamespaceRoot(prefix, dirAbs, ext);
+    }
     container.enableTestMode();
     const loader = await container.get('TeqFw_Cfg_Loader$');
     const object = await container.get('TeqFw_Cfg_Source_Object$');
