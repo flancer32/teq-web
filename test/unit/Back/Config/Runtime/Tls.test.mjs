@@ -16,6 +16,8 @@ describe('Fl32_Web_Back_Config_Runtime_Tls', () => {
         const tls = new RuntimeTls();
         const factory = new Factory({cast: new Cast()});
         assert.throws(() => tls.key, /not initialized/);
+        Object.freeze(tls);
+        assert.equal(Object.isFrozen(tls), true);
 
         factory.configure({key: 'key-1', cert: 'cert-1'});
         factory.configure({key: 'key-2', cert: 'cert-2', ca: 'ca-1'});
@@ -24,7 +26,6 @@ describe('Fl32_Web_Back_Config_Runtime_Tls', () => {
         assert.equal(tls.key, 'key-1');
         assert.equal(tls.cert, 'cert-1');
         assert.equal(tls.ca, 'ca-1');
-        assert.throws(() => Object.freeze(tls), /cannot be frozen/);
         assert.throws(() => {
             tls.key = 'next';
         }, /immutable/);

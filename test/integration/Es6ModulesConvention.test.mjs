@@ -94,9 +94,10 @@ describe('TeqFW ES6 module convention integration', () => {
             TEQFW_WEB__TYPE: 'http',
         })]);
         const runtimeConfigFactory = await container.get('Fl32_Web_Back_Config_Runtime__Factory$');
+        const runtimeConfig = await container.get('Fl32_Web_Back_Config_Runtime$');
+        assert.equal(Object.isFrozen(runtimeConfig), true);
         const runtimeFromFactory = runtimeConfigFactory.configure();
         runtimeConfigFactory.freeze();
-        const runtimeConfig = await container.get('Fl32_Web_Back_Config_Runtime$');
         const server = await container.get('Fl32_Web_Back_Server$');
         const STAGE = await container.get('Fl32_Web_Back_Enum_Stage$');
         const SERVER_TYPE = await container.get('Fl32_Web_Back_Enum_Server_Type$');

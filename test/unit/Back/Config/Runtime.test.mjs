@@ -42,6 +42,8 @@ describe('Fl32_Web_Back_Config_Runtime', () => {
         });
 
         assert.throws(() => runtime.port, /not initialized/);
+        Object.freeze(runtime);
+        assert.equal(Object.isFrozen(runtime), true);
 
         factory.configure({host: '127.0.0.1', port: '8080', type: 'http2'});
         factory.configure({host: '0.0.0.0', port: '9090', type: 'https'});
@@ -50,7 +52,6 @@ describe('Fl32_Web_Back_Config_Runtime', () => {
         assert.equal(runtime.host, '127.0.0.1');
         assert.equal(runtime.port, 8080);
         assert.equal(runtime.type, 'http2');
-        assert.throws(() => Object.freeze(runtime), /cannot be frozen/);
         assert.throws(() => {
             runtime.port = 9090;
         }, /immutable/);
@@ -78,12 +79,13 @@ describe('Fl32_Web_Back_Config_Runtime', () => {
             tlsFactory: new TlsFactory({cast}),
         });
 
+        Object.freeze(runtime);
+        assert.equal(Object.isFrozen(runtime), true);
         factory.freeze();
 
         assert.equal(runtime.host, undefined);
         assert.equal(runtime.port, 3000);
         assert.equal(runtime.type, 'http');
-        assert.throws(() => Object.freeze(runtime), /cannot be frozen/);
     });
 
     test('requires tls for https mode', async () => {
@@ -130,8 +132,10 @@ describe('Fl32_Web_Back_Config_Runtime', () => {
         assert.equal(runtime.tls.key, 'key');
         assert.equal(runtime.tls.cert, 'cert');
         assert.equal(runtime.tls.ca, 'ca');
-        assert.throws(() => Object.freeze(runtime.tls), /cannot be frozen/);
-        assert.throws(() => Object.freeze(runtime), /cannot be frozen/);
+        Object.freeze(runtime.tls);
+        Object.freeze(runtime);
+        assert.equal(Object.isFrozen(runtime.tls), true);
+        assert.equal(Object.isFrozen(runtime), true);
     });
 
     test('reads transport settings from the TEQFW_WEB configuration namespace', async () => {

@@ -38,9 +38,6 @@ const proxy = new Proxy(facade, {
     deleteProperty() {
         throw new Error('Runtime configuration is immutable.');
     },
-    preventExtensions() {
-        throw new Error('Runtime configuration wrapper cannot be frozen.');
-    },
 });
 
 export default class Wrapper {
