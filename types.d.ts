@@ -61,6 +61,9 @@ declare global {
 
   type Fl32_Web_Back_PipelineEngine = typeof import("./src/Back/PipelineEngine.mjs").default;
   type Fl32_Web_Back_PipelineEngine$ = InstanceType<typeof import("./src/Back/PipelineEngine.mjs").default>;
+  type Fl32_Web_Cli_Command_Start = typeof import("./src/Cli/Command/Start.mjs").default;
+  type Fl32_Web_Cli_Command_Start$ = InstanceType<typeof import("./src/Cli/Command/Start.mjs").default>;
+
   type Fl32_Web_Back_Server = typeof import("./src/Back/Server.mjs").default;
   type Fl32_Web_Back_Server$ = InstanceType<typeof import("./src/Back/Server.mjs").default>;
 

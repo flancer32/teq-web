@@ -1,5 +1,10 @@
 # Changelog
 
+## [Unreleased]
+
+### Added
+- CLI command `fl32:web:start` for starting the web server through `@teqfw/cli` host.
+
 ## [0.15.0] - 2026-07-14 - Listening host and TeqFW ESM conformance
 
 ### Added

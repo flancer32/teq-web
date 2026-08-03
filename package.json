@@ -41,11 +41,27 @@
             "ext": ".mjs"
           }
         ]
+      },
+      "cli": {
+        "commands": [
+          {
+            "id": "fl32:web:start",
+            "path": ["fl32", "web", "start"],
+            "summary": "Start the web server.",
+            "arguments": [],
+            "options": [],
+            "component": "Fl32_Web_Cli_Command_Start$"
+          }
+        ],
+        "command": {
+          "default": "fl32:web:start"
+        }
       }
     }
   },
   "dependencies": {
     "@teqfw/cfg": "github:teqfw/cfg#main",
+    "@teqfw/cli": "github:teqfw/cli#main",
     "@teqfw/di": "github:teqfw/di#main",
     "@teqfw/log": "^0.1.0"
   },
@@ -53,6 +69,7 @@
     "@types/node": "^25.4.0"
   },
   "scripts": {
+    "start": "teq fl32:web:start",
     "test:unit": "find test/unit -name '*.test.mjs' -print0 | xargs -0 node --test",
     "test:integration": "find test/integration -name '*.test.mjs' -print0 | xargs -0 node --test",
     "test": "npm run test:unit && npm run test:integration"
