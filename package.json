@@ -47,8 +47,6 @@
           {
             "id": "fl32:web:start",
             "summary": "Start the web server.",
-            "arguments": [],
-            "options": [],
             "component": "Fl32_Web_Cli_Command_Start$"
           }
         ],
@@ -62,7 +60,7 @@
     "@teqfw/cfg": "github:teqfw/cfg#main",
     "@teqfw/cli": "github:teqfw/cli#main",
     "@teqfw/di": "github:teqfw/di#main",
-    "@teqfw/log": "^0.1.0"
+    "@teqfw/log": "github:teqfw/log#main"
   },
   "devDependencies": {
     "@types/node": "^25.4.0"
