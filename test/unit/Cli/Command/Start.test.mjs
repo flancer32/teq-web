@@ -44,7 +44,6 @@ describe('Fl32_Web_Cli_Command_Start (mocked)', () => {
     test('has correct metadata', () => {
         assert.deepStrictEqual(command.lifetime, 'long-running');
         assert.deepStrictEqual(command.id, 'fl32:web:start');
-        assert.deepStrictEqual(command.path, Object.freeze(['fl32', 'web', 'start']));
         assert.deepStrictEqual(command.summary, 'Start the web server.');
     });
 

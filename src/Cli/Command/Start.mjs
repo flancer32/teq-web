@@ -23,11 +23,6 @@ export default class Start {
         this.id = 'fl32:web:start';
 
         /**
-         * @type {ReadonlyArray<string>}
-         */
-        this.path = Object.freeze(['fl32', 'web', 'start']);
-
-        /**
          * @type {string}
          */
         this.summary = 'Start the web server.';

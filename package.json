@@ -46,7 +46,6 @@
         "commands": [
           {
             "id": "fl32:web:start",
-            "path": ["fl32", "web", "start"],
             "summary": "Start the web server.",
             "arguments": [],
             "options": [],
