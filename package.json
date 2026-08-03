@@ -58,7 +58,7 @@
     "test": "npm run test:unit && npm run test:integration"
   },
   "files": [
-    "ai/",
+    "skills/",
     "jsconfig.json",
     "src/",
     "CHANGELOG.md",

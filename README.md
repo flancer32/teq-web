@@ -198,28 +198,25 @@ The package also uses [`@teqfw/log`](https://www.npmjs.com/package/@teqfw/log) a
 
 Runtime configuration uses [`@teqfw/cfg`](https://github.com/teqfw/cfg) as a direct GitHub dependency because the plugin is not published to npm. After application bootstrap loads the plugin, `Fl32_Web_Back_Config_Runtime__Factory$` reads the `TEQFW_WEB` namespace through `TeqFw_Cfg_Reader$` and projects `HOST`, `PORT`, `TYPE`, and `TLS` into the transport configuration (`host`, `port`, `type`, and `tls`).
 
-## Agent Interface
+## Agent Skill
 
-This package includes **agent interface documentation** intended for LLM agents that use the library as a dependency.
-
-These documents are distributed inside the package in:
+The package distributes a version-matched consumer skill at:
 
 ```text
-./ai/
+skills/teqfw-web/
 ```
 
-For a quick integration reference, see:
+Its entry point is `SKILL.md`. A host project may mount the installed directory in its
+agent catalog; installation does not create links or alter host configuration:
 
-- `ai/examples/minimal-server.md`
+```sh
+mkdir -p .agents/skills
+ln -s ../../node_modules/@flancer32/teq-web/skills/teqfw-web .agents/skills/teqfw-web
+```
 
-They describe:
-
-- runtime abstractions
-- request lifecycle semantics
-- handler contracts
-- integration rules for TeqFW applications
-
-Human developers typically read the README and source code, while **LLM agents can rely on the documentation in `./ai/`.**
+The skill covers request lifecycle semantics, handlers, server configuration, static
+file delivery, and TeqFW integration. It supplements this README; the host project's
+instructions and cognitive context remain authoritative for application architecture.
 
 ## Installation
 
