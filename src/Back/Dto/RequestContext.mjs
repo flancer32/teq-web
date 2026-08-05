@@ -9,7 +9,7 @@ export default class RequestContext {
      * Creates an empty request context.
      */
     constructor() {
-        /** @type {Fl32_Web_Node_Http_IncomingMessage|Fl32_Web_Node_Http2_ServerRequest} */
+        /** @type {Fl32_Web_Back_Request_Target} */
         this.request;
 
         /** @type {Fl32_Web_Back_Response_Target} */

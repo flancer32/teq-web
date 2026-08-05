@@ -70,6 +70,12 @@ declare global {
   type Fl32_Web_Back_Response_Body = string | object;
   type Fl32_Web_Back_Response_Headers = {[key: string]: string | number | string[]};
   type Fl32_Web_Back_Response_Target = Fl32_Web_Node_Http_ServerResponse | Fl32_Web_Node_Http2_ServerResponse;
+  type Fl32_Web_Back_Response_Payload = {
+    res: Fl32_Web_Back_Response_Target;
+    headers?: Fl32_Web_Back_Response_Headers;
+    body?: Fl32_Web_Back_Response_Body;
+  };
+  type Fl32_Web_Back_Request_Target = Fl32_Web_Node_Http_IncomingMessage | Fl32_Web_Node_Http2_ServerRequest;
 
   type Fl32_Web_Node_Fs = typeof import("node:fs");
   type Fl32_Web_Node_Http = typeof import("node:http");

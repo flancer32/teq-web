@@ -24,7 +24,7 @@ export default class FileService {
          *
          * @param {Fl32_Web_Back_Handler_Static_A_Config__Value} config
          * @param {string} rel
-         * @param {Fl32_Web_Node_Http_IncomingMessage|Fl32_Web_Node_Http2_ServerRequest} req
+         * @param {Fl32_Web_Back_Request_Target} req
          * @param {Fl32_Web_Back_Response_Target} res
          * @returns {Promise<boolean>} true if served
          */

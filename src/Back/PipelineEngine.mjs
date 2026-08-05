@@ -30,7 +30,7 @@ export default class PipelineEngine {
         let isLocked = false;
 
         /**
-         * @param {Fl32_Web_Node_Http_IncomingMessage|Fl32_Web_Node_Http2_ServerRequest} request
+         * @param {Fl32_Web_Back_Request_Target} request
          * @param {Fl32_Web_Back_Response_Target} response
          * @returns {Fl32_Web_Back_Dto_RequestContext$ & {[KEY_STAGE]: string|null}}
          */
@@ -134,7 +134,7 @@ export default class PipelineEngine {
         this.registerHandler = (handler) => this.addHandler(handler);
 
         /**
-         * @param {Fl32_Web_Node_Http_IncomingMessage|Fl32_Web_Node_Http2_ServerRequest} req
+         * @param {Fl32_Web_Back_Request_Target} req
          * @param {Fl32_Web_Back_Response_Target} res
          * @returns {Promise<void>}
          */
@@ -203,7 +203,7 @@ export default class PipelineEngine {
         };
 
         /**
-         * @param {Fl32_Web_Node_Http_IncomingMessage|Fl32_Web_Node_Http2_ServerRequest} req
+         * @param {Fl32_Web_Back_Request_Target} req
          * @param {Fl32_Web_Back_Response_Target} res
          * @returns {Promise<void>}
          */
