@@ -8,9 +8,13 @@ import Fl32_Web_Back_Enum_Stage from '../../../../src/Back/Enum/Stage.mjs';
 describe('Fl32_Web_Back_Handler_Static', () => {
     const STAGE = new Fl32_Web_Back_Enum_Stage();
     const dtoInfoFactory = new Fl32_Web_Back_Dto_Info_Factory({cast: new Fl32_Web_Back_Helper_Cast(), STAGE});
+    /** @type {*} */
     let registry;
+    /** @type {*} */
     let fileService;
+    /** @type {*} */
     let respond;
+    /** @type {*} */
     let handler;
 
     beforeEach(() => {
@@ -28,7 +32,6 @@ describe('Fl32_Web_Back_Handler_Static', () => {
             registry,
             fileService,
             respond,
-            logger: {warn: () => {}},
             dtoInfoFactory,
             STAGE,
         });
@@ -41,13 +44,13 @@ describe('Fl32_Web_Back_Handler_Static', () => {
     });
 
     test('marks request completed when file is served', async () => {
-        registry.find = () => ({config: {}, rel: 'file.txt'});
+        registry.find = () => /** @type {*} */ ({config: {}, rel: 'file.txt'});
         fileService.serve = async () => true;
-        const context = {
+        const context = /** @type {*} */ ({
             request: {url: '/file.txt'},
             response: {},
             completed: false,
-        };
+        });
 
         await handler.handle(context);
 
@@ -55,11 +58,11 @@ describe('Fl32_Web_Back_Handler_Static', () => {
     });
 
     test('does nothing when no source matches request', async () => {
-        const context = {
+        const context = /** @type {*} */ ({
             request: {url: '/missing'},
             response: {},
             completed: false,
-        };
+        });
 
         await handler.handle(context);
 

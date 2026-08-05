@@ -20,18 +20,18 @@ export default class Server {
         const { createServer } = http;
         const { createServer: createServerH2, createSecureServer } = http2;
         const log = logger.forSource('Fl32_Web_Back_Server');
-        /** @type {Fl32_Web_Node_Http_Server} */
+        /** @type {Fl32_Web_Node_Http_Server|Fl32_Web_Node_Http2_Server|Fl32_Web_Node_Http2_SecureServer|undefined} */
         let _instance;
 
         // MAIN
         /**
-         * @returns {Fl32_Web_Node_Http_Server}
+         * @returns {Fl32_Web_Node_Http_Server|Fl32_Web_Node_Http2_Server|Fl32_Web_Node_Http2_SecureServer|undefined}
          */
         this.getInstance = () => _instance;
 
         /**
          * Starts the server with optional configuration.
-         * @param {Fl32_Web_Back_Config_Runtime$} cfg
+         * @param {Fl32_Web_Back_Config_Runtime$} [cfg]
          * @returns {Promise<void>}
          */
         this.start = async function (cfg) {
@@ -71,9 +71,10 @@ export default class Server {
          * @returns {Promise<void>}
          */
         this.stop = async function () {
-            if (_instance) {
+            const instance = _instance;
+            if (instance) {
                 await new Promise((resolve, reject) => {
-                    _instance.close(err => err ? reject(err) : resolve());
+                    instance.close(err => err ? reject(err) : resolve(undefined));
                 });
                 log.info('Server stopped');
                 _instance = undefined;

@@ -60,13 +60,13 @@ export default class Config {
 
 export class Value {
     /** @type {string} */
-    root;
+    root = '';
     /** @type {string} */
-    prefix;
+    prefix = '';
     /** @type {Record<string, string[]>|undefined} */
     allow;
     /** @type {string[]} */
-    defaults;
+    defaults = [];
 }
 
 /**

@@ -53,9 +53,9 @@ export default class Registry {
 
 export class Match {
     /** @type {Fl32_Web_Back_Handler_Static_A_Config__Value} */
-    config;
+    config = /** @type {*} */ (undefined);
     /** @type {string} */
-    rel;
+    rel = '';
 }
 
 /**

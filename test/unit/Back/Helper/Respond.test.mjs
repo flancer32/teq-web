@@ -35,7 +35,7 @@ class MockRes {
         this.writableEnded = false;
     }
 
-    writeHead(status, headers) {
+    writeHead(/** @type {number} */ status, /** @type {Fl32_Web_Back_Response_Headers|undefined} */ headers) {
         this.statusCode = status;
         this.headers = headers;
         this.headersSent = true;
@@ -53,11 +53,11 @@ describe('Fl32_Web_Back_Helper_Respond', () => {
 
     beforeEach(() => {
         /** @type {Fl32_Web_Back_Helper_Respond} */
-        respond = new Fl32_Web_Back_Helper_Respond({http2: mockHttp2});
+        respond = new Fl32_Web_Back_Helper_Respond({http2: /** @type {*} */ (mockHttp2)});
     });
 
     test('sends 200 OK response', () => {
-        const res = new MockRes();
+        const res = /** @type {*} */ (new MockRes());
         const ok = respond.code200_Ok({res, headers: {a: 'b'}, body: 'hi'});
         assert.strictEqual(ok, true);
         assert.strictEqual(res.statusCode, 200);
@@ -66,14 +66,14 @@ describe('Fl32_Web_Back_Helper_Respond', () => {
     });
 
     test('adds Allow header for 405 Method Not Allowed', () => {
-        const res = new MockRes();
+        const res = /** @type {*} */ (new MockRes());
         respond.code405_MethodNotAllowed({res});
         assert.strictEqual(res.statusCode, 405);
         assert.strictEqual(res.headers.allow, 'HEAD, GET, POST');
     });
 
     test('isWritable detects ended responses', () => {
-        const res = new MockRes();
+        const res = /** @type {*} */ (new MockRes());
         respond.code200_Ok({res});
         assert.strictEqual(respond.isWritable(res), false);
         const again = respond.code200_Ok({res});

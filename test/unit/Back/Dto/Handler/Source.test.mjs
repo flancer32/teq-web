@@ -4,12 +4,13 @@ import {Factory as Fl32_Web_Back_Dto_Source_Factory} from '../../../../../src/Ba
 
 test.describe('Fl32_Web_Back_Dto_Source', () => {
   test('should create valid config DTO with casted fields', async () => {
+    /** @type {*} */
     const cast = {
-      string: (d) => typeof d === 'string' ? d : undefined,
-      stringArrayMap: (d) => d,
-      array: (d, item) => Array.isArray(d) ? d.map(item) : [],
+      string: (/** @type {*} */ d) => typeof d === 'string' ? d : undefined,
+      stringArrayMap: (/** @type {*} */ d) => d,
+      array: (/** @type {*} */ d, /** @type {*} */ item) => Array.isArray(d) ? d.map(item) : [],
     };
-    /** @type {Fl32_Web_Back_Dto_Source$Factory} */
+    /** @type {Fl32_Web_Back_Dto_Source__Factory$} */
     const factory = new Fl32_Web_Back_Dto_Source_Factory({cast});
     const dto = factory.create({
       root: '/abs/path',
@@ -25,12 +26,13 @@ test.describe('Fl32_Web_Back_Dto_Source', () => {
   });
 
   test('should return undefined fields if values are invalid', async () => {
+    /** @type {*} */
     const cast = {
       string: () => undefined,
       stringArrayMap: () => ({}),
       array: () => [],
     };
-    /** @type {Fl32_Web_Back_Dto_Source$Factory} */
+    /** @type {Fl32_Web_Back_Dto_Source__Factory$} */
     const factory = new Fl32_Web_Back_Dto_Source_Factory({cast});
     const dto = factory.create({});
     assert.strictEqual(dto.root, undefined);

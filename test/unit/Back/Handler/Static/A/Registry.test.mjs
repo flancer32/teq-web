@@ -3,14 +3,19 @@ import assert from 'node:assert/strict';
 import Fl32_Web_Back_Handler_Static_A_Registry from '../../../../../../src/Back/Handler/Static/A/Registry.mjs';
 
 /** Simple config factory mock */
+/** @returns {*} */
 function getMockFactory() {
-    return { create: dto => ({ root: dto.root, prefix: dto.prefix }) };
+    return { create: (/** @type {*} */ dto) => ({ root: dto.root, prefix: dto.prefix }) };
 }
 
+/**
+ * @param {*} [onWarn]
+ * @returns {*}
+ */
 function createLoggerProvider(onWarn = () => {}) {
     return {
         forSource: () => ({
-            warn: (...args) => onWarn(...args),
+            warn: /** @type {(...args: unknown[]) => void} */ (...args) => onWarn(...args),
         }),
     };
 }
@@ -23,7 +28,7 @@ describe('Fl32_Web_Back_Handler_Static_A_Registry', () => {
             logger: createLoggerProvider(),
         });
 
-        registry.addConfigs([{ root: '/a', prefix: '/p/' }]);
+        registry.addConfigs([/** @type {*} */ ({ root: '/a', prefix: '/p/' })]);
         const match = registry.find('/p/file.txt');
 
         assert.ok(match);
@@ -37,8 +42,8 @@ describe('Fl32_Web_Back_Handler_Static_A_Registry', () => {
             logger: createLoggerProvider(),
         });
 
-        registry.addConfigs([{ root: '/a', prefix: '/p/' }]);
-        registry.addConfigs([{ root: '/b', prefix: '/p/s/' }]);
+        registry.addConfigs([/** @type {*} */ ({ root: '/a', prefix: '/p/' })]);
+        registry.addConfigs([/** @type {*} */ ({ root: '/b', prefix: '/p/s/' })]);
 
         const match = registry.find('/p/s/file.txt');
         assert.ok(match);
@@ -52,9 +57,9 @@ describe('Fl32_Web_Back_Handler_Static_A_Registry', () => {
             logger: createLoggerProvider(),
         });
 
-        registry.addConfigs([{ root: '/a', prefix: '/p/' }]);
-        registry.addConfigs([{ root: '/b', prefix: '/p/s/' }]);
-        registry.addConfigs([{ root: '/c', prefix: '/p/s/' }]);
+        registry.addConfigs([/** @type {*} */ ({ root: '/a', prefix: '/p/' })]);
+        registry.addConfigs([/** @type {*} */ ({ root: '/b', prefix: '/p/s/' })]);
+        registry.addConfigs([/** @type {*} */ ({ root: '/c', prefix: '/p/s/' })]);
 
         const match = registry.find('/p/s/test.txt');
         assert.ok(match);
@@ -62,15 +67,16 @@ describe('Fl32_Web_Back_Handler_Static_A_Registry', () => {
     });
 
     test('logs warning when prefix already exists', async () => {
+        /** @type {Array<*>} */
         const log = [];
         /** @type {Fl32_Web_Back_Handler_Static_A_Registry} */
         const registry = new Fl32_Web_Back_Handler_Static_A_Registry({
             configFactory: getMockFactory(),
-            logger: createLoggerProvider((...args) => log.push(args)),
+            logger: createLoggerProvider(/** @type {(...args: unknown[]) => void} */ ((...args) => log.push(args))),
         });
 
-        registry.addConfigs([{ root: '/a', prefix: '/p/' }]);
-        registry.addConfigs([{ root: '/b', prefix: '/p/' }]);
+        registry.addConfigs([/** @type {*} */ ({ root: '/a', prefix: '/p/' })]);
+        registry.addConfigs([/** @type {*} */ ({ root: '/b', prefix: '/p/' })]);
 
         assert.strictEqual(log.length, 1);
         assert.ok(log[0][0].includes('/p/'));
@@ -84,13 +90,15 @@ describe('Fl32_Web_Back_Handler_Static_A_Registry', () => {
         });
 
         registry.addConfigs([
-            { root: '/a', prefix: '/p/' },
-            { root: '/b', prefix: '/p/s/' }
+            /** @type {*} */ ({ root: '/a', prefix: '/p/' }),
+            /** @type {*} */ ({ root: '/b', prefix: '/p/s/' })
         ]);
 
         const match1 = registry.find('/p/s/x.txt');
         const match2 = registry.find('/p/y.txt');
 
+        assert.ok(match1);
+        assert.ok(match2);
         assert.strictEqual(match1.config.root, '/b');
         assert.strictEqual(match2.config.root, '/a');
     });

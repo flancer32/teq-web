@@ -3,13 +3,13 @@ declare global {
   type Fl32_Web_Back_Api_Handler$ = InstanceType<typeof import("./src/Back/Api/Handler.mjs").default>;
 
   type Fl32_Web_Back_Config_Runtime = typeof import("./src/Back/Config/Runtime.mjs").default;
-  type Fl32_Web_Back_Config_Runtime$ = InstanceType<typeof import("./src/Back/Config/Runtime.mjs").default>;
+  type Fl32_Web_Back_Config_Runtime$ = import("./src/Back/Config/Runtime.mjs").Data;
   type Fl32_Web_Back_Config_Runtime__Data = import("./src/Back/Config/Runtime.mjs").Data;
   type Fl32_Web_Back_Config_Runtime__Factory = typeof import("./src/Back/Config/Runtime.mjs").Factory;
   type Fl32_Web_Back_Config_Runtime__Factory$ = InstanceType<typeof import("./src/Back/Config/Runtime.mjs").Factory>;
 
   type Fl32_Web_Back_Config_Runtime_Tls = typeof import("./src/Back/Config/Runtime/Tls.mjs").default;
-  type Fl32_Web_Back_Config_Runtime_Tls$ = InstanceType<typeof import("./src/Back/Config/Runtime/Tls.mjs").default>;
+  type Fl32_Web_Back_Config_Runtime_Tls$ = import("./src/Back/Config/Runtime/Tls.mjs").Data;
   type Fl32_Web_Back_Config_Runtime_Tls__Data = import("./src/Back/Config/Runtime/Tls.mjs").Data;
   type Fl32_Web_Back_Config_Runtime_Tls__Factory = typeof import("./src/Back/Config/Runtime/Tls.mjs").Factory;
   type Fl32_Web_Back_Config_Runtime_Tls__Factory$ = InstanceType<typeof import("./src/Back/Config/Runtime/Tls.mjs").Factory>;
@@ -68,7 +68,7 @@ declare global {
   type Fl32_Web_Back_Server$ = InstanceType<typeof import("./src/Back/Server.mjs").default>;
 
   type Fl32_Web_Back_Response_Body = string | object;
-  type Fl32_Web_Back_Response_Headers = {[key: string]: string};
+  type Fl32_Web_Back_Response_Headers = {[key: string]: string | number | string[]};
   type Fl32_Web_Back_Response_Target = Fl32_Web_Node_Http_ServerResponse | Fl32_Web_Node_Http2_ServerResponse;
 
   type Fl32_Web_Node_Fs = typeof import("node:fs");
@@ -77,6 +77,8 @@ declare global {
   type Fl32_Web_Node_Http_IncomingMessage = import("node:http").IncomingMessage;
   type Fl32_Web_Node_Http_ServerResponse = import("node:http").ServerResponse;
   type Fl32_Web_Node_Http2 = typeof import("node:http2");
+  type Fl32_Web_Node_Http2_Server = import("node:http2").Http2Server;
+  type Fl32_Web_Node_Http2_SecureServer = import("node:http2").Http2SecureServer;
   type Fl32_Web_Node_Http2_ServerRequest = import("node:http2").Http2ServerRequest;
   type Fl32_Web_Node_Http2_ServerResponse = import("node:http2").Http2ServerResponse;
   type Fl32_Web_Node_Path = typeof import("node:path");

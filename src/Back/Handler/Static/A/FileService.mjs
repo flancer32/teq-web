@@ -47,13 +47,17 @@ export default class FileService {
                     [H2.HTTP2_HEADER_CONTENT_TYPE]: helpMime.getByExt(ext),
                     [H2.HTTP2_HEADER_LAST_MODIFIED]: stat.mtime.toUTCString(),
                 };
-                res.writeHead(H2.HTTP_STATUS_OK, headers);
+                /** @type {Fl32_Web_Back_Response_Target & {writeHead(status: number, headers?: Record<string, string|number>): void}} */
+                const target = /** @type {*} */ (res);
+                target.writeHead(H2.HTTP_STATUS_OK, headers);
                 stream.pipe(res);
                 return true;
             } catch (e) {
-                if (e?.code === 'ENOENT') {
+                /** @type {{code?: string}} */
+                const err = /** @type {*} */ (e);
+                if (err.code === 'ENOENT') {
                     log.info(`File not found: ${fsPath}`);
-                } else if (e?.code === 'EACCES' || e?.code === 'EPERM') {
+                } else if (err.code === 'EACCES' || err.code === 'EPERM') {
                     log.warn(`Access denied: ${fsPath}`);
                 } else {
                     log.error('Static file service failed', {

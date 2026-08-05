@@ -5,9 +5,9 @@
  * @description Source DTO for static handler configuration.
  */
 export default class Source {
-    /** @type {string} */
+    /** @type {string|undefined} */
     root;
-    /** @type {string} */
+    /** @type {string|undefined} */
     prefix;
     /** @type {{[key: string]: string[]}} */
     allow = {};

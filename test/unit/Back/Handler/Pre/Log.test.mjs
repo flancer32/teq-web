@@ -4,19 +4,25 @@ import Fl32_Web_Back_Handler_Pre_Log from '../../../../../src/Back/Handler/Pre/L
 import {Factory as Fl32_Web_Back_Dto_Info_Factory} from '../../../../../src/Back/Dto/Info.mjs';
 import Fl32_Web_Back_Helper_Cast from '../../../../../src/Back/Helper/Cast.mjs';
 
+/**
+ * @param {Array<*>} log
+ * @returns {*}
+ */
 function createLoggerProvider(log) {
     return {
         forSource: () => ({
-            debug: (msg) => log.push(msg),
+            debug: (/** @type {string} */ msg) => log.push(msg),
         }),
     };
 }
 
 describe('Fl32_Web_Back_Handler_Pre_Log', () => {
+    /** @type {Array<*>} */
     const log = [];
     const STAGE = Object.freeze({INIT: 'INIT', PROCESS: 'PROCESS', FINALIZE: 'FINALIZE'});
     const cast = new Fl32_Web_Back_Helper_Cast();
     const dtoInfoFactory = new Fl32_Web_Back_Dto_Info_Factory({cast, STAGE});
+    /** @type {*} */
     let logger;
 
     beforeEach(() => {
@@ -28,7 +34,7 @@ describe('Fl32_Web_Back_Handler_Pre_Log', () => {
         /** @type {Fl32_Web_Back_Handler_Pre_Log} */
         const handler = new Fl32_Web_Back_Handler_Pre_Log({logger, dtoInfoFactory, STAGE});
         assert.strictEqual(handler.getRegistrationInfo().name, 'Fl32_Web_Back_Handler_Pre_Log');
-        await handler.handle({request: {method: 'GET', url: '/path'}});
+        await handler.handle(/** @type {*} */ ({request: {method: 'GET', url: '/path'}}));
         assert.deepStrictEqual(log, ['GET /path']);
     });
 });

@@ -3,15 +3,18 @@
 ## [Unreleased]
 
 ### Added
+
 - CLI command `fl32:web:start` for starting the web server through `@teqfw/cli` host.
 
 ## [0.15.0] - 2026-07-14 - Listening host and TeqFW ESM conformance
 
 ### Added
+
 - Added optional flat runtime field `host` for selecting the native server bind address.
 - Added unit and integration coverage for forwarding and applying an explicit listening host.
 
 ### Changed
+
 - Renamed non-runtime default-exported classes to their final namespace segments while preserving full `@namespace` annotations and DI identifiers.
 - Reused the TLS runtime `Data` shape as the `configure()` input contract.
 - Updated human-facing and AI-facing usage documentation with explicit loopback-binding guidance.
@@ -20,36 +23,44 @@
 - Updated package version metadata to `0.15.0`.
 
 ### Removed
+
 - Removed the redundant `Fl32_Web_Back_Config_Runtime_Tls.Params` export and `Fl32_Web_Back_Config_Runtime_Tls__Params` type alias.
 
 ### Compatibility
+
 - Omitting `host` preserves the previous Node.js default listen-address selection.
 - Default imports and DI identifiers are unchanged. Code that inspects default class `name` values or references the removed TLS `Params` type must migrate to the short class name or `Fl32_Web_Back_Config_Runtime_Tls__Data` respectively.
 
 ## [0.14.0] - 2026-07-12 - Completion contract simplification and agent interface hardening
 
 ### Added
+
 - Added `ai/recipes.md` with canonical agent-oriented patterns for custom handlers, static handler setup, and external transport adapters.
 
 ### Changed
+
 - Simplified request completion semantics to rely on `context.completed = true` as the stable handler-facing contract.
 - Realigned `README.md`, `ai/`, tests, and code-level context documentation with the preferred class-based handler shape and explicit static-source configuration guidance.
 - Strengthened AI-facing static handler documentation with explicit `allow` semantics and configuration examples.
 - Updated package version metadata to `0.14.0`.
 
 ### Removed
+
 - Removed runtime helper methods `context.complete()` and `context.isCompleted()` from `Fl32_Web_Back_PipelineEngine` request contexts.
 
 ### Compatibility
+
 - Existing custom handlers that still call `context.complete()` or read `context.isCompleted()` will break and must be migrated to the `completed` flag contract.
 
 ## [0.13.0] - 2026-07-10 - TeqFW logging migration and package surface alignment
 
 ### Added
+
 - Added `jsconfig.json` to the published npm package surface.
 - Added class-and-instance public type aliases in `types.d.ts` following the TeqFW `$` instance convention.
 
 ### Changed
+
 - Migrated runtime logging from the local logger facade to `@teqfw/log` with source-bound logger usage.
 - Removed the direct `@teqfw/di` package dependency and relied on the platform component graph through `@teqfw/log`.
 - Aligned README, `ai/`, tests, and code-level context documentation with the current logging and typing contracts.
@@ -59,10 +70,12 @@
 ## [0.12.0] - 2026-07-04 - Pipeline locking and transport contract alignment
 
 ### Added
+
 - Added unit and integration coverage for direct request execution with an unlocked pipeline.
 - Added unit coverage for the request-context DTO contract.
 
 ### Changed
+
 - Stopped pipeline processing when the response is no longer writable.
 - Required explicit handler locking before direct `PipelineEngine` request execution.
 - Clarified the transport model as plain HTTP plus secure web transport and aligned AI-facing documentation with the current server behavior.
@@ -72,9 +85,11 @@
 ## [0.11.0] - 2026-04-01 - TeqFW spec alignment and runtime contract updates
 
 ### Added
+
 - Added TeqFW specification documents for DI usage, ES module conventions, and package metadata expectations.
 
 ### Changed
+
 - Reworked runtime configuration docs and examples to follow the current spec-level contract.
 - Tightened runtime configuration implementation and unit tests to match the updated contract.
 - Replaced legacy TeqFW convention documents with the current spec-oriented documentation layout.
@@ -83,6 +98,7 @@
 ## [0.10.0] - 2026-03-31 - Validator conformance and release preparation
 
 ### Changed
+
 - Updated handler interfaces and runtime DTOs to conform to validator requirements.
 - Removed the ESLint development dependency after aligning the codebase with the current validation approach.
 - Updated package version metadata to `0.10.0`.
@@ -90,11 +106,13 @@
 ## [0.9.0] - 2026-03-25 - Release preparation for minor version bump
 
 ### Changed
+
 - Updated package version metadata to `0.9.0`.
 
 ## [0.8.0] - 2026-03-17 - Flat runtime configuration and server startup alignment
 
 ### Changed
+
 - Flattened runtime startup configuration to top-level fields `port`, `type`, and `tls` (without nested `server` branch).
 - Aligned server startup and runtime components with the updated flat runtime configuration contract.
 - Updated and verified the `ai/` consumer interface documentation to reflect current runtime usage patterns.
@@ -103,6 +121,7 @@
 ## [0.7.0] - 2026-03-16 - Runtime composition and agent interface alignment
 
 ### Changed
+
 - Refined runtime configuration composition for server and TLS branches and preserved immutable runtime state semantics.
 - Updated and verified the `ai/` consumer interface documentation against the current package behavior and usage rules.
 - Updated package version metadata to `0.7.0`.
@@ -110,9 +129,11 @@
 ## [0.6.0] - 2026-03-16 - Runtime configuration hardening
 
 ### Added
+
 - Added JSDoc coverage for request-context DTO usage and runtime configuration components.
 
 ### Changed
+
 - Refined runtime configuration composition for server and TLS settings.
 - Hardened runtime configuration objects to remain immutable after initialization.
 - Updated package version metadata to `0.6.0`.
@@ -120,11 +141,13 @@
 ## [0.5.0] - 2026-03-13
 
 ### Added
+
 - Added `ai/` documentation for agent-oriented project materials.
 - Added a non-resettable request-context attribute.
 - Added component type conventions to the cognitive context.
 
 ### Changed
+
 - Updated `README.md` with package and agent-interface documentation refinements.
 - Migrated dependency injection to `@teqfw/di` v2 and updated package metadata accordingly.
 - Refined architecture and terminology around the dispatcher, request context, and transport boundary.
@@ -135,35 +158,42 @@
 - Refreshed runtime and development dependencies.
 
 ### Removed
+
 - Removed legacy code, tests, and the shared `common.mjs` unit-test helper.
 
 ## [0.4.0] - 2025-12-20
 
 ### Added
+
 - TypeScript type declarations for the public API via `types.d.ts`.
 - ADSM cognitive context in `ctx/`.
 
 ## [0.3.1] - 2025-08-21
 
 ### Added
+
 - Added TeqFW descriptor to define package namespace for @teqfw/core.
 
 ## [0.3.0] - 2025-06-26
 
 ### Added
+
 - Generalized NPM handler into a Source handler with DTO-based configuration.
 - Unit tests for the dispatcher and built-in handlers.
 
 ### Changed
+
 - Static handler refactored into modular components with before/after ordering.
 
 ### Fixed
+
 - Improved validation messages for static handler configuration.
 - File service now reports specific filesystem errors.
 
 ## [0.2.0] - 2025-06-21
 
 ### Added
+
 - Integration test covering static file serving from `node_modules`.
 - Static handler can serve files from `node_modules` via `Handler_Source`.
 - JSDoc examples for initializing the static handler with a `Handler_Source` DTO.
@@ -171,6 +201,7 @@
 ## [0.1.0] - 2025-06-11
 
 ### Added
+
 - Initial release of `@flancer32/teq-web`, a TeqFW plugin for centralized HTTP(S) request handling.
 - Dispatcher with three-stage lifecycle: `pre`, `process`, and `post`, each with isolated execution logic.
 - Middleware registration with support for execution order via `before`/`after` dependencies.

@@ -4,7 +4,7 @@ import path from 'node:path';
 import Fl32_Web_Back_Handler_Static_A_Fallback from '../../../../../../src/Back/Handler/Static/A/Fallback.mjs';
 
 describe('Fl32_Web_Back_Handler_Static_A_Fallback', () => {
-    /** @type {{ promises: { stat: (p: string) => Promise<any> }, _add: (p: string, isFile: boolean) => void }} */
+    /** @type {*} */
     let mockFs;
 
     beforeEach(() => {
@@ -12,7 +12,7 @@ describe('Fl32_Web_Back_Handler_Static_A_Fallback', () => {
 
         mockFs = {
             promises: {
-                stat: async p => {
+                stat: async (/** @type {string} */ p) => {
                     // normalize path: backslashes → slashes, remove duplicate and trailing slash
                     const key = p.replace(/\\/g, '/').replace(/\/+/g, '/').replace(/\/$/, '');
                     if (!storage.has(key)) throw new Error('ENOENT');
@@ -20,7 +20,7 @@ describe('Fl32_Web_Back_Handler_Static_A_Fallback', () => {
                 }
             },
             /** Adds a file or directory into the mock storage */
-            _add: (p, isFile) => {
+            _add: (/** @type {string} */ p, /** @type {boolean} */ isFile) => {
                 const key = p.replace(/\\/g, '/').replace(/\/+/g, '/').replace(/\/$/, '');
                 storage.set(key, {
                     isFile: () => isFile,
@@ -30,9 +30,9 @@ describe('Fl32_Web_Back_Handler_Static_A_Fallback', () => {
         };
     });
 
-    function addFile(p) { mockFs._add(p, true); }
+    function addFile(/** @type {string} */ p) { mockFs._add(p, true); }
 
-    function addDir(p) { mockFs._add(p, false); }
+    function addDir(/** @type {string} */ p) { mockFs._add(p, false); }
 
     /** Creates and returns a configured Fallback instance */
     async function getFallback() {

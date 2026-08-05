@@ -5,16 +5,18 @@ import Fl32_Web_Back_Handler_Static_A_FileService from '../../../../../../src/Ba
 import Fl32_Web_Back_Handler_Static_A_Resolver from '../../../../../../src/Back/Handler/Static/A/Resolver.mjs';
 import Fl32_Web_Back_Handler_Static_A_Fallback from '../../../../../../src/Back/Handler/Static/A/Fallback.mjs';
 
-const normalize = p => p.replace(/\\/g, '/').replace(/\/+/g, '/').replace(/\/$/, '');
+const normalize = (/** @type {string} */ p) => p.replace(/\\/g, '/').replace(/\/+/g, '/').replace(/\/$/, '');
+/** @type {*} */
 const mockPath = {
-  resolve: (...parts) => normalize(parts.join('/')),
-  join: (...parts) => normalize(parts.join('/')),
-  isAbsolute: p => String(p).startsWith('/'),
-  extname: p => {
+  resolve: /** @type {(...parts: string[]) => string} */ (...parts) => normalize(parts.join('/')),
+  join: /** @type {(...parts: string[]) => string} */ (...parts) => normalize(parts.join('/')),
+  isAbsolute: (/** @type {*} */ p) => String(p).startsWith('/'),
+  extname: (/** @type {string} */ p) => {
     const m = String(p).match(/(\.[^./]+)$/);
     return m ? m[1] : '';
   }
 };
+/** @type {*} */
 const mockHttp2 = {
   constants: {
     HTTP2_HEADER_CONTENT_LENGTH: 'content-length',
@@ -24,12 +26,16 @@ const mockHttp2 = {
   }
 };
 
+/**
+ * @param {Array<*>} logs
+ * @returns {*}
+ */
 function createLoggerProvider(logs) {
   return {
     forSource: () => ({
-      info: (...args) => logs.push(['info', ...args]),
-      warn: (...args) => logs.push(['warn', ...args]),
-      error: (...args) => logs.push(['error', ...args])
+      info: /** @type {(...args: unknown[]) => void} */ (...args) => { logs.push(['info', ...args]); },
+      warn: /** @type {(...args: unknown[]) => void} */ (...args) => { logs.push(['warn', ...args]); },
+      error: /** @type {(...args: unknown[]) => void} */ (...args) => { logs.push(['error', ...args]); }
     })
   };
 }
@@ -49,15 +55,15 @@ class MockRes extends EventEmitter {
   get writableEnded() {
     return this._ended;
   }
-  writeHead(status, headers) {
+  writeHead(/** @type {number} */ status, /** @type {*} */ headers) {
     this.status = status;
     this.headers = headers;
     this._hs = true;
   }
-  write(chunk) {
+  write(/** @type {string} */ chunk) {
     this.data += chunk;
   }
-  end(chunk) {
+  end(/** @type {string|undefined} */ chunk) {
     if (chunk) this.write(chunk);
     this._ended = true;
     this.emit('finish');
@@ -65,7 +71,20 @@ class MockRes extends EventEmitter {
 }
 
 describe('Fl32_Web_Back_Handler_Static_A_FileService', () => {
-  let storage, mockFs, mime, logger, logs, addFile, addDir;
+  /** @type {Map<string, *>} */
+  let storage;
+  /** @type {*} */
+  let mockFs;
+  /** @type {*} */
+  let mime;
+  /** @type {*} */
+  let logger;
+  /** @type {Array<*>} */
+  let logs;
+  /** @type {*} */
+  let addFile;
+  /** @type {*} */
+  let addDir;
 
   beforeEach(() => {
     storage = new Map();
@@ -73,7 +92,7 @@ describe('Fl32_Web_Back_Handler_Static_A_FileService', () => {
     // mock fs.promises.stat and createReadStream
     mockFs = {
       promises: {
-        stat: async p => {
+        stat: async (/** @type {string} */ p) => {
           const key = normalize(p);
           if (!storage.has(key)) throw new Error('ENOENT');
           const entry = storage.get(key);
@@ -85,8 +104,8 @@ describe('Fl32_Web_Back_Handler_Static_A_FileService', () => {
           };
         }
       },
-      createReadStream: p => ({
-        pipe: res => {
+      createReadStream: (/** @type {string} */ p) => ({
+        pipe: (/** @type {*} */ res) => {
           setImmediate(() => {
             const key = normalize(p);
             const entry = storage.get(key);
@@ -106,7 +125,7 @@ describe('Fl32_Web_Back_Handler_Static_A_FileService', () => {
     logger = createLoggerProvider(logs);
 
     // helpers to populate mock FS
-    addFile = (p, content) => {
+    addFile = (/** @type {string} */ p, /** @type {string} */ content) => {
       const key = normalize(p);
       storage.set(key, {
         isFile: () => true,
@@ -116,7 +135,7 @@ describe('Fl32_Web_Back_Handler_Static_A_FileService', () => {
         content
       });
     };
-    addDir = p => {
+    addDir = (/** @type {string} */ p) => {
       const key = normalize(p);
       storage.set(key, {
         isFile: () => false,
@@ -130,7 +149,7 @@ describe('Fl32_Web_Back_Handler_Static_A_FileService', () => {
   test('serves existing file', async () => {
     addFile('/root/a.txt', 'A');
 
-    /** @type {{ root: string, prefix: string, defaults: string[] }} */
+    /** @type {*} */
     const config = { root: '/root', prefix: '/p/', defaults: ['index.html'] };
     const res = new MockRes();
 
@@ -145,7 +164,7 @@ describe('Fl32_Web_Back_Handler_Static_A_FileService', () => {
       fallback: new Fl32_Web_Back_Handler_Static_A_Fallback({fs: mockFs, path: mockPath}),
     });
 
-    const ok = await service.serve(config, 'a.txt', {}, res);
+    const ok = await service.serve(config, 'a.txt', /** @type {*} */ ({}), /** @type {*} */ (res));
     await new Promise(r => res.on('finish', r));
 
     assert.ok(ok);
@@ -156,7 +175,7 @@ describe('Fl32_Web_Back_Handler_Static_A_FileService', () => {
   test('returns false when file not found', async () => {
     addDir('/root');
 
-    /** @type {{ root: string, prefix: string, defaults: string[] }} */
+    /** @type {*} */
     const config = { root: '/root', prefix: '/p/', defaults: ['index.html'] };
     const res = new MockRes();
 
@@ -171,17 +190,17 @@ describe('Fl32_Web_Back_Handler_Static_A_FileService', () => {
       fallback: new Fl32_Web_Back_Handler_Static_A_Fallback({fs: mockFs, path: mockPath}),
     });
 
-    const ok = await service.serve(config, 'missing.txt', {}, res);
+    const ok = await service.serve(config, 'missing.txt', /** @type {*} */ ({}), /** @type {*} */ (res));
     assert.strictEqual(ok, false);
   });
 
   test('logs info when file is missing during stat', async () => {
     mockFs.promises.stat = async () => {
-      const err = new Error('ENOENT');
+      const err = /** @type {Error & {code: string}} */ (new Error('ENOENT'));
       err.code = 'ENOENT';
       throw err;
     };
-    /** @type {{ root: string, prefix: string, defaults: string[] }} */
+    /** @type {*} */
     const config = { root: '/root', prefix: '/p/', defaults: [] };
     const res = new MockRes();
 
@@ -196,7 +215,7 @@ describe('Fl32_Web_Back_Handler_Static_A_FileService', () => {
       fallback: { apply: async p => p },
     });
 
-    const ok = await service.serve(config, 'missing.txt', {}, res);
+    const ok = await service.serve(config, 'missing.txt', /** @type {*} */ ({}), /** @type {*} */ (res));
 
     assert.strictEqual(ok, false);
     assert.strictEqual(logs.length, 1);
@@ -206,12 +225,12 @@ describe('Fl32_Web_Back_Handler_Static_A_FileService', () => {
   test('logs warn on access errors', async () => {
     /** force EACCES error */
     mockFs.promises.stat = async () => {
-      const err = new Error('EACCES');
+      const err = /** @type {Error & {code: string}} */ (new Error('EACCES'));
       err.code = 'EACCES';
       throw err;
     };
 
-    /** @type {{ root: string, prefix: string, defaults: string[] }} */
+    /** @type {*} */
     const config = { root: '/root', prefix: '/p/', defaults: [] };
     const res = new MockRes();
 
@@ -226,7 +245,7 @@ describe('Fl32_Web_Back_Handler_Static_A_FileService', () => {
       fallback: { apply: async p => p },
     });
 
-    const ok = await service.serve(config, 'denied.txt', {}, res);
+    const ok = await service.serve(config, 'denied.txt', /** @type {*} */ ({}), /** @type {*} */ (res));
 
     assert.strictEqual(ok, false);
     assert.strictEqual(logs.length, 1);
@@ -237,7 +256,7 @@ describe('Fl32_Web_Back_Handler_Static_A_FileService', () => {
     addFile('/root/x.txt', 'X');
     mockFs.createReadStream = () => { throw new Error('boom'); };
 
-    /** @type {{ root: string, prefix: string, defaults: string[] }} */
+    /** @type {*} */
     const config = { root: '/root', prefix: '/p/', defaults: [] };
     const res = new MockRes();
 
@@ -252,7 +271,7 @@ describe('Fl32_Web_Back_Handler_Static_A_FileService', () => {
       fallback: { apply: async p => p },
     });
 
-    const ok = await service.serve(config, 'x.txt', {}, res);
+    const ok = await service.serve(config, 'x.txt', /** @type {*} */ ({}), /** @type {*} */ (res));
 
     assert.strictEqual(ok, false);
     assert.strictEqual(logs.length, 1);

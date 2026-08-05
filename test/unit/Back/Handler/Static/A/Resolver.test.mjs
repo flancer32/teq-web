@@ -12,7 +12,8 @@ describe('Fl32_Web_Back_Handler_Static_A_Resolver', () => {
         const config = {
             root: resolve('/root'),
             prefix: '/p/',
-            allow: { pkg: ['a.txt'] }
+            allow: { pkg: ['a.txt'] },
+            defaults: []
         };
 
         const fsPath = resolver.resolve(config, 'pkg/a.txt');
@@ -27,7 +28,8 @@ describe('Fl32_Web_Back_Handler_Static_A_Resolver', () => {
         const config = {
             root: resolve('/root'),
             prefix: '/p/',
-            allow: { pkg: ['a.txt'] }
+            allow: { pkg: ['a.txt'] },
+            defaults: []
         };
 
         const result = resolver.resolve(config, 'pkg/b.txt');
@@ -42,7 +44,8 @@ describe('Fl32_Web_Back_Handler_Static_A_Resolver', () => {
         const config = {
             root: resolve('/root'),
             prefix: '/p/',
-            allow: { pkg: ['a.txt'] }
+            allow: { pkg: ['a.txt'] },
+            defaults: []
         };
 
         assert.throws(
@@ -59,7 +62,8 @@ describe('Fl32_Web_Back_Handler_Static_A_Resolver', () => {
         const config = {
             root: resolve('/root'),
             prefix: '/p/',
-            allow: { pkg: ['a.txt'] }
+            allow: { pkg: ['a.txt'] },
+            defaults: []
         };
 
         assert.throws(

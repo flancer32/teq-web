@@ -24,14 +24,17 @@ async function createContainer() {
     return container;
 }
 
+/**
+ * @returns {TeqFw_Log_Provider$}
+ */
 function createLoggerProvider() {
-    return {
+    return /** @type {TeqFw_Log_Provider$} */ (/** @type {*} */ ({
         forSource: () => ({
             info: () => {},
             warn: () => {},
             error: () => {},
         }),
-    };
+    }));
 }
 
 /**
@@ -57,7 +60,7 @@ function createResponse() {
 /**
  * @param {string} label
  * @param {Array<*>} log
- * @returns {{listening:boolean,on:(name:string,handler:Function)=>void,listen:(...args:any[])=>void,close:(cb?:Function)=>void,emitRequest:(req:any,res:any)=>Promise<void>}}
+ * @returns {{listening:boolean,on:(name:string, handler:(req:any,res:any)=>Promise<void>)=>void,listen:(...args:any[])=>void,close:(cb?:Function)=>void,emitRequest:(req:any,res:any)=>Promise<void>}}
  */
 function createMockServer(label, log) {
     /** @type {((req:any,res:any)=>Promise<void>)|undefined} */
@@ -90,9 +93,12 @@ describe('Fl32_Web_Back_Server integration', () => {
         const container = await createContainer();
         const runtimeFactory = await container.get('Fl32_Web_Back_Config_Runtime__Factory$');
         runtimeFactory.freeze();
-        const log = [];
+        const log = /** @type {Array<*>} */ ([]);
+        /** @type {*} */
         const mockHttpServer = createMockServer('http', log);
+        /** @type {*} */
         const mockHttp = {createServer: () => mockHttpServer};
+        /** @type {*} */
         const mockHttp2 = {
             createServer: () => createMockServer('http2', log),
             createSecureServer: () => createMockServer('https', log),
@@ -109,7 +115,7 @@ describe('Fl32_Web_Back_Server integration', () => {
 
         await server.start();
         const res = createResponse();
-        await server.getInstance().emitRequest({url: '/missing'}, res);
+        await /** @type {*} */ (server.getInstance()).emitRequest({url: '/missing'}, res);
 
         assert.strictEqual(res.statusCode, 404);
         assert.deepStrictEqual(log, ['http.on', ['http.listen', 3000]]);
@@ -132,11 +138,11 @@ describe('Fl32_Web_Back_Server integration', () => {
         });
 
         const server = new Fl32_Web_Back_Server({
-            http: {createServer: () => createMockServer('http', [])},
-            http2: {
+            http: /** @type {*} */ ({createServer: () => createMockServer('http', [])}),
+            http2: /** @type {*} */ ({
                 createServer: () => createMockServer('http2', []),
                 createSecureServer: () => createMockServer('https', []),
-            },
+            }),
             config: await container.get('Fl32_Web_Back_Config_Runtime$'),
             logger: createLoggerProvider(),
             pipelineEngine,
@@ -145,7 +151,7 @@ describe('Fl32_Web_Back_Server integration', () => {
 
         await server.start();
         const res = createResponse();
-        await server.getInstance().emitRequest({url: '/boom'}, res);
+        await /** @type {*} */ (server.getInstance()).emitRequest({url: '/boom'}, res);
 
         assert.strictEqual(res.statusCode, 500);
         assert.strictEqual(res.body, 'Internal Server Error');
@@ -168,13 +174,14 @@ describe('Fl32_Web_Back_Server integration', () => {
         });
 
         try {
-            await server.start({host: '127.0.0.1', port: 0, type: 'http'});
+            await server.start(/** @type {*} */ ({host: '127.0.0.1', port: 0, type: 'http'}));
             const instance = server.getInstance();
+            if (!instance) throw new Error('Server not started');
             if (!instance.listening) await once(instance, 'listening');
             const address = instance.address();
 
             assert.equal(typeof address, 'object');
-            assert.equal(address?.address, '127.0.0.1');
+            assert.equal(address && typeof address === 'object' ? address.address : null, '127.0.0.1');
         } finally {
             await server.stop();
         }

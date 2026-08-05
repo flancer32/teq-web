@@ -10,6 +10,12 @@ describe('Fl32_Web_Back_Helper_Order_Kahn', () => {
             const sorter = new Fl32_Web_Back_Helper_Order_Kahn();
 
             // Mock handlers with dependencies
+            /**
+             * @param {string} name
+             * @param {string[]} [after]
+             * @param {string[]} [before]
+             * @returns {*}
+             */
             const mk = (name, after = [], before = []) => ({
                 getRegistrationInfo: () => ({name, after, before})
             });
@@ -28,6 +34,12 @@ describe('Fl32_Web_Back_Helper_Order_Kahn', () => {
             /** @type {Fl32_Web_Back_Helper_Order_Kahn} */
             const sorter = new Fl32_Web_Back_Helper_Order_Kahn();
 
+            /**
+             * @param {string} name
+             * @param {string[]} [after]
+             * @param {string[]} [before]
+             * @returns {*}
+             */
             const mk = (name, after = [], before = []) => ({
                 getRegistrationInfo: () => ({name, after, before})
             });
@@ -44,6 +56,12 @@ describe('Fl32_Web_Back_Helper_Order_Kahn', () => {
             /** @type {Fl32_Web_Back_Helper_Order_Kahn} */
             const sorter = new Fl32_Web_Back_Helper_Order_Kahn();
 
+            /**
+             * @param {string} name
+             * @param {string[]} [after]
+             * @param {string[]} [before]
+             * @returns {*}
+             */
             const mk = (name, after = [], before = []) => ({
                 getRegistrationInfo: () => ({name, after, before})
             });

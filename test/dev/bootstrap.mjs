@@ -8,13 +8,18 @@ const PORT = Number.parseInt(process.env.PORT ?? '3000', 10);
 const APP_ROOT = path.resolve(import.meta.dirname, '../..');
 const WEB_ROOT = path.resolve(import.meta.dirname, './web');
 
+/**
+ * @param {Fl32_Web_Node_Http_Server|Fl32_Web_Node_Http2_Server|Fl32_Web_Node_Http2_SecureServer|undefined} instance
+ * @returns {Promise<void>}
+ */
 function waitForServerStart(instance) {
+    if (!instance) throw new Error('Server instance is not set');
     return new Promise((resolve, reject) => {
         const onListening = () => {
             instance.off('error', onError);
             resolve();
         };
-        const onError = (error) => {
+        const onError = (/** @type {Error} */ error) => {
             instance.off('listening', onListening);
             reject(error);
         };
@@ -85,7 +90,7 @@ async function main() {
     await server.start();
     await waitForServerStart(server.getInstance());
 
-    const shutdown = async (signal) => {
+    const shutdown = async (/** @type {string} */ signal) => {
         console.info(`[dev] Received ${signal}, stopping server...`);
         await server.stop();
         process.exit(0);

@@ -3,12 +3,16 @@ import assert from 'node:assert/strict';
 import Fl32_Web_Back_Server from '../../../src/Back/Server.mjs';
 import Fl32_Web_Back_Enum_Server_Type from '../../../src/Back/Enum/Server/Type.mjs';
 
+/**
+ * @param {Array<*>} log
+ * @returns {*}
+ */
 function createLoggerProvider(log) {
     return {
         forSource: () => ({
-            info: (...args) => log.push(['info', ...args]),
-            error: (...args) => log.push(['error', ...args]),
-            warn: (...args) => log.push(['warn', ...args]),
+            info: /** @type {(...args: unknown[]) => void} */ (...args) => { log.push(['info', ...args]); },
+            error: /** @type {(...args: unknown[]) => void} */ (...args) => { log.push(['error', ...args]); },
+            warn: /** @type {(...args: unknown[]) => void} */ (...args) => { log.push(['warn', ...args]); },
         }),
     };
 }
@@ -17,29 +21,34 @@ describe('Fl32_Web_Back_Server (mocked)', () => {
 
     /** @type {Array<*>} */
     const log = [];
+    /** @type {*} */
     let logger;
+    /** @type {*} */
     let pipelineEngine;
+    /** @type {*} */
     let server;
 
     // Mocks for HTTP/1 and HTTP/2 servers
+    /** @type {*} */
     const mockHttp = {
         createServer: () => ({
-            listen: (...args) => { log.push(['http.listen', ...args]); },
+            listen: /** @type {(...args: unknown[]) => void} */ (...args) => { log.push(['http.listen', ...args]); },
             on: () => { log.push('http.on'); },
-            close: (cb) => { log.push('http.close'); cb && cb(); },
+            close: (/** @type {*} */ cb) => { log.push('http.close'); cb && cb(); },
         }),
     };
 
+    /** @type {*} */
     const mockHttp2 = {
         createServer: () => ({
-            listen: (...args) => { log.push(['http2.listen', ...args]); },
+            listen: /** @type {(...args: unknown[]) => void} */ (...args) => { log.push(['http2.listen', ...args]); },
             on: () => { log.push('http2.on'); },
-            close: (cb) => { log.push('http2.close'); cb && cb(); },
+            close: (/** @type {*} */ cb) => { log.push('http2.close'); cb && cb(); },
         }),
-        createSecureServer: (tlsOpts) => ({
-            listen: (...args) => { log.push(['http2s.listen', ...args]); },
+        createSecureServer: (/** @type {*} */ tlsOpts) => ({
+            listen: /** @type {(...args: unknown[]) => void} */ (...args) => { log.push(['http2s.listen', ...args]); },
             on: () => { log.push('http2s.on'); },
-            close: (cb) => { log.push('http2s.close'); cb && cb(); },
+            close: (/** @type {*} */ cb) => { log.push('http2s.close'); cb && cb(); },
         })
     };
 
@@ -53,7 +62,7 @@ describe('Fl32_Web_Back_Server (mocked)', () => {
         server = new Fl32_Web_Back_Server({
             http: mockHttp,
             http2: mockHttp2,
-            config: Object.freeze({port: 3000, type: 'http'}),
+            config: /** @type {Fl32_Web_Back_Config_Runtime$} */ (Object.freeze({port: 3000, type: 'http'})),
             logger,
             pipelineEngine,
             SERVER_TYPE: new Fl32_Web_Back_Enum_Server_Type(),

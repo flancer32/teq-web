@@ -63,13 +63,17 @@
     "@teqfw/log": "github:teqfw/log#main"
   },
   "devDependencies": {
-    "@types/node": "^25.4.0"
+    "@types/node": "^25.4.0",
+    "markdownlint-cli2": "^0.23.2",
+    "typescript": "^5.9.3"
   },
   "scripts": {
     "start": "teq fl32:web:start",
     "test:unit": "find test/unit -name '*.test.mjs' -print0 | xargs -0 node --test",
     "test:integration": "find test/integration -name '*.test.mjs' -print0 | xargs -0 node --test",
-    "test": "npm run test:unit && npm run test:integration"
+    "test": "npm run test:unit && npm run test:integration",
+    "typecheck": "tsc -p jsconfig.json",
+    "lint:md": "markdownlint-cli2 \"skills/**/*.md\" \"*.md\""
   },
   "files": [
     "skills/",

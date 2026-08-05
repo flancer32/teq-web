@@ -32,12 +32,12 @@ export default class PipelineEngine {
         /**
          * @param {Fl32_Web_Node_Http_IncomingMessage|Fl32_Web_Node_Http2_ServerRequest} request
          * @param {Fl32_Web_Back_Response_Target} response
-         * @returns {Fl32_Web_Back_Dto_RequestContext$}
+         * @returns {Fl32_Web_Back_Dto_RequestContext$ & {[KEY_STAGE]: string|null}}
          */
         function createRequestContext(request, response) {
             let completed = false;
             /** @type {Fl32_Web_Back_Dto_RequestContext$ & {[KEY_STAGE]: string|null}} */
-            const context = dtoRequestContextFactory.create();
+            const context = /** @type {Fl32_Web_Back_Dto_RequestContext$ & {[KEY_STAGE]: string|null}} */ (dtoRequestContextFactory.create());
             context.request = request;
             context.response = response;
             context.data = {};
@@ -72,7 +72,7 @@ export default class PipelineEngine {
         /**
          * @param {Fl32_Web_Back_Api_Handler$} handler
          * @param {string} stage
-         * @param {Fl32_Web_Back_Dto_RequestContext$} context
+         * @param {Fl32_Web_Back_Dto_RequestContext$ & {[KEY_STAGE]: string|null}} context
          * @returns {Promise<void>}
          */
         async function runHandler(handler, stage, context) {

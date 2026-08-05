@@ -14,8 +14,8 @@ export default class Cast {
          * Optionally casts each item using the provided itemCast function.
          *
          * @param {*} data - Input data to be cast to array.
-         * @param {any} itemCast - Optional function to cast each item.
-         * @returns {Array}
+         * @param {*} itemCast - Optional function to cast each item.
+         * @returns {Array<*>}
          */
         this.array = function (data, itemCast) {
             let arr = [];
@@ -48,6 +48,7 @@ export default class Cast {
          *
          * @param {*} data - The input to cast.
          * @param {object} enu - Object whose values represent valid enum values.
+         * @param {{lower?: boolean, upper?: boolean}} [options]
          * @returns {string|undefined}
          */
         this.enum = function (data, enu, {lower, upper} = {}) {
@@ -101,6 +102,7 @@ export default class Cast {
             if (typeof data !== 'object' || data === null || Array.isArray(data)) {
                 throw new Error('Invalid value for allow');
             }
+            /** @type {Record<string, string[]>} */
             const res = {};
             for (const [key, arr] of Object.entries(data)) {
                 if (!Array.isArray(arr)) throw new Error(`Invalid allow list for ${key}`);

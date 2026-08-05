@@ -39,14 +39,16 @@ export default class Respond {
          *
          * @param {object} deps
          * @param {Fl32_Web_Back_Response_Target} deps.res - HTTP response object.
-         * @param {Fl32_Web_Back_Response_Headers} deps.headers - Custom headers.
-         * @param {Fl32_Web_Back_Response_Body} deps.body - Response body.
+         * @param {Fl32_Web_Back_Response_Headers} [deps.headers] - Custom headers.
+         * @param {Fl32_Web_Back_Response_Body} [deps.body] - Response body.
          * @param {number} status - HTTP status code.
          * @returns {boolean} - `true` if response was sent, `false` if headers were already sent.
          */
         function send({res, headers = {}, body = ''}, status) {
             if (res.headersSent || res.writableEnded) return false;
-            res.writeHead(status, headers);
+            /** @type {Fl32_Web_Back_Response_Target & {writeHead(status: number, headers?: Fl32_Web_Back_Response_Headers): void}} */
+            const target = /** @type {*} */ (res);
+            target.writeHead(status, headers);
             res.end(typeof body === 'string' ? body : JSON.stringify(body));
             return true;
         }
@@ -56,8 +58,8 @@ export default class Respond {
         /**
          * @param {object} deps
          * @param {Fl32_Web_Back_Response_Target} deps.res
-         * @param {Fl32_Web_Back_Response_Headers} deps.headers
-         * @param {Fl32_Web_Back_Response_Body} deps.body
+         * @param {Fl32_Web_Back_Response_Headers} [deps.headers]
+         * @param {Fl32_Web_Back_Response_Body} [deps.body]
          * @returns {boolean}
          */
         this.code200_Ok = function ({res, headers = {}, body = ''}) {
@@ -67,8 +69,8 @@ export default class Respond {
         /**
          * @param {object} deps
          * @param {Fl32_Web_Back_Response_Target} deps.res
-         * @param {Fl32_Web_Back_Response_Headers} deps.headers
-         * @param {Fl32_Web_Back_Response_Body} deps.body
+         * @param {Fl32_Web_Back_Response_Headers} [deps.headers]
+         * @param {Fl32_Web_Back_Response_Body} [deps.body]
          * @returns {boolean}
          */
         this.code201_Created = function ({res, headers = {}, body = ''}) {
@@ -78,7 +80,7 @@ export default class Respond {
         /**
          * @param {object} deps
          * @param {Fl32_Web_Back_Response_Target} deps.res
-         * @param {Fl32_Web_Back_Response_Headers} deps.headers
+         * @param {Fl32_Web_Back_Response_Headers} [deps.headers]
          * @returns {boolean}
          */
         this.code204_NoContent = function ({res, headers = {}}) {
@@ -88,8 +90,8 @@ export default class Respond {
         /**
          * @param {object} deps
          * @param {Fl32_Web_Back_Response_Target} deps.res
-         * @param {Fl32_Web_Back_Response_Headers} deps.headers
-         * @param {Fl32_Web_Back_Response_Body} deps.body
+         * @param {Fl32_Web_Back_Response_Headers} [deps.headers]
+         * @param {Fl32_Web_Back_Response_Body} [deps.body]
          * @returns {boolean}
          */
         this.code301_MovedPermanently = function ({res, headers = {}, body = ''}) {
@@ -99,8 +101,8 @@ export default class Respond {
         /**
          * @param {object} deps
          * @param {Fl32_Web_Back_Response_Target} deps.res
-         * @param {Fl32_Web_Back_Response_Headers} deps.headers
-         * @param {Fl32_Web_Back_Response_Body} deps.body
+         * @param {Fl32_Web_Back_Response_Headers} [deps.headers]
+         * @param {Fl32_Web_Back_Response_Body} [deps.body]
          * @returns {boolean}
          */
         this.code302_Found = function ({res, headers = {}, body = ''}) {
@@ -110,8 +112,8 @@ export default class Respond {
         /**
          * @param {object} deps
          * @param {Fl32_Web_Back_Response_Target} deps.res
-         * @param {Fl32_Web_Back_Response_Headers} deps.headers
-         * @param {Fl32_Web_Back_Response_Body} deps.body
+         * @param {Fl32_Web_Back_Response_Headers} [deps.headers]
+         * @param {Fl32_Web_Back_Response_Body} [deps.body]
          * @returns {boolean}
          */
         this.code303_SeeOther = function ({res, headers = {}, body = ''}) {
@@ -121,8 +123,8 @@ export default class Respond {
         /**
          * @param {object} deps
          * @param {Fl32_Web_Back_Response_Target} deps.res
-         * @param {Fl32_Web_Back_Response_Headers} deps.headers
-         * @param {Fl32_Web_Back_Response_Body} deps.body
+         * @param {Fl32_Web_Back_Response_Headers} [deps.headers]
+         * @param {Fl32_Web_Back_Response_Body} [deps.body]
          * @returns {boolean}
          */
         this.code304_NotModified = function ({res, headers = {}, body = ''}) {
@@ -132,8 +134,8 @@ export default class Respond {
         /**
          * @param {object} deps
          * @param {Fl32_Web_Back_Response_Target} deps.res
-         * @param {Fl32_Web_Back_Response_Headers} deps.headers
-         * @param {Fl32_Web_Back_Response_Body} deps.body
+         * @param {Fl32_Web_Back_Response_Headers} [deps.headers]
+         * @param {Fl32_Web_Back_Response_Body} [deps.body]
          * @returns {boolean}
          */
         this.code400_BadRequest = function ({res, headers = {}, body = ''}) {
@@ -143,8 +145,8 @@ export default class Respond {
         /**
          * @param {object} deps
          * @param {Fl32_Web_Back_Response_Target} deps.res
-         * @param {Fl32_Web_Back_Response_Headers} deps.headers
-         * @param {Fl32_Web_Back_Response_Body} deps.body
+         * @param {Fl32_Web_Back_Response_Headers} [deps.headers]
+         * @param {Fl32_Web_Back_Response_Body} [deps.body]
          * @returns {boolean}
          */
         this.code401_Unauthorized = function ({res, headers = {}, body = ''}) {
@@ -154,8 +156,8 @@ export default class Respond {
         /**
          * @param {object} deps
          * @param {Fl32_Web_Back_Response_Target} deps.res
-         * @param {Fl32_Web_Back_Response_Headers} deps.headers
-         * @param {Fl32_Web_Back_Response_Body} deps.body
+         * @param {Fl32_Web_Back_Response_Headers} [deps.headers]
+         * @param {Fl32_Web_Back_Response_Body} [deps.body]
          * @returns {boolean}
          */
         this.code402_PaymentRequired = function ({res, headers = {}, body = ''}) {
@@ -165,8 +167,8 @@ export default class Respond {
         /**
          * @param {object} deps
          * @param {Fl32_Web_Back_Response_Target} deps.res
-         * @param {Fl32_Web_Back_Response_Headers} deps.headers
-         * @param {Fl32_Web_Back_Response_Body} deps.body
+         * @param {Fl32_Web_Back_Response_Headers} [deps.headers]
+         * @param {Fl32_Web_Back_Response_Body} [deps.body]
          * @returns {boolean}
          */
         this.code403_Forbidden = function ({res, headers = {}, body = ''}) {
@@ -176,8 +178,8 @@ export default class Respond {
         /**
          * @param {object} deps
          * @param {Fl32_Web_Back_Response_Target} deps.res
-         * @param {Fl32_Web_Back_Response_Headers} deps.headers
-         * @param {Fl32_Web_Back_Response_Body} deps.body
+         * @param {Fl32_Web_Back_Response_Headers} [deps.headers]
+         * @param {Fl32_Web_Back_Response_Body} [deps.body]
          * @returns {boolean}
          */
         this.code404_NotFound = function ({res, headers = {}, body = ''}) {
@@ -187,9 +189,9 @@ export default class Respond {
         /**
          * @param {object} deps
          * @param {Fl32_Web_Back_Response_Target} deps.res
-         * @param {Fl32_Web_Back_Response_Headers} deps.headers
-         * @param {Fl32_Web_Back_Response_Body} deps.body
-         * @param {string} deps.allowed
+         * @param {Fl32_Web_Back_Response_Headers} [deps.headers]
+         * @param {Fl32_Web_Back_Response_Body} [deps.body]
+         * @param {string} [deps.allowed]
          * @returns {boolean}
          */
         this.code405_MethodNotAllowed = function ({res, headers = {}, body = '', allowed = 'HEAD, GET, POST'}) {
@@ -206,8 +208,8 @@ export default class Respond {
         /**
          * @param {object} deps
          * @param {Fl32_Web_Back_Response_Target} deps.res
-         * @param {Fl32_Web_Back_Response_Headers} deps.headers
-         * @param {Fl32_Web_Back_Response_Body} deps.body
+         * @param {Fl32_Web_Back_Response_Headers} [deps.headers]
+         * @param {Fl32_Web_Back_Response_Body} [deps.body]
          * @returns {boolean}
          */
         this.code409_Conflict = function ({res, headers = {}, body = ''}) {
@@ -217,8 +219,8 @@ export default class Respond {
         /**
          * @param {object} deps
          * @param {Fl32_Web_Back_Response_Target} deps.res
-         * @param {Fl32_Web_Back_Response_Headers} deps.headers
-         * @param {Fl32_Web_Back_Response_Body} deps.body
+         * @param {Fl32_Web_Back_Response_Headers} [deps.headers]
+         * @param {Fl32_Web_Back_Response_Body} [deps.body]
          * @returns {boolean}
          */
         this.code500_InternalServerError = function ({res, headers = {}, body = 'Internal Server Error'}) {
@@ -228,8 +230,8 @@ export default class Respond {
         /**
          * @param {object} deps
          * @param {Fl32_Web_Back_Response_Target} deps.res
-         * @param {Fl32_Web_Back_Response_Headers} deps.headers
-         * @param {Fl32_Web_Back_Response_Body} deps.body
+         * @param {Fl32_Web_Back_Response_Headers} [deps.headers]
+         * @param {Fl32_Web_Back_Response_Body} [deps.body]
          * @returns {boolean}
          */
         this.code502_BadGateway = function ({res, headers = {}, body = ''}) {
@@ -239,8 +241,8 @@ export default class Respond {
         /**
          * @param {object} deps
          * @param {Fl32_Web_Back_Response_Target} deps.res
-         * @param {Fl32_Web_Back_Response_Headers} deps.headers
-         * @param {Fl32_Web_Back_Response_Body} deps.body
+         * @param {Fl32_Web_Back_Response_Headers} [deps.headers]
+         * @param {Fl32_Web_Back_Response_Body} [deps.body]
          * @returns {boolean}
          */
         this.code503_ServiceUnavailable = function ({res, headers = {}, body = ''}) {

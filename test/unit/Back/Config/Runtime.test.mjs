@@ -14,7 +14,7 @@ async function loadRuntimeTlsModule() {
 }
 
 function createReader(values = {}) {
-    return {get: (namespace) => {
+    return {get: (/** @type {string} */ namespace) => {
         assert.equal(namespace, 'TEQFW_WEB');
         return values;
     }};

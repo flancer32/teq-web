@@ -36,8 +36,8 @@ describe('Fl32_Web_Cli_Command_Start (mocked)', () => {
         };
 
         command = new Fl32_Web_Cli_Command_Start({
-            server: mockServer,
-            configFactory: mockConfigFactory,
+            server: /** @type {*} */ (mockServer),
+            configFactory: /** @type {*} */ (mockConfigFactory),
         });
     });
 

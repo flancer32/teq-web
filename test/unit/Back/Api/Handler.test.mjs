@@ -6,7 +6,7 @@ describe('Fl32_Web_Back_Api_Handler', () => {
     test('throws for abstract methods', async () => {
         const handler = new Fl32_Web_Back_Api_Handler();
 
-        await assert.rejects(async () => handler.handle({}), /Method not implemented/);
+        await assert.rejects(async () => handler.handle(/** @type {*} */ ({})), /Method not implemented/);
         assert.throws(() => handler.getRegistrationInfo(), /Method not implemented/);
     });
 });

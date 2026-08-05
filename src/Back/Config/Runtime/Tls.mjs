@@ -21,11 +21,12 @@ let frozen = false;
 const facade = {};
 
 /** @type {Fl32_Web_Back_Config_Runtime_Tls$} */
-const proxy = new Proxy(facade, {
+const proxy = /** @type {Fl32_Web_Back_Config_Runtime_Tls$} */ (new Proxy(facade, {
     get(_target, prop) {
         const isServiceProp = (prop === 'then') || (typeof prop === 'symbol');
         if (!frozen && !isServiceProp) throw new Error('Runtime configuration is not initialized.');
-        return cfg[prop];
+        if (typeof prop === 'symbol') return undefined;
+        return cfg[/** @type {keyof Fl32_Web_Back_Config_Runtime_Tls__Data} */ (prop)];
     },
     set() {
         throw new Error('Runtime configuration is immutable.');
@@ -36,7 +37,7 @@ const proxy = new Proxy(facade, {
     deleteProperty() {
         throw new Error('Runtime configuration is immutable.');
     },
-});
+}));
 
 export default class Wrapper {
     /**
@@ -54,7 +55,7 @@ export class Factory {
      */
     constructor({cast}) {
         /**
-         * @param {Fl32_Web_Back_Config_Runtime_Tls__Data} params
+         * @param {Partial<Fl32_Web_Back_Config_Runtime_Tls__Data>} params
          */
         this.configure = function (params = {}) {
             if (frozen) throw new Error('Runtime configuration is frozen.');

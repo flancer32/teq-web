@@ -4,10 +4,14 @@ import Fl32_Web_Back_PipelineEngine from '../../../src/Back/PipelineEngine.mjs';
 import {Factory as Fl32_Web_Back_Dto_RequestContext_Factory} from '../../../src/Back/Dto/RequestContext.mjs';
 import Fl32_Web_Back_Enum_Stage from '../../../src/Back/Enum/Stage.mjs';
 
+/**
+ * @param {{errors: string[], exceptions: string[]}} sources
+ * @returns {*}
+ */
 function createLoggerProvider({errors, exceptions}) {
     return {
         forSource: () => ({
-            error(message, data) {
+            error(/** @type {string} */ message, /** @type {*} */ data) {
                 errors.push(message);
                 if (data?.err) exceptions.push(String(data.err.message ?? data.err));
             },
@@ -43,9 +47,13 @@ describe('Fl32_Web_Back_PipelineEngine', () => {
     let errors;
     /** @type {string[]} */
     let exceptions;
+    /** @type {*} */
     let respond;
+    /** @type {*} */
     let logger;
+    /** @type {Fl32_Web_Back_Helper_Order_Kahn$} */
     let helpOrder;
+    /** @type {Fl32_Web_Back_Dto_RequestContext__Factory$} */
     let dtoRequestContextFactory;
 
     beforeEach(() => {
@@ -53,12 +61,12 @@ describe('Fl32_Web_Back_PipelineEngine', () => {
         errors = [];
         exceptions = [];
         respond = {
-            isWritable: (res) => !res.headersSent && !res.writableEnded,
-            code404_NotFound: ({res}) => {
+            isWritable: (/** @type {*} */ res) => !res.headersSent && !res.writableEnded,
+            code404_NotFound: (/** @type {{res: *}} */ {res}) => {
                 res.writeHead(404);
                 res.end('Not Found');
             },
-            code500_InternalServerError: ({res, body = 'Internal Server Error'}) => {
+            code500_InternalServerError: (/** @type {{res: *, body?: string}} */ {res, body = 'Internal Server Error'}) => {
                 res.writeHead(500);
                 res.end(body);
             },
@@ -93,7 +101,7 @@ describe('Fl32_Web_Back_PipelineEngine', () => {
         engine.addHandler(mkHandler('finalize', STAGE.FINALIZE, async () => { log.push('finalize'); }));
         engine.orderHandlers();
 
-        await engine.onEventRequest({url: '/ok'}, createResponse());
+        await engine.onEventRequest(/** @type {*} */ ({url: '/ok'}), /** @type {*} */ (createResponse()));
 
         assert.deepStrictEqual(log, ['init', 'processA', 'finalize']);
     });
@@ -105,8 +113,8 @@ describe('Fl32_Web_Back_PipelineEngine', () => {
         engine.addHandler(mkHandler('process', STAGE.PROCESS, async () => { log.push('process'); }));
         engine.orderHandlers();
 
-        const res = createResponse();
-        await engine.onEventRequest({url: '/missing'}, res);
+        const res = /** @type {*} */ (createResponse());
+        await engine.onEventRequest(/** @type {*} */ ({url: '/missing'}), res);
 
         assert.strictEqual(res.statusCode, 404);
         assert.match(errors[0], /404 Not Found/);
@@ -122,8 +130,8 @@ describe('Fl32_Web_Back_PipelineEngine', () => {
         engine.addHandler(mkHandler('finalize', STAGE.FINALIZE, async () => { log.push('finalize'); }));
         engine.orderHandlers();
 
-        const res = createResponse();
-        await engine.onEventRequest({url: '/err'}, res);
+        const res = /** @type {*} */ (createResponse());
+        await engine.onEventRequest(/** @type {*} */ ({url: '/err'}), res);
 
         assert.strictEqual(res.statusCode, 500);
         assert.deepStrictEqual(log, ['finalize']);
@@ -143,8 +151,8 @@ describe('Fl32_Web_Back_PipelineEngine', () => {
         }));
         engine.orderHandlers();
 
-        const res = createResponse();
-        await engine.onEventRequest({url: '/ok'}, res);
+        const res = /** @type {*} */ (createResponse());
+        await engine.onEventRequest(/** @type {*} */ ({url: '/ok'}), res);
 
         assert.deepStrictEqual(log, ['process']);
         assert.deepStrictEqual(exceptions, ['Only PROCESS handlers may complete request processing']);
@@ -171,7 +179,7 @@ describe('Fl32_Web_Back_PipelineEngine', () => {
         engine.addHandler(mkHandler('process', STAGE.PROCESS, async () => {}));
 
         await assert.rejects(
-            () => engine.onEventRequest({url: '/early'}, createResponse()),
+            () => engine.onEventRequest(/** @type {*} */ ({url: '/early'}), /** @type {*} */ (createResponse())),
             /must be locked before request execution/
         );
     });

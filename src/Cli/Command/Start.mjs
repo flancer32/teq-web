@@ -40,7 +40,7 @@ export default class Start {
             await server.start();
             return {
                 done: new Promise((resolve) => {
-                    context.signal.addEventListener('abort', resolve, {once: true});
+                    context.signal.addEventListener('abort', () => resolve(), {once: true});
                 }),
                 stop: async () => {
                     await server.stop();

@@ -24,7 +24,7 @@ export default class Static {
         /**
          * Initialize registry with provided sources.
          *
-         * @param {object} params
+         * @param {{sources?: Fl32_Web_Back_Dto_Source$[]}} [params]
          * @returns {Promise<void>}
          */
         this.init = async (params = {}) => {
@@ -42,6 +42,7 @@ export default class Static {
             const req = context.request;
             const res = context.response;
             if (!respond.isWritable(res)) return;
+            if (req.url === undefined) return;
             const urlPath = decodeURIComponent(req.url.split('?')[0]);
             const match = registry.find(urlPath);
             if (!match) return;
