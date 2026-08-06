@@ -11,33 +11,33 @@ const KEY_STAGE = Symbol('stage');
 export default class PipelineEngine {
     /**
      * @param {object} deps
-     * @param {Fl32_Web_Back_Dto_RequestContext__Factory$} deps.dtoRequestContextFactory
-     * @param {TeqFw_Log_Provider$} deps.logger
-     * @param {Fl32_Web_Back_Helper_Respond$} deps.respond
-     * @param {Fl32_Web_Back_Helper_Order_Kahn$} deps.helpOrder
-     * @param {Fl32_Web_Back_Enum_Stage$} deps.STAGE
+     * @param {Fl32_Web_Back_Dto_RequestContext__Factory} deps.dtoRequestContextFactory
+     * @param {TeqFw_Log_Provider} deps.logger
+     * @param {Fl32_Web_Back_Helper_Respond} deps.respond
+     * @param {Fl32_Web_Back_Helper_Order_Kahn} deps.helpOrder
+     * @param {Fl32_Web_Back_Enum_Stage} deps.STAGE
      */
     constructor({dtoRequestContextFactory, logger, respond, helpOrder, STAGE}) {
         const log = logger.forSource('Fl32_Web_Back_PipelineEngine');
-        /** @type {Map<string, Fl32_Web_Back_Api_Handler$>} */
+        /** @type {Map<string, Fl32_Web_Back_Api_Handler>} */
         const handlers = new Map();
-        /** @type {Fl32_Web_Back_Api_Handler$[]} */
+        /** @type {Fl32_Web_Back_Api_Handler[]} */
         let initHandlers = [];
-        /** @type {Fl32_Web_Back_Api_Handler$[]} */
+        /** @type {Fl32_Web_Back_Api_Handler[]} */
         let processHandlers = [];
-        /** @type {Fl32_Web_Back_Api_Handler$[]} */
+        /** @type {Fl32_Web_Back_Api_Handler[]} */
         let finalizeHandlers = [];
         let isLocked = false;
 
         /**
          * @param {Fl32_Web_Back_Request_Target} request
          * @param {Fl32_Web_Back_Response_Target} response
-         * @returns {Fl32_Web_Back_Dto_RequestContext$ & {[KEY_STAGE]: string|null}}
+         * @returns {Fl32_Web_Back_Pipeline_RequestContext}
          */
         function createRequestContext(request, response) {
             let completed = false;
-            /** @type {Fl32_Web_Back_Dto_RequestContext$ & {[KEY_STAGE]: string|null}} */
-            const context = /** @type {Fl32_Web_Back_Dto_RequestContext$ & {[KEY_STAGE]: string|null}} */ (dtoRequestContextFactory.create());
+            /** @type {Fl32_Web_Back_Pipeline_RequestContext} */
+            const context = /** @type {Fl32_Web_Back_Pipeline_RequestContext} */ (dtoRequestContextFactory.create());
             context.request = request;
             context.response = response;
             context.data = {};
@@ -70,9 +70,9 @@ export default class PipelineEngine {
         }
 
         /**
-         * @param {Fl32_Web_Back_Api_Handler$} handler
+         * @param {Fl32_Web_Back_Api_Handler} handler
          * @param {string} stage
-         * @param {Fl32_Web_Back_Dto_RequestContext$ & {[KEY_STAGE]: string|null}} context
+         * @param {Fl32_Web_Back_Pipeline_RequestContext} context
          * @returns {Promise<void>}
          */
         async function runHandler(handler, stage, context) {
@@ -113,7 +113,7 @@ export default class PipelineEngine {
         this.lockHandlers = () => this.orderHandlers();
 
         /**
-         * @param {Fl32_Web_Back_Api_Handler$} handler
+         * @param {Fl32_Web_Back_Api_Handler} handler
          * @returns {void}
          */
         this.addHandler = function (handler) {
@@ -128,7 +128,7 @@ export default class PipelineEngine {
         };
 
         /**
-         * @param {Fl32_Web_Back_Api_Handler$} handler
+         * @param {Fl32_Web_Back_Api_Handler} handler
          * @returns {void}
          */
         this.registerHandler = (handler) => this.addHandler(handler);
@@ -142,7 +142,7 @@ export default class PipelineEngine {
             if (!isLocked) {
                 throw new Error('Pipeline handlers must be locked before request execution');
             }
-            /** @type {Fl32_Web_Back_Dto_RequestContext$ & {[KEY_STAGE]: string|null}} */
+            /** @type {Fl32_Web_Back_Pipeline_RequestContext} */
             const context = createRequestContext(req, res);
 
             try {

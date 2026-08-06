@@ -18,7 +18,7 @@ export default class Source {
 export class Factory {
     /**
      * @param {object} deps
-     * @param {Fl32_Web_Back_Helper_Cast$} deps.cast
+     * @param {Fl32_Web_Back_Helper_Cast} deps.cast
      */
     constructor(
         {
@@ -27,7 +27,7 @@ export class Factory {
     ) {
         /**
          * @param {*} data
-         * @returns {Fl32_Web_Back_Dto_Source$}
+         * @returns {Fl32_Web_Back_Dto_Source}
          */
         this.create = function (data) {
             const res = new Source();

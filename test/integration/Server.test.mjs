@@ -25,10 +25,10 @@ async function createContainer() {
 }
 
 /**
- * @returns {TeqFw_Log_Provider$}
+ * @returns {TeqFw_Log_Provider}
  */
 function createLoggerProvider() {
-    return /** @type {TeqFw_Log_Provider$} */ (/** @type {*} */ ({
+    return /** @type {TeqFw_Log_Provider} */ (/** @type {*} */ ({
         forSource: () => ({
             info: () => {},
             warn: () => {},

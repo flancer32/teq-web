@@ -8,30 +8,30 @@
 export default class Server {
     /**
      * @param {object} deps
-     * @param {Fl32_Web_Node_Http} deps.http
-     * @param {Fl32_Web_Node_Http2} deps.http2
-     * @param {Fl32_Web_Back_Config_Runtime$} deps.config
-     * @param {TeqFw_Log_Provider$} deps.logger
-     * @param {Fl32_Web_Back_PipelineEngine$} deps.pipelineEngine
-     * @param {Fl32_Web_Back_Enum_Server_Type$} deps.SERVER_TYPE
+     * @param {typeof import("node:http")} deps.http
+     * @param {typeof import("node:http2")} deps.http2
+     * @param {Fl32_Web_Back_Config_Runtime} deps.config
+     * @param {TeqFw_Log_Provider} deps.logger
+     * @param {Fl32_Web_Back_PipelineEngine} deps.pipelineEngine
+     * @param {Fl32_Web_Back_Enum_Server_Type} deps.SERVER_TYPE
      */
     constructor({http, http2, config, logger, pipelineEngine, SERVER_TYPE}) {
         // VARS
         const { createServer } = http;
         const { createServer: createServerH2, createSecureServer } = http2;
         const log = logger.forSource('Fl32_Web_Back_Server');
-        /** @type {Fl32_Web_Node_Http_Server|Fl32_Web_Node_Http2_Server|Fl32_Web_Node_Http2_SecureServer|undefined} */
+        /** @type {import("node:http").Server|import("node:http2").Http2Server|import("node:http2").Http2SecureServer|undefined} */
         let _instance;
 
         // MAIN
         /**
-         * @returns {Fl32_Web_Node_Http_Server|Fl32_Web_Node_Http2_Server|Fl32_Web_Node_Http2_SecureServer|undefined}
+         * @returns {Fl32_Web_Back_Server_Instance}
          */
         this.getInstance = () => _instance;
 
         /**
          * Starts the server with optional configuration.
-         * @param {Fl32_Web_Back_Config_Runtime$} [cfg]
+         * @param {Fl32_Web_Back_Config_Runtime} [cfg]
          * @returns {Promise<void>}
          */
         this.start = async function (cfg) {

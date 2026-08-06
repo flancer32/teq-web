@@ -48,7 +48,7 @@ export default class Cast {
          *
          * @param {*} data - The input to cast.
          * @param {object} enu - Object whose values represent valid enum values.
-         * @param {{lower?: boolean, upper?: boolean}} [options]
+         * @param {Fl32_Web_Back_Helper_Cast_Enum_Options} [options]
          * @returns {string|undefined}
          */
         this.enum = function (data, enu, {lower, upper} = {}) {

@@ -7,8 +7,8 @@
 export default class Start {
     /**
      * @param {object} deps
-     * @param {Fl32_Web_Back_Server$} deps.server
-     * @param {Fl32_Web_Back_Config_Runtime__Factory$} deps.configFactory
+     * @param {Fl32_Web_Back_Server} deps.server
+     * @param {Fl32_Web_Back_Config_Runtime__Factory} deps.configFactory
      */
     constructor({server, configFactory}) {
 
@@ -33,7 +33,7 @@ export default class Start {
          *
          * @param {object} context
          * @param {AbortSignal} context.signal
-         * @returns {Promise<{done: Promise<void>, stop: () => Promise<void>}>}
+         * @returns {Promise<Fl32_Web_Cli_Command_Start_Handle>}
          */
         this.start = async function (context) {
             configFactory.freeze();

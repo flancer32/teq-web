@@ -10,7 +10,7 @@ test.describe('Fl32_Web_Back_Dto_Source', () => {
       stringArrayMap: (/** @type {*} */ d) => d,
       array: (/** @type {*} */ d, /** @type {*} */ item) => Array.isArray(d) ? d.map(item) : [],
     };
-    /** @type {Fl32_Web_Back_Dto_Source__Factory$} */
+    /** @type {Fl32_Web_Back_Dto_Source__Factory} */
     const factory = new Fl32_Web_Back_Dto_Source_Factory({cast});
     const dto = factory.create({
       root: '/abs/path',
@@ -32,7 +32,7 @@ test.describe('Fl32_Web_Back_Dto_Source', () => {
       stringArrayMap: () => ({}),
       array: () => [],
     };
-    /** @type {Fl32_Web_Back_Dto_Source__Factory$} */
+    /** @type {Fl32_Web_Back_Dto_Source__Factory} */
     const factory = new Fl32_Web_Back_Dto_Source_Factory({cast});
     const dto = factory.create({});
     assert.strictEqual(dto.root, undefined);

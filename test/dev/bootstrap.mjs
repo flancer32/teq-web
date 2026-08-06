@@ -9,7 +9,7 @@ const APP_ROOT = path.resolve(import.meta.dirname, '../..');
 const WEB_ROOT = path.resolve(import.meta.dirname, './web');
 
 /**
- * @param {Fl32_Web_Node_Http_Server|Fl32_Web_Node_Http2_Server|Fl32_Web_Node_Http2_SecureServer|undefined} instance
+ * @param {import("node:http").Server|import("node:http2").Http2Server|import("node:http2").Http2SecureServer|undefined} instance
  * @returns {Promise<void>}
  */
 function waitForServerStart(instance) {
@@ -44,15 +44,15 @@ async function main() {
         cfgProcessEnv.create(process.env),
     ]);
 
-    /** @type {Fl32_Web_Back_PipelineEngine$} */
+    /** @type {Fl32_Web_Back_PipelineEngine} */
     const pipelineEngine = await container.get('Fl32_Web_Back_PipelineEngine$');
-    /** @type {Fl32_Web_Back_Dto_Source__Factory$} */
+    /** @type {Fl32_Web_Back_Dto_Source__Factory} */
     const sourceDtoFactory = await container.get('Fl32_Web_Back_Dto_Source__Factory$');
-    /** @type {Fl32_Web_Back_Handler_Pre_Log$} */
+    /** @type {Fl32_Web_Back_Handler_Pre_Log} */
     const logHandler = await container.get('Fl32_Web_Back_Handler_Pre_Log$');
-    /** @type {Fl32_Web_Back_Handler_Static$} */
+    /** @type {Fl32_Web_Back_Handler_Static} */
     const staticHandler = await container.get('Fl32_Web_Back_Handler_Static$');
-    /** @type {Fl32_Web_Back_Config_Runtime__Factory$} */
+    /** @type {Fl32_Web_Back_Config_Runtime__Factory} */
     const runtimeConfigFactory = await container.get('Fl32_Web_Back_Config_Runtime__Factory$');
 
     await staticHandler.init({
@@ -70,12 +70,12 @@ async function main() {
     pipelineEngine.addHandler(logHandler);
     pipelineEngine.addHandler(staticHandler);
 
-    /** @type {TeqFw_Log_Provider$} */
+    /** @type {TeqFw_Log_Provider} */
     const logger = await container.get('TeqFw_Log_Provider$');
-    /** @type {Fl32_Web_Back_Enum_Server_Type$} */
+    /** @type {Fl32_Web_Back_Enum_Server_Type} */
     const SERVER_TYPE = await container.get('Fl32_Web_Back_Enum_Server_Type$');
     runtimeConfigFactory.freeze();
-    /** @type {Fl32_Web_Back_Config_Runtime$} */
+    /** @type {Fl32_Web_Back_Config_Runtime} */
     const config = await container.get('Fl32_Web_Back_Config_Runtime$');
 
     const server = new Fl32_Web_Back_Server({

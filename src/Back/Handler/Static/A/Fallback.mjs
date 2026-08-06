@@ -7,8 +7,8 @@
 export default class Fallback {
     /**
      * @param {object} deps
-     * @param {Fl32_Web_Node_Fs} deps.fs
-     * @param {Fl32_Web_Node_Path} deps.path
+     * @param {typeof import("node:fs")} deps.fs
+     * @param {typeof import("node:path")} deps.path
      */
     constructor({fs, path}) {
 

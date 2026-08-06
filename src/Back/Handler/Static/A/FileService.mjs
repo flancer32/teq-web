@@ -7,13 +7,13 @@
 export default class FileService {
     /**
      * @param {object} deps
-     * @param {Fl32_Web_Node_Fs} deps.fs
-     * @param {Fl32_Web_Node_Http2} deps.http2
-     * @param {Fl32_Web_Node_Path} deps.path
-     * @param {TeqFw_Log_Provider$} deps.logger
-     * @param {Fl32_Web_Back_Helper_Mime$} deps.helpMime
-     * @param {Fl32_Web_Back_Handler_Static_A_Resolver$} deps.resolver
-     * @param {Fl32_Web_Back_Handler_Static_A_Fallback$} deps.fallback
+     * @param {typeof import("node:fs")} deps.fs
+     * @param {typeof import("node:http2")} deps.http2
+     * @param {typeof import("node:path")} deps.path
+     * @param {TeqFw_Log_Provider} deps.logger
+     * @param {Fl32_Web_Back_Helper_Mime} deps.helpMime
+     * @param {Fl32_Web_Back_Handler_Static_A_Resolver} deps.resolver
+     * @param {Fl32_Web_Back_Handler_Static_A_Fallback} deps.fallback
      */
     constructor({fs, http2, path, logger, helpMime, resolver, fallback}) {
         const {constants: H2} = http2;

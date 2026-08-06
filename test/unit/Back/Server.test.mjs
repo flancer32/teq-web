@@ -62,7 +62,7 @@ describe('Fl32_Web_Back_Server (mocked)', () => {
         server = new Fl32_Web_Back_Server({
             http: mockHttp,
             http2: mockHttp2,
-            config: /** @type {Fl32_Web_Back_Config_Runtime$} */ (Object.freeze({port: 3000, type: 'http'})),
+            config: /** @type {Fl32_Web_Back_Config_Runtime} */ (Object.freeze({port: 3000, type: 'http'})),
             logger,
             pipelineEngine,
             SERVER_TYPE: new Fl32_Web_Back_Enum_Server_Type(),

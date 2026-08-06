@@ -138,7 +138,7 @@ describe('TeqFW ES6 module convention integration', () => {
                 {
                     getRegistrationInfo: () => ({name: 'two'}),
                 },
-            ]).map((/** @type {Fl32_Web_Back_Api_Handler$} */ item) => item.getRegistrationInfo().name),
+            ]).map((/** @type {Fl32_Web_Back_Api_Handler} */ item) => item.getRegistrationInfo().name),
             ['one', 'two']
         );
     });

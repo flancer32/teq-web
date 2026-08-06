@@ -20,8 +20,8 @@ let frozen = false;
 
 const facade = {};
 
-/** @type {Fl32_Web_Back_Config_Runtime_Tls$} */
-const proxy = /** @type {Fl32_Web_Back_Config_Runtime_Tls$} */ (new Proxy(facade, {
+/** @type {Fl32_Web_Back_Config_Runtime_Tls} */
+const proxy = /** @type {Fl32_Web_Back_Config_Runtime_Tls} */ (new Proxy(facade, {
     get(_target, prop) {
         const isServiceProp = (prop === 'then') || (typeof prop === 'symbol');
         if (!frozen && !isServiceProp) throw new Error('Runtime configuration is not initialized.');
@@ -51,7 +51,7 @@ export default class Wrapper {
 export class Factory {
     /**
      * @param {object} deps
-     * @param {Fl32_Web_Back_Helper_Cast$} deps.cast
+     * @param {Fl32_Web_Back_Helper_Cast} deps.cast
      */
     constructor({cast}) {
         /**
@@ -71,7 +71,7 @@ export class Factory {
         };
 
         /**
-         * @returns {Fl32_Web_Back_Config_Runtime_Tls$}
+         * @returns {Fl32_Web_Back_Config_Runtime_Tls}
          */
         this.freeze = function () {
             if (frozen) return proxy;

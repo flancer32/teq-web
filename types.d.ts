@@ -1,93 +1,89 @@
 declare global {
-  type Fl32_Web_Back_Api_Handler = typeof import("./src/Back/Api/Handler.mjs").default;
-  type Fl32_Web_Back_Api_Handler$ = InstanceType<typeof import("./src/Back/Api/Handler.mjs").default>;
+  type Fl32_Web_Back_Api_Handler = import("./src/Back/Api/Handler.mjs").default;
+  type Fl32_Web_Back_Api_Handler__Class = typeof import("./src/Back/Api/Handler.mjs").default;
 
-  type Fl32_Web_Back_Config_Runtime = typeof import("./src/Back/Config/Runtime.mjs").default;
-  type Fl32_Web_Back_Config_Runtime$ = import("./src/Back/Config/Runtime.mjs").Data;
-  type Fl32_Web_Back_Config_Runtime__Data = import("./src/Back/Config/Runtime.mjs").Data;
-  type Fl32_Web_Back_Config_Runtime__Factory = typeof import("./src/Back/Config/Runtime.mjs").Factory;
-  type Fl32_Web_Back_Config_Runtime__Factory$ = InstanceType<typeof import("./src/Back/Config/Runtime.mjs").Factory>;
-
-  type Fl32_Web_Back_Config_Runtime_Tls = typeof import("./src/Back/Config/Runtime/Tls.mjs").default;
-  type Fl32_Web_Back_Config_Runtime_Tls$ = import("./src/Back/Config/Runtime/Tls.mjs").Data;
+  type Fl32_Web_Back_Config_Runtime = import("./src/Back/Config/Runtime.mjs").Data;
+  type Fl32_Web_Back_Config_Runtime_Tls = import("./src/Back/Config/Runtime/Tls.mjs").Data;
+  type Fl32_Web_Back_Config_Runtime_Tls__Class = typeof import("./src/Back/Config/Runtime/Tls.mjs").default;
   type Fl32_Web_Back_Config_Runtime_Tls__Data = import("./src/Back/Config/Runtime/Tls.mjs").Data;
-  type Fl32_Web_Back_Config_Runtime_Tls__Factory = typeof import("./src/Back/Config/Runtime/Tls.mjs").Factory;
-  type Fl32_Web_Back_Config_Runtime_Tls__Factory$ = InstanceType<typeof import("./src/Back/Config/Runtime/Tls.mjs").Factory>;
-  type Fl32_Web_Back_Dto_Info = typeof import("./src/Back/Dto/Info.mjs").default;
-  type Fl32_Web_Back_Dto_Info$ = InstanceType<typeof import("./src/Back/Dto/Info.mjs").default>;
-  type Fl32_Web_Back_Dto_Info__Factory = typeof import("./src/Back/Dto/Info.mjs").Factory;
-  type Fl32_Web_Back_Dto_Info__Factory$ = InstanceType<typeof import("./src/Back/Dto/Info.mjs").Factory>;
+  type Fl32_Web_Back_Config_Runtime_Tls__Factory = import("./src/Back/Config/Runtime/Tls.mjs").Factory;
+  type Fl32_Web_Back_Config_Runtime_Tls__Factory__Class = typeof import("./src/Back/Config/Runtime/Tls.mjs").Factory;
+  type Fl32_Web_Back_Config_Runtime__Class = typeof import("./src/Back/Config/Runtime.mjs").default;
+  type Fl32_Web_Back_Config_Runtime__Data = import("./src/Back/Config/Runtime.mjs").Data;
+  type Fl32_Web_Back_Config_Runtime__Factory = import("./src/Back/Config/Runtime.mjs").Factory;
+  type Fl32_Web_Back_Config_Runtime__Factory__Class = typeof import("./src/Back/Config/Runtime.mjs").Factory;
 
-  type Fl32_Web_Back_Dto_RequestContext = typeof import("./src/Back/Dto/RequestContext.mjs").default;
-  type Fl32_Web_Back_Dto_RequestContext$ = InstanceType<typeof import("./src/Back/Dto/RequestContext.mjs").default>;
-  type Fl32_Web_Back_Dto_RequestContext__Factory = typeof import("./src/Back/Dto/RequestContext.mjs").Factory;
-  type Fl32_Web_Back_Dto_RequestContext__Factory$ = InstanceType<typeof import("./src/Back/Dto/RequestContext.mjs").Factory>;
+  type Fl32_Web_Back_Dto_Info = import("./src/Back/Dto/Info.mjs").default;
+  type Fl32_Web_Back_Dto_Info__Class = typeof import("./src/Back/Dto/Info.mjs").default;
+  type Fl32_Web_Back_Dto_Info__Factory = import("./src/Back/Dto/Info.mjs").Factory;
+  type Fl32_Web_Back_Dto_Info__Factory__Class = typeof import("./src/Back/Dto/Info.mjs").Factory;
 
-  type Fl32_Web_Back_Dto_Source = typeof import("./src/Back/Dto/Source.mjs").default;
-  type Fl32_Web_Back_Dto_Source$ = InstanceType<typeof import("./src/Back/Dto/Source.mjs").default>;
-  type Fl32_Web_Back_Dto_Source__Factory = typeof import("./src/Back/Dto/Source.mjs").Factory;
-  type Fl32_Web_Back_Dto_Source__Factory$ = InstanceType<typeof import("./src/Back/Dto/Source.mjs").Factory>;
+  type Fl32_Web_Back_Dto_RequestContext = import("./src/Back/Dto/RequestContext.mjs").default;
+  type Fl32_Web_Back_Dto_RequestContext__Class = typeof import("./src/Back/Dto/RequestContext.mjs").default;
+  type Fl32_Web_Back_Dto_RequestContext__Factory = import("./src/Back/Dto/RequestContext.mjs").Factory;
+  type Fl32_Web_Back_Dto_RequestContext__Factory__Class = typeof import("./src/Back/Dto/RequestContext.mjs").Factory;
 
-  type Fl32_Web_Back_Enum_Server_Type = typeof import("./src/Back/Enum/Server/Type.mjs").default;
-  type Fl32_Web_Back_Enum_Server_Type$ = InstanceType<typeof import("./src/Back/Enum/Server/Type.mjs").default>;
-  type Fl32_Web_Back_Enum_Stage = typeof import("./src/Back/Enum/Stage.mjs").default;
-  type Fl32_Web_Back_Enum_Stage$ = InstanceType<typeof import("./src/Back/Enum/Stage.mjs").default>;
+  type Fl32_Web_Back_Dto_Source = import("./src/Back/Dto/Source.mjs").default;
+  type Fl32_Web_Back_Dto_Source__Class = typeof import("./src/Back/Dto/Source.mjs").default;
+  type Fl32_Web_Back_Dto_Source__Factory = import("./src/Back/Dto/Source.mjs").Factory;
+  type Fl32_Web_Back_Dto_Source__Factory__Class = typeof import("./src/Back/Dto/Source.mjs").Factory;
 
-  type Fl32_Web_Back_Handler_Pre_Log = typeof import("./src/Back/Handler/Pre/Log.mjs").default;
-  type Fl32_Web_Back_Handler_Pre_Log$ = InstanceType<typeof import("./src/Back/Handler/Pre/Log.mjs").default>;
-  type Fl32_Web_Back_Handler_Static = typeof import("./src/Back/Handler/Static.mjs").default;
-  type Fl32_Web_Back_Handler_Static$ = InstanceType<typeof import("./src/Back/Handler/Static.mjs").default>;
-  type Fl32_Web_Back_Handler_Static_A_Config = typeof import("./src/Back/Handler/Static/A/Config.mjs").default;
-  type Fl32_Web_Back_Handler_Static_A_Config$ = InstanceType<typeof import("./src/Back/Handler/Static/A/Config.mjs").default>;
+  type Fl32_Web_Back_Enum_Server_Type = import("./src/Back/Enum/Server/Type.mjs").default;
+  type Fl32_Web_Back_Enum_Server_Type__Class = typeof import("./src/Back/Enum/Server/Type.mjs").default;
+  type Fl32_Web_Back_Enum_Stage = import("./src/Back/Enum/Stage.mjs").default;
+  type Fl32_Web_Back_Enum_Stage__Class = typeof import("./src/Back/Enum/Stage.mjs").default;
+
+  type Fl32_Web_Back_Handler_Pre_Log = import("./src/Back/Handler/Pre/Log.mjs").default;
+  type Fl32_Web_Back_Handler_Pre_Log__Class = typeof import("./src/Back/Handler/Pre/Log.mjs").default;
+  type Fl32_Web_Back_Handler_Static = import("./src/Back/Handler/Static.mjs").default;
+  type Fl32_Web_Back_Handler_Static_A_Config = import("./src/Back/Handler/Static/A/Config.mjs").default;
+  type Fl32_Web_Back_Handler_Static_A_Config__Class = typeof import("./src/Back/Handler/Static/A/Config.mjs").default;
   type Fl32_Web_Back_Handler_Static_A_Config__Value = import("./src/Back/Handler/Static/A/Config.mjs").Value;
-  type Fl32_Web_Back_Handler_Static_A_Fallback = typeof import("./src/Back/Handler/Static/A/Fallback.mjs").default;
-  type Fl32_Web_Back_Handler_Static_A_Fallback$ = InstanceType<typeof import("./src/Back/Handler/Static/A/Fallback.mjs").default>;
-  type Fl32_Web_Back_Handler_Static_A_FileService = typeof import("./src/Back/Handler/Static/A/FileService.mjs").default;
-  type Fl32_Web_Back_Handler_Static_A_FileService$ = InstanceType<typeof import("./src/Back/Handler/Static/A/FileService.mjs").default>;
-  type Fl32_Web_Back_Handler_Static_A_Registry = typeof import("./src/Back/Handler/Static/A/Registry.mjs").default;
-  type Fl32_Web_Back_Handler_Static_A_Registry$ = InstanceType<typeof import("./src/Back/Handler/Static/A/Registry.mjs").default>;
+  type Fl32_Web_Back_Handler_Static_A_Fallback = import("./src/Back/Handler/Static/A/Fallback.mjs").default;
+  type Fl32_Web_Back_Handler_Static_A_Fallback__Class = typeof import("./src/Back/Handler/Static/A/Fallback.mjs").default;
+  type Fl32_Web_Back_Handler_Static_A_FileService = import("./src/Back/Handler/Static/A/FileService.mjs").default;
+  type Fl32_Web_Back_Handler_Static_A_FileService__Class = typeof import("./src/Back/Handler/Static/A/FileService.mjs").default;
+  type Fl32_Web_Back_Handler_Static_A_Registry = import("./src/Back/Handler/Static/A/Registry.mjs").default;
+  type Fl32_Web_Back_Handler_Static_A_Registry__Class = typeof import("./src/Back/Handler/Static/A/Registry.mjs").default;
   type Fl32_Web_Back_Handler_Static_A_Registry__Match = import("./src/Back/Handler/Static/A/Registry.mjs").Match;
-  type Fl32_Web_Back_Handler_Static_A_Resolver = typeof import("./src/Back/Handler/Static/A/Resolver.mjs").default;
-  type Fl32_Web_Back_Handler_Static_A_Resolver$ = InstanceType<typeof import("./src/Back/Handler/Static/A/Resolver.mjs").default>;
+  type Fl32_Web_Back_Handler_Static_A_Resolver = import("./src/Back/Handler/Static/A/Resolver.mjs").default;
+  type Fl32_Web_Back_Handler_Static_A_Resolver__Class = typeof import("./src/Back/Handler/Static/A/Resolver.mjs").default;
+  type Fl32_Web_Back_Handler_Static_Init_Params = {sources?: Fl32_Web_Back_Dto_Source[]};
+  type Fl32_Web_Back_Handler_Static__Class = typeof import("./src/Back/Handler/Static.mjs").default;
 
-  type Fl32_Web_Back_Helper_Cast = typeof import("./src/Back/Helper/Cast.mjs").default;
-  type Fl32_Web_Back_Helper_Cast$ = InstanceType<typeof import("./src/Back/Helper/Cast.mjs").default>;
-  type Fl32_Web_Back_Helper_Mime = typeof import("./src/Back/Helper/Mime.mjs").default;
-  type Fl32_Web_Back_Helper_Mime$ = InstanceType<typeof import("./src/Back/Helper/Mime.mjs").default>;
-  type Fl32_Web_Back_Helper_Order_Kahn = typeof import("./src/Back/Helper/Order/Kahn.mjs").default;
-  type Fl32_Web_Back_Helper_Order_Kahn$ = InstanceType<typeof import("./src/Back/Helper/Order/Kahn.mjs").default>;
-  type Fl32_Web_Back_Helper_Respond = typeof import("./src/Back/Helper/Respond.mjs").default;
-  type Fl32_Web_Back_Helper_Respond$ = InstanceType<typeof import("./src/Back/Helper/Respond.mjs").default>;
+  type Fl32_Web_Back_Helper_Cast = import("./src/Back/Helper/Cast.mjs").default;
+  type Fl32_Web_Back_Helper_Cast_Enum_Options = {lower?: boolean; upper?: boolean};
+  type Fl32_Web_Back_Helper_Cast__Class = typeof import("./src/Back/Helper/Cast.mjs").default;
+  type Fl32_Web_Back_Helper_Mime = import("./src/Back/Helper/Mime.mjs").default;
+  type Fl32_Web_Back_Helper_Mime__Class = typeof import("./src/Back/Helper/Mime.mjs").default;
+  type Fl32_Web_Back_Helper_Order_Kahn = import("./src/Back/Helper/Order/Kahn.mjs").default;
+  type Fl32_Web_Back_Helper_Order_Kahn__Class = typeof import("./src/Back/Helper/Order/Kahn.mjs").default;
+  type Fl32_Web_Back_Helper_Respond = import("./src/Back/Helper/Respond.mjs").default;
+  type Fl32_Web_Back_Helper_Respond__Class = typeof import("./src/Back/Helper/Respond.mjs").default;
 
-  type Fl32_Web_Back_PipelineEngine = typeof import("./src/Back/PipelineEngine.mjs").default;
-  type Fl32_Web_Back_PipelineEngine$ = InstanceType<typeof import("./src/Back/PipelineEngine.mjs").default>;
-  type Fl32_Web_Cli_Command_Start = typeof import("./src/Cli/Command/Start.mjs").default;
-  type Fl32_Web_Cli_Command_Start$ = InstanceType<typeof import("./src/Cli/Command/Start.mjs").default>;
-
-  type Fl32_Web_Back_Server = typeof import("./src/Back/Server.mjs").default;
-  type Fl32_Web_Back_Server$ = InstanceType<typeof import("./src/Back/Server.mjs").default>;
-
+  type Fl32_Web_Back_PipelineEngine = import("./src/Back/PipelineEngine.mjs").default;
+  type Fl32_Web_Back_PipelineEngine__Class = typeof import("./src/Back/PipelineEngine.mjs").default;
+  type Fl32_Web_Back_Pipeline_RequestContext = Fl32_Web_Back_Dto_RequestContext & Record<symbol, string | null>;
+  type Fl32_Web_Back_Request_Target = {method?: string; url?: string};
   type Fl32_Web_Back_Response_Body = string | object;
   type Fl32_Web_Back_Response_Headers = {[key: string]: string | number | string[]};
-  type Fl32_Web_Back_Response_Target = Fl32_Web_Node_Http_ServerResponse | Fl32_Web_Node_Http2_ServerResponse;
   type Fl32_Web_Back_Response_Payload = {
     res: Fl32_Web_Back_Response_Target;
     headers?: Fl32_Web_Back_Response_Headers;
     body?: Fl32_Web_Back_Response_Body;
   };
-  type Fl32_Web_Back_Request_Target = Fl32_Web_Node_Http_IncomingMessage | Fl32_Web_Node_Http2_ServerRequest;
+  type Fl32_Web_Back_Response_Target = NodeJS.WritableStream & {
+    end(body?: unknown): void;
+    headersSent: boolean;
+    writableEnded: boolean;
+  };
+  type Fl32_Web_Back_Server = import("./src/Back/Server.mjs").default;
+  type Fl32_Web_Back_Server_Instance = import("node:http").Server | import("node:http2").Http2Server | import("node:http2").Http2SecureServer | undefined;
+  type Fl32_Web_Back_Server__Class = typeof import("./src/Back/Server.mjs").default;
+  type Fl32_Web_Cli_Command_Start = import("./src/Cli/Command/Start.mjs").default;
+  type Fl32_Web_Cli_Command_Start_Handle = {done: Promise<void>; stop: () => Promise<void>};
+  type Fl32_Web_Cli_Command_Start__Class = typeof import("./src/Cli/Command/Start.mjs").default;
 
-  type Fl32_Web_Node_Fs = typeof import("node:fs");
-  type Fl32_Web_Node_Http = typeof import("node:http");
-  type Fl32_Web_Node_Http_Server = import("node:http").Server;
-  type Fl32_Web_Node_Http_IncomingMessage = import("node:http").IncomingMessage;
-  type Fl32_Web_Node_Http_ServerResponse = import("node:http").ServerResponse;
-  type Fl32_Web_Node_Http2 = typeof import("node:http2");
-  type Fl32_Web_Node_Http2_Server = import("node:http2").Http2Server;
-  type Fl32_Web_Node_Http2_SecureServer = import("node:http2").Http2SecureServer;
-  type Fl32_Web_Node_Http2_ServerRequest = import("node:http2").Http2ServerRequest;
-  type Fl32_Web_Node_Http2_ServerResponse = import("node:http2").Http2ServerResponse;
-  type Fl32_Web_Node_Path = typeof import("node:path");
 }
 
 export {};

@@ -3,16 +3,16 @@
 /**
  * @namespace Fl32_Web_Back_Handler_Static
  * @description Universal static-file PROCESS handler.
- * @implements {Fl32_Web_Back_Api_Handler$}
+ * @implements {Fl32_Web_Back_Api_Handler}
  */
 export default class Static {
     /**
      * @param {object} deps
-     * @param {Fl32_Web_Back_Handler_Static_A_Registry$} deps.registry
-     * @param {Fl32_Web_Back_Handler_Static_A_FileService$} deps.fileService
-     * @param {Fl32_Web_Back_Helper_Respond$} deps.respond
-     * @param {Fl32_Web_Back_Dto_Info__Factory$} deps.dtoInfoFactory
-     * @param {Fl32_Web_Back_Enum_Stage$} deps.STAGE
+     * @param {Fl32_Web_Back_Handler_Static_A_Registry} deps.registry
+     * @param {Fl32_Web_Back_Handler_Static_A_FileService} deps.fileService
+     * @param {Fl32_Web_Back_Helper_Respond} deps.respond
+     * @param {Fl32_Web_Back_Dto_Info__Factory} deps.dtoInfoFactory
+     * @param {Fl32_Web_Back_Enum_Stage} deps.STAGE
      */
     constructor({registry, fileService, respond, dtoInfoFactory, STAGE}) {
 
@@ -24,7 +24,7 @@ export default class Static {
         /**
          * Initialize registry with provided sources.
          *
-         * @param {{sources?: Fl32_Web_Back_Dto_Source$[]}} [params]
+         * @param {Fl32_Web_Back_Handler_Static_Init_Params} [params]
          * @returns {Promise<void>}
          */
         this.init = async (params = {}) => {
@@ -35,7 +35,7 @@ export default class Static {
         /**
          * Attempt to handle incoming request.
          *
-         * @param {Fl32_Web_Back_Dto_RequestContext$} context
+         * @param {Fl32_Web_Back_Dto_RequestContext} context
          * @returns {Promise<void>}
          */
         this.handle = async (context) => {
@@ -53,7 +53,7 @@ export default class Static {
         };
 
         /**
-         * @returns {Fl32_Web_Back_Dto_Info$}
+         * @returns {Fl32_Web_Back_Dto_Info}
          */
         this.getRegistrationInfo = () => _info;
     }

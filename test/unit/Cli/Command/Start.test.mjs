@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import Fl32_Web_Cli_Command_Start from '../../../../src/Cli/Command/Start.mjs';
 
 describe('Fl32_Web_Cli_Command_Start (mocked)', () => {
-    /** @type {Fl32_Web_Cli_Command_Start$} */
+    /** @type {Fl32_Web_Cli_Command_Start} */
     let command;
     /** @type {Array<*>} */
     let log;

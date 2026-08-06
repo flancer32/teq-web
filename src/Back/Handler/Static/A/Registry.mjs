@@ -7,8 +7,8 @@
 export default class Registry {
     /**
      * @param {object} deps
-     * @param {Fl32_Web_Back_Handler_Static_A_Config$} deps.configFactory
-     * @param {TeqFw_Log_Provider$} deps.logger
+     * @param {Fl32_Web_Back_Handler_Static_A_Config} deps.configFactory
+     * @param {TeqFw_Log_Provider} deps.logger
      */
     constructor({configFactory, logger}) {
         const log = logger.forSource('Fl32_Web_Back_Handler_Static_A_Registry');
@@ -19,7 +19,7 @@ export default class Registry {
          * Add configurations ensuring unique prefixes.
          * Existing entries are not modified.
          *
-         * @param {Fl32_Web_Back_Dto_Source$[]} dtoList
+         * @param {Fl32_Web_Back_Dto_Source[]} dtoList
          */
         this.addConfigs = function (dtoList = []) {
             const list = dtoList.map(dto => configFactory.create(dto));

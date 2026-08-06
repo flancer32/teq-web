@@ -8,7 +8,7 @@
 export default class Handler {
     /**
      * Handles one request context in a pipeline stage.
-     * @param {Fl32_Web_Back_Dto_RequestContext$} _context
+     * @param {Fl32_Web_Back_Dto_RequestContext} _context
      * @returns {Promise<void>}
      */
     async handle(_context) {
@@ -17,7 +17,7 @@ export default class Handler {
 
     /**
      * Provides metadata for pipeline registration.
-     * @returns {Fl32_Web_Back_Dto_Info$}
+     * @returns {Fl32_Web_Back_Dto_Info}
      */
     getRegistrationInfo() {
         throw new Error('Method not implemented');

@@ -7,7 +7,7 @@
 export default class Resolver {
     /**
      * @param {object} deps
-     * @param {Fl32_Web_Node_Path} deps.path
+     * @param {typeof import("node:path")} deps.path
      */
     constructor({path}) {
         /**

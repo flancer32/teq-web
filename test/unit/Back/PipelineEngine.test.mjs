@@ -51,9 +51,9 @@ describe('Fl32_Web_Back_PipelineEngine', () => {
     let respond;
     /** @type {*} */
     let logger;
-    /** @type {Fl32_Web_Back_Helper_Order_Kahn$} */
+    /** @type {Fl32_Web_Back_Helper_Order_Kahn} */
     let helpOrder;
-    /** @type {Fl32_Web_Back_Dto_RequestContext__Factory$} */
+    /** @type {Fl32_Web_Back_Dto_RequestContext__Factory} */
     let dtoRequestContextFactory;
 
     beforeEach(() => {
