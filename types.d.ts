@@ -63,7 +63,7 @@ declare global {
 
   type Fl32_Web_Back_PipelineEngine = import("./src/Back/PipelineEngine.mjs").default;
   type Fl32_Web_Back_PipelineEngine__Class = typeof import("./src/Back/PipelineEngine.mjs").default;
-  type Fl32_Web_Back_Pipeline_RequestContext = Fl32_Web_Back_Dto_RequestContext & Record<symbol, string | null>;
+  type Fl32_Web_Back_Pipeline_RequestContext = Fl32_Web_Back_Dto_RequestContext & {[key: symbol]: string | null};
   type Fl32_Web_Back_Request_Target = {method?: string; url?: string};
   type Fl32_Web_Back_Response_Body = string | object;
   type Fl32_Web_Back_Response_Headers = {[key: string]: string | number | string[]};
@@ -78,7 +78,6 @@ declare global {
     writableEnded: boolean;
   };
   type Fl32_Web_Back_Server = import("./src/Back/Server.mjs").default;
-  type Fl32_Web_Back_Server_Instance = import("node:http").Server | import("node:http2").Http2Server | import("node:http2").Http2SecureServer | undefined;
   type Fl32_Web_Back_Server__Class = typeof import("./src/Back/Server.mjs").default;
   type Fl32_Web_Cli_Command_Start = import("./src/Cli/Command/Start.mjs").default;
   type Fl32_Web_Cli_Command_Start_Handle = {done: Promise<void>; stop: () => Promise<void>};

@@ -39,9 +39,9 @@ export default class Start {
             configFactory.freeze();
             await server.start();
             return {
-                done: new Promise((resolve) => {
+                done: /** @type {Promise<void>} */ (new Promise((resolve) => {
                     context.signal.addEventListener('abort', () => resolve(), {once: true});
-                }),
+                })),
                 stop: async () => {
                     await server.stop();
                 },

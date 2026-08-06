@@ -25,7 +25,7 @@ export default class Server {
 
         // MAIN
         /**
-         * @returns {Fl32_Web_Back_Server_Instance}
+         * @returns {import("node:http").Server|import("node:http2").Http2Server|import("node:http2").Http2SecureServer|undefined}
          */
         this.getInstance = () => _instance;
 

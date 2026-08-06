@@ -51,7 +51,8 @@ export default class Cast {
          * @param {Fl32_Web_Back_Helper_Cast_Enum_Options} [options]
          * @returns {string|undefined}
          */
-        this.enum = function (data, enu, {lower, upper} = {}) {
+        this.enum = function (data, enu, options = {}) {
+            const {lower, upper} = options;
             let norm = data;
 
             if (typeof data === 'string') {
