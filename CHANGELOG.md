@@ -1,10 +1,29 @@
 # Changelog
 
-## [Unreleased]
+## [0.16.0] - 2026-08-06 - CLI startup and published agent interface
 
 ### Added
 
 - CLI command `fl32:web:start` for starting the web server through `@teqfw/cli` host.
+- Published consumer Agent Skill at `skills/teqfw-web/` with package concepts, lifecycle, configuration, static-file, and integration guidance.
+- Configuration integration through `@teqfw/cfg` and canonical namespace discovery through `@teqfw/di`.
+- Strict JSDoc typechecking and Markdown linting for the package and its tests.
+
+### Changed
+
+- Moved the package metadata to the current TeqFW `fw.di` and `fw.cli` descriptor structure.
+- Updated the public type map and runtime contracts for the current TeqFW DI, configuration, logging, and CLI dependencies.
+- Added the `start` package script and aligned runtime configuration loading with the `TEQFW_WEB` configuration namespace.
+- Replaced the unpublished `ai/` documentation surface with the published version-matched `skills/` surface.
+
+### Removed
+
+- Removed the obsolete root npm publication workflow; release publication is handled by the current release process.
+
+### Compatibility
+
+- Consumers using the published package must provide the TeqFW DI, configuration, and CLI components required by the new runtime assembly contract.
+- Agent integrations must mount `skills/teqfw-web/` instead of the removed `ai/` directory.
 
 ## [0.15.0] - 2026-07-14 - Listening host and TeqFW ESM conformance
 
