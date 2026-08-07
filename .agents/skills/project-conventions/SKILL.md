@@ -43,9 +43,12 @@ cognitive context for the product; preserve consistency with it.
 - Run `npm test` when a change crosses unit and integration boundaries or when the complete test suite is required (source: `package.json`, `ctx/docs/code/testing.md`).
 - Run `npm run lint:md` for changes to published skills or root Markdown files, then run `git diff --check` for every affected repository (source: `package.json`, template `project-conventions.memo.md`).
 
+## GitHub
+
+- In all multiline text sent to GitHub, including issues and comments, use actual line breaks; never send literal `\n`, which GitHub displays as text.
+
 ## Shared memory
 
 - `flancer32/ai-memo` is the shared cross-project issue tracker and memory. Source identity: `flancer32/teq-web`. Note path: `project/flancer32/teq-web/`. Resolvers: `flancer32/teq-web` and, for context-owned issues, `flancer32/teq-web-ctx` (source: `ctx/agent/flows/app/configuration.md`, `ctx/agent/flows/ctx/configuration.md`).
 - Every issue must name the project or projects expected to resolve it (source: template `project-conventions.memo.md`).
-- In multiline text sent to GitHub, use actual line breaks; never send literal `\n`, which GitHub displays as text (source: template `project-conventions.memo.md`).
 - When referring to a commit in another repository, use its full GitHub URL: `https://github.com/vendor/name/commit/<sha>` (source: template `project-conventions.memo.md`).
