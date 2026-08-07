@@ -4,7 +4,7 @@
 
 > **Human-governed. Agent-built. Agent-ready.**
 
-`@flancer32/teq-web` coordinates deterministic web request processing through a built-in Node.js server and ordered handler pipeline. It is part of the Tequila Framework (TeqFW): created and evolved by coding agents under the architectural direction and final responsibility of Alex Gusev, and shipped with a version-matched Agent Skill so other agents can understand, integrate, and use it correctly.
+`@flancer32/teq-web` coordinates deterministic web request processing through a built-in Node.js server and ordered handler pipeline. It is part of the Tequila Framework (TeqFW): created and evolved by coding agents under the architectural direction and final responsibility of [Alex Gusev](https://github.com/flancer64), and shipped with a version-matched Agent Skill so other agents can understand, integrate, and use it correctly.
 
 ## Why use it
 
